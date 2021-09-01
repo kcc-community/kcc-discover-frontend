@@ -143,14 +143,13 @@ const handleResposne = (res, resolve, reject, params) => {
 
 const handleError = (err, reject) => {
   console.log(err)
-  reject({code: 'NET_ERROR', message: '网络错误'})
+  reject({code: 'NET_ERROR', message: 'Network Error'})
 }
 
 
 export const get = (url, params?) => new Promise((resolve, reject) => {
   if (params) {
       const paramsArray: any[] = [];
-      // 拼接参数
       Object.keys(params).forEach(key => paramsArray.push(`${key}=${params[key]}`));
       if (paramsArray.length > 0) {
           if (url.search(/\?/) === -1) {
