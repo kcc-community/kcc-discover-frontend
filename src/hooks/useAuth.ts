@@ -8,7 +8,7 @@ import {
   UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
   WalletConnectConnector,
 } from '@web3-react/walletconnect-connector'
-import { connectorLocalStorageKey, ConnectorNames } from '../uikit'
+import { connectorLocalStorageKey, ConnectorNames } from '../style'
 import { message } from 'antd'
 import { connectorsByName } from 'connectors'
 

@@ -1,4 +1,4 @@
-import { Button } from '../../uikit'
+import { Button } from '../../style'
 import styled from 'styled-components'
 
 export const SwapButton = styled(Button)<{ background?: string, color?: string }>`
