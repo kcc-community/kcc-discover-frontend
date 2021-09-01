@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.68 37.68">
+    <defs>
+        <style>
+            .cls-1{fill:#5dda98;}.cls-2{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px;}
+        </style>
+    </defs>
+    <g id="图层_2" data-name="图层 2">
+        <g id="图层_1-2" data-name="图层 1">
+            <circle class="cls-1" cx="18.84" cy="18.84" r="18.84"/>
+            <polyline class="cls-2" points="16.16 26.47 16.16 11.24 10.6 16.8"/>
+            <polyline class="cls-2" points="21.52 11.22 21.52 26.44 27.08 20.88"/>
+        </g>
+    </g>
+</svg>

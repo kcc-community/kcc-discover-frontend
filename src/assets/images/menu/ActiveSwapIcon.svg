@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>画板备份 7</title>
+    <defs>
+        <filter color-interpolation-filters="auto" id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.364706 0 0 0 0 0.854902 0 0 0 0 0.596078 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="画板备份-7" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g filter="url(#filter-1)" id="编组-5">
+            <g transform="translate(14.000000, 13.000000)">
+                <path d="M11.5,0 C5.14872538,0 0,5.14872538 0,11.5 C0,14.9495418 1.51880067,18.0443488 3.92416772,20.1521865 L0.37321663,19.7716281 M11.5,23 C17.8512746,23 23,17.8512746 23,11.5 C23,7.68306673 21.1404533,4.30045385 18.27788,2.20868134 L21.917728,2.8529673" id="形状" stroke="#979797" stroke-width="2" stroke-linejoin="round"></path>
+                <path d="M14.8568411,8.23897039 C14.410282,6.74632346 13.2711245,6 11.4393689,6 C8.69173532,6 8,7.26190708 8,8.51438068 C8,9.76685428 8.16673276,11.0131237 11.4393689,11.0131237 C13.6211262,11.0131237 14.8080033,11.7843706 15,13.3268644 C14.9191585,15.1089548 13.7322814,16 11.4393689,16 C9.14645628,16 8,15.4387224 8,14.3161672" id="路径-4" stroke="#979797" stroke-width="2" stroke-linejoin="round"></path>
+                <line x1="11.5" y1="4" x2="11.5" y2="18" id="路径-5" stroke="#979797" stroke-width="2"></line>
+            </g>
+        </g>
+    </g>
+</svg>
