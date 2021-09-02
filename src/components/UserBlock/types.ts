@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { SvgProps } from 'uikit/components/Svg/types'
+import { SvgProps } from '../../style/components/Svg/types'
 
 export enum ConnectorNames {
   Injected = 'injected',

@@ -1,6 +1,6 @@
 import React from "react";
-import Svg from "uikit/components/Svg/Svg";
-import { SvgProps } from "uikit/components/Svg/types";
+import Svg from "../../../style/components/Svg/Svg";
+import { SvgProps } from "../../../style/components/Svg/types";
 
 const Icon: React.FC<SvgProps> = (props) => {
   return (

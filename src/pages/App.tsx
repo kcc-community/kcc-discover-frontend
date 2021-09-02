@@ -20,9 +20,6 @@ const BodyWrapper = styled.div`
   overflow-x: hidden;
   z-index: 1;
   // margin-bottom: 64px;
-  ${({ theme }) => theme.mediaQueries.lg} {
-    margin-bottom: 0;
-  }
 `
 
 export default function App() {

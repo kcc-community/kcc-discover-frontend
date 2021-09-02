@@ -1,6 +1,5 @@
 import React from "react";
-import Button from "uikit/components/Button/Button";
-import Text from "uikit/components/Text/Text";
+import { Button, Text } from '../../style';
 import { connectorLocalStorageKey } from "./config";
 import { Login, Config } from "./types";
 
@@ -12,7 +11,7 @@ interface Props {
 }
 
 const WalletCard: React.FC<Props> = ({ login, walletConfig, onDismiss, mb }) => {
-  const { title, icon: Icon } = walletConfig;
+  const { title, } = walletConfig;
   return (
     <Button
       width="100%"
@@ -29,7 +28,6 @@ const WalletCard: React.FC<Props> = ({ login, walletConfig, onDismiss, mb }) => 
       <Text bold color="primary" mr="16px">
         {title}
       </Text>
-      <Icon width="32px" />
     </Button>
   );
 };

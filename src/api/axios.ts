@@ -63,7 +63,7 @@ const getErrorCode2text = (response: AxiosResponse): string => {
 
 /**
  * @returns  {AxiosResponse} result
- * @tutorial see more:https://github.com/onlyling/some-demo/tree/master/typescript-width-axios
+ * @tutorial see more:https://github.com/onlyling/some-demo/tree/master/typescript-width-Axios
  * @example
  * service.get<{data: string; code: number}>('/test').then(({data}) => { console.log(data.code) })
  */
@@ -121,5 +121,86 @@ service.interceptors.response.use(
     return Promise.reject(new Error(__emsg))
   }
 )
+
+const handleResposne = (res, resolve, reject, params) => {
+  if ((res.responseCode && res.responseCode === '00') || (res.success && res.success === 'SUCCESS')) {
+      if (params && params.original) {
+          resolve(res)
+          return
+      }
+      resolve(res.content || res.data)
+  } else {
+      if (res.responseCode === '401') {
+          window.location.href = '#/login'
+      }
+      if (res.responseCode) {
+          reject({code: res.responseCode, message: res.responseMsg})
+      } else {
+          reject(res.error)
+      }
+  }
+}
+
+const handleError = (err, reject) => {
+  console.log(err)
+  reject({code: 'NET_ERROR', message: 'Network Error'})
+}
+
+
+export const get = (url, params?) => new Promise((resolve, reject) => {
+  if (params) {
+      const paramsArray: any[] = [];
+      Object.keys(params).forEach(key => paramsArray.push(`${key}=${params[key]}`));
+      if (paramsArray.length > 0) {
+          if (url.search(/\?/) === -1) {
+              url += `?${paramsArray.join('&')}`;
+          } else {
+              url += `&${paramsArray.join('&')}`;
+          }
+      }
+  }
+  Axios(url, {
+      method: 'GET',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Accept-Language': 'zh-CN',
+          // 'Authorization': token || '',
+      },
+  })
+      .then(response => response.data)
+      .then(res => handleResposne(res, resolve, reject, params))
+      .catch(err => handleError(err, reject));
+})
+
+export const post = (url, jsonData) => new Promise((resolve, reject) => {
+  Axios(url, {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Accept-Language': 'zh-CN',
+      },
+      data: jsonData,
+  })
+      .then(response => response.data)
+      .then(res => handleResposne(res, resolve, reject, jsonData))
+      .catch(err => handleError(err, reject));
+})
+
+export const form = (url, formData) => new Promise((resolve, reject) => {
+  Axios(url, {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          'Accept-Language': 'zh-CN',
+      },
+      data: formData,
+  })
+      .then(response => response.data)
+      .then(res => handleResposne(res, resolve, reject, formData))
+      .catch(err => handleError(err, reject));
+})
 
 export default service
