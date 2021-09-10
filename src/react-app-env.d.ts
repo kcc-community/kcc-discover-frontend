@@ -20,3 +20,8 @@ declare module 'multihashes' {
   declare function toB58String(hash: Uint8Array): string
 }
 
+declare module "waterwheelCarousel";
+declare function waterwheelCarousel(data: any);
+
+
+

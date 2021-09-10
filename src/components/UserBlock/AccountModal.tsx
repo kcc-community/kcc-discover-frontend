@@ -1,10 +1,11 @@
 import React from 'react'
-import { Button, Text } from '../../style'
 import LinkExternal from '../../style/components/Link/LinkExternal'
 import Flex from '../../style/components/Box/Flex'
+import { Text } from '../../style'
 import { Modal } from 'antd'
 import CopyToClipboard from './CopyToClipboard'
 import { connectorLocalStorageKey } from './config'
+import { Button } from 'antd'
 
 interface Props {
   account: string
@@ -22,6 +23,7 @@ const AccountModal: React.FC<Props> = ({ account, logout, visible, onCancel }) =
     <Text
       fontSize="16px"
       bold
+      mt="-10px"
       style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '8px' }}
     >
       {account}
@@ -37,15 +39,13 @@ const AccountModal: React.FC<Props> = ({ account, logout, visible, onCancel }) =
       </CopyToClipboard>
     </Flex>
     <Flex justifyContent="center">
-      <Button
-        scale="sm"
-        variant="secondary"
+      <Button 
+        type="primary"
         onClick={() => {
           logout()
           window.localStorage.removeItem(connectorLocalStorageKey)
           onCancel()
-        }}
-      >
+        }}>
         Logout
       </Button>
     </Flex>

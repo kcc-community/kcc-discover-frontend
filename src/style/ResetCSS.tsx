@@ -114,6 +114,30 @@ const ResetCSS = createGlobalStyle`
     border-color: transparent;
     color: transparent;
   }  
+  .homeSlider {
+    width: 880px !important;
+  }
+  .slick-dots{
+    bottom: -38px;
+  }
+  .slick-dots li{
+    margin: 0;
+  }
+  li:before{
+    content: '';
+  }
+  .slick-dots li button:before{
+    color: #B8C6D866;
+    opacity: 1;
+  }
+  .slick-dots li.slick-active button:before {
+    color: #B8C6D8;
+    opacity: 1;
+  }
+  .kcc-pagination{
+    display: flex;
+    justify-content: center;
+  }
 `
 
 export default ResetCSS

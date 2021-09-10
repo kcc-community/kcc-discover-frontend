@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors.backgroundLight};
 
     img {
       height: auto;
@@ -17,12 +17,6 @@ const GlobalStyle = createGlobalStyle`
   li {
     display: flex;
     align-items: center;
-  }
-
-  li::before {
-    content: "•";
-    color: ${({ theme }) => theme.colors.primary};
-    margin-right: 8px;
   }
 `
 

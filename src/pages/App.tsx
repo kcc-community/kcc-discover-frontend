@@ -5,6 +5,9 @@ import Web3ReactManager from '../components/Web3ReactManager'
 
 import Home from './Home'
 import Project from './Project'
+import ProjectDetail from './Project/detail'
+import Submit from './Submit'
+import Account from './Account'
 
 import Menu from '../components/Menu'
 
@@ -33,6 +36,9 @@ export default function App() {
                     <Switch>
                       <Route exact path="/" component={Home} />
                       <Route exact path="/project" component={Project} />
+                      <Route exact path="/project_detail" component={ProjectDetail} />
+                      <Route exact path="/submit" component={Submit} />
+                      <Route exact path="/account" component={Account} />
                       <Route path="*" component={Home} />
                     </Switch>
                   </Web3ReactManager>

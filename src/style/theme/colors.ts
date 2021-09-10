@@ -10,18 +10,15 @@ export const baseColors = {
   warning: '#FFB547',
 }
 
-export const additionalColors = {
-  binance: '#F0B90B',
-  // Settings Card Mask color
-  overlay: 'rgba(1, 1, 1, 0.7)',
-}
-
 export const lightColors: Colors = {
   ...baseColors,
   background: '#10141C',
   backgroundDisabled: '#E9EAEB',
-  backgroundAlt: '#0B0F15',
+  backgroundAlt: '#FFFFFF1A',
   backgroundCard: '#0B0F15',
+  backgroundNav: '#000A1E',
+  backgroundTip: '#28CD9629',
+  backgroundLight: '#F4F6F7',
   contrast: '#191326',
   dropdown: '#F6F6F6',
   invertedContrast: '#FFFFFF',
@@ -38,26 +35,3 @@ export const lightColors: Colors = {
   },
 }
 
-export const darkColors: Colors = {
-  ...baseColors,
-  secondary: '#9A6AFF',
-  background: '#08060B',
-  backgroundDisabled: '#3c3742',
-  backgroundAlt: '#27262c',
-  backgroundCard: '#F5F5F5',
-  borderColor: '#fff',
-  contrast: '#FFFFFF',
-  dropdown: '#1E1D20',
-  invertedContrast: '#191326',
-  input: '#F5F9EE',
-  inputSecondary: '#262130',
-  primaryDark: '#0098A1',
-  tertiary: '#5DDA98', 
-  text: '#F4EEFF',
-  textDisabled: '#ffffff',
-  textSubtle: '#64ffb2',
-  gradients: {
-    hovercard: 'linear-gradient(0deg, rgba(0, 20, 42, 0.04), rgba(0, 20, 42, 0.04)) white',
-    disable: 'linear-gradient(0deg, rgba(0, 20, 42, 0.08), rgba(0, 20, 42, 0.08)), #FFFFFF'
-  },
-}

@@ -68,7 +68,7 @@ const getErrorCode2text = (response: AxiosResponse): string => {
  * service.get<{data: string; code: number}>('/test').then(({data}) => { console.log(data.code) })
  */
 const service = Axios.create({
-  baseURL: process.env.REACT_APP_API_URL + '/v1/bridge/server/',
+  baseURL: process.env.REACT_APP_API_URL,
   timeout: 10000,
 })
 
@@ -123,7 +123,7 @@ service.interceptors.response.use(
 )
 
 const handleResposne = (res, resolve, reject, params) => {
-  if ((res.responseCode && res.responseCode === '00') || (res.success && res.success === 'SUCCESS')) {
+  if ((res.code && res.code === '0') || (res.msg && res.msg === 'SUCCESS')) {
       if (params && params.original) {
           resolve(res)
           return

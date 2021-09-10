@@ -4,8 +4,9 @@ import { isAddress } from '../../utils'
 import { useSelector } from 'react-redux'
 import { useMulticallContract } from '../../hooks/useContract'
 import ERC20_INTERFACE from '../../constants/abis/erc20'
-import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
+import { useSingleContractMultipleData, useMultipleContractSingleData, useSingleCallResult } from '../multicall/hooks'
 import { AppState } from '../index'
+
 
 export function useBalance(): string {
   return useSelector((state: AppState) => {
@@ -37,6 +38,8 @@ export function useBalance(): string {
     'getEthBalance',
     addresses.map((address) => [address])
   )
+
+    // const contract = multicallContract?.interface?.getFunction('aggregate')[addresses[0].toLowerCase(), itf.encodeFunctionData('unserInfo',[addresses[0]] )]
   return useMemo(
     () =>
       addresses.reduce<{ [address: string]: CurrencyAmount }>((memo, address, i) => {
@@ -63,7 +66,6 @@ export function useTokenBalancesWithLoadingIndicator(
   const validatedTokenAddresses = useMemo(() => validatedTokens.map((vt) => vt.address), [validatedTokens])
 
   const balances = useMultipleContractSingleData(validatedTokenAddresses, ERC20_INTERFACE, 'balanceOf', [address])
-
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
 
   return [

@@ -41,7 +41,7 @@ export const LanguageButton = styled.div`
   height: 36px;
   line-height: none;
   padding: 0;
-  border-radius: 4px;
+  border-radius: 18px;
   border: 1px solid ${({ theme }) => theme.colors.darkGrey};
   font-size: 16px;
   outline: none;
@@ -50,6 +50,9 @@ export const LanguageButton = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 24px;
+  :hover {
+    border: 1px solid ${({ theme }) => theme.colors.primary};
+  }
 `
 
 const ChangeLanguage: React.FunctionComponent<ChangeLanguageProps> = () => {
@@ -86,10 +89,10 @@ const ChangeLanguage: React.FunctionComponent<ChangeLanguageProps> = () => {
     <MenuWrap>
       <Popover placement="bottom" content={selectOptions}>
         <LanguageButton
-          style={{ color: theme.colors.secondary, fontSize: '16px' }}
+          style={{ color: theme.colors.invertedContrast, fontSize: '16px' }}
         >
           {currentLanguage}
-          <DownOutlined style={{ fontSize: '10px', marginLeft: '6px', color: theme.colors.secondary }} />
+          <DownOutlined style={{ fontSize: '10px', marginLeft: '6px', color: theme.colors.invertedContrast }} />
         </LanguageButton>
       </Popover>
     </MenuWrap>

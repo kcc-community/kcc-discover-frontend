@@ -20,6 +20,7 @@ export interface Result extends ReadonlyArray<any> {
 
 export function useBlockNumber(): number | undefined {
   const { chainId } = useActiveWeb3React()
+  
   return useSelector((state: AppState) => state.multicall.blockNumber[chainId ?? -1])
 }
 

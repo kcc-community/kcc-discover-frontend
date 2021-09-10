@@ -47,9 +47,12 @@ export type Colors = {
   input: string
   inputSecondary: string
   background: string
+  backgroundTip: string
   backgroundDisabled: string
   backgroundAlt: string
   backgroundCard: string
+  backgroundNav: string
+  backgroundLight: string
   text: string
   textDisabled: string
   textSubtle: string

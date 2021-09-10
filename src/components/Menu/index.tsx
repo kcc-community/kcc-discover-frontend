@@ -1,16 +1,14 @@
-import React, { useContext } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled, { useTheme } from 'styled-components'
-// import { allLanguages } from 'constants/localisation/languageCodes'
-// import { LanguageContext } from 'hooks/LanguageContext'
-// import useTheme from 'hooks/useTheme'
 import useAuth from 'hooks/useAuth'
-import { Link } from 'react-router-dom'
-import { RowFixed } from '../Row'
+import { RowFixed, RowBetween } from '../Row'
 import { Text } from '../../style'
 import Flex from '../../style/components/Box/Flex'
 import UserBlock from '../UserBlock'
 import Language from '../ChangeLanguage'
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'
 
 const Wrapper = styled.div`
   position: relative;
@@ -28,12 +26,11 @@ const StyledNav = styled.nav`
   padding-left: 8px;
   padding-right: 16px;
   width: 100%;
-  height: 48px;
-  background-color: black;
+  height: 80px;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.backgroundNav};
   z-index: 20;
   transform: translate3d(0, 0, 0);
-  height: 80px;
-  padding: 0 120px;
 `
 
 const BodyWrapper = styled.div`
@@ -50,28 +47,82 @@ const Inner = styled.div`
   max-width: 100%;
 `
 
-const Menu: React.FC = (props) => {
+interface MenuList {
+  title: string
+  route: string
+}
+
+const Menu: React.FunctionComponent = (props) => {
+  const { t } = useTranslation();
   const { account } = useWeb3React()
   const { login, logout } = useAuth()
+  const history = useHistory();
+  const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true });
+  const matchAccount = useRouteMatch({ path: '/account', strict: true, sensitive: true });
   const theme = useTheme()
-  console.log('login =', account)
-  // const { selectedLanguage, setSelectedLanguage } = useContext(LanguageContext)
+  const href = window.location.href
+  const menuList: MenuList[] = [
+    {
+      title: t('Home'),
+      route: '/',
+    },
+    {
+      title: t('Project'),
+      route: '/project',
+    },
+    {
+      title: t('Submit'),
+      route: '/submit',
+    },
+  ]
+
+  useEffect(() => {
+    const isHome = matchHome && matchHome.isExact;
+    const isAccount = matchAccount && matchAccount.isExact;
+    let body = document.getElementsByTagName('body')[0];
+    let lastLocation: any;
+    history.listen((location) => {
+      if (lastLocation !== location) {
+        window.scrollTo(0, 0);
+      }
+      lastLocation = location;
+    });
+    if(isHome){
+      body.setAttribute('style',`background: ${theme.colors.background}`)
+    } else if(isAccount){
+      body.setAttribute('style',`background: ${theme.colors.backgroundLight}`)
+    } else {
+      body.setAttribute('style',`background: ${theme.colors.invertedContrast}`)
+    }
+  }, [history, href])
+  
+  const renderMenu = (data) => {
+    return(
+      <a onClick={() => history.push(data?.route)}>
+        <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml="40px">{data?.title}</Text>
+      </a>
+    )
+  }
+
   return ( 
     <Wrapper>
       <StyledNav>
-        <RowFixed>
-          <Link to="/" aria-label="KCC home page">
-            <Text color={theme.colors.primary} fontSize="24px" fontWeight="bold">DISCOVER KCC</Text>
-          </Link>
-        </RowFixed>
-        <RowFixed>
-          {!!login && !!logout && (
-            <Flex>
-              <UserBlock account={account as string} login={login} logout={logout} />
-            </Flex>
-          )}
-          <Language />
-        </RowFixed>
+        <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
+          <RowFixed>
+            <div onClick={() => history.push('/')} style={{cursor: 'pointer'}} aria-label="KCC home page">
+              <Text color={theme.colors.primary} fontSize="24px" fontWeight="bold">DISCOVER KCC</Text>
+            </div>
+            { menuList.map((item) => renderMenu(item)) }
+          </RowFixed>
+          <RowFixed>
+            {!!login && !!logout && (
+              <Flex>
+                <UserBlock account={account as string} login={login} logout={logout} />
+              </Flex>
+            )}
+            <Language />
+          </RowFixed>
+        </RowBetween>
       </StyledNav>
       <BodyWrapper>
         <Inner>

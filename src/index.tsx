@@ -32,6 +32,7 @@ ReactDOM.render(
       <GlobalStyle />
       <App />
     </Providers>
-  </StrictMode>,
+  </StrictMode>
+  ,
   document.getElementById('root')
 )

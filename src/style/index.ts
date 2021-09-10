@@ -20,4 +20,5 @@ export * from "./components/Button";
 export * from "./components/Svg";
 export * from "./components/Link";
 export * from "./components/Box";
+export * from "./components/Container";
 
