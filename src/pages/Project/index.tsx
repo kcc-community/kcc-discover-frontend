@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState, useCallback, useMemo } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
@@ -88,7 +88,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
     return(
       <LocalStyle.ProjectInputWrapper>
         <LocalStyle.ProjectImgSearch src={search}/>
-        <LocalStyle.ProjectInput placeholder={'Search'} onChange={(e) => setInput(e.target.value as any)}/>
+        <LocalStyle.ProjectInput placeholder={t('Search')} onChange={(e) => setInput(e.target.value as any)}/>
       </LocalStyle.ProjectInputWrapper>
     )
   }
@@ -129,7 +129,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
       <Container style={{minHeight: '80vh'}}>
         <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
           <LocalStyle.ProjectMenu>
-            <LocalStyle.ProjectText ml="21px" mb="17px">Categories</LocalStyle.ProjectText>
+            <LocalStyle.ProjectText ml="21px" mb="17px">{t("Categories")}</LocalStyle.ProjectText>
             { 
               cateLoading ? 
               <LocalStyle.ProjectItem style={{height: 'auto'}}><Skeleton paragraph={{ rows: 5 }} /></LocalStyle.ProjectItem>

@@ -167,14 +167,19 @@ const HomePage: React.FunctionComponent = (props) => {
       <>
         <Container>
           <RowBetween style={{marginTop: '60px'}}>
-            <>
+            <Col>
+              <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
+              <Row align="flex-end">
+                <LocalStyle.SecondText style={{fontSize: '48px', lineHeight: '48px'}}>{t("$ 602,318.68")}</LocalStyle.SecondText>
+                <Text fontSize="24px" color={theme.colors.primary} fontWeight="bold" ml="27px">+4.13%</Text>
+              </Row>
               <Chart
                 key="chart1"
                 className="chart1"
                 option={chart1Data}
                 onRender={(e): void => chart1 = e}
                 style={{width: "807px", height: "279px"}}/>
-            </>
+            </Col>
             <FadeInUp>
               <LocalStyle.RankCard>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>

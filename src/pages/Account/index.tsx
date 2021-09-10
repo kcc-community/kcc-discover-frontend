@@ -1,9 +1,9 @@
-import React, { FunctionComponent, useEffect, useState, useCallback, useMemo } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
 import { Container, Text } from '../../style'
-import { eyeOpen, eyeClose, del, edit, copy } from '../../constants/imgs'
+import { eyeOpen, eyeClose, edit, copy } from '../../constants/imgs'
 import Row, { RowBetween } from 'components/Row'
 import Col from 'components/Column'
 import Empty from 'components/Empty'
@@ -54,10 +54,10 @@ const AccountPage: React.FunctionComponent = (props) => {
     }
     return(
       <LocalStyle.AccountCard key={type}>
-        {InfoItem(isBalance ? 'Total KCS Balance' : 'Total Value', show ? (isBalance ? balance[0]?.toSignificant(4) ?? '0.00' : `$103,223.89`) : '-')}
+        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? balance[0]?.toSignificant(4) ?? '0.00' : `$103,223.89`) : '-')}
         <RowBetween>
-          {InfoItem(isBalance ? 'Wallet KCS balance' : 'Wallet balance', show ? (isBalance ? `10000.12` : `$103,223.89`) : '-', '50%', '35px')}
-          {InfoItem(isBalance ? 'Locked KCS balance' : 'Locked balance', show ? (isBalance ? `10000.12` : `$103,223.89`) : '-', '50%', '35px')}
+          {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance'), show ? (isBalance ? `10000.12` : `$103,223.89`) : '-', '50%', '35px')}
+          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance'), show ? (isBalance ? `10000.12` : `$103,223.89`) : '-', '50%', '35px')}
         </RowBetween>
       </LocalStyle.AccountCard>
     )
@@ -78,7 +78,7 @@ const AccountPage: React.FunctionComponent = (props) => {
     return(
       <RowBetween mb="15px" style={{cursor: 'pointer'}}>
         <LocalStyle.ProjectTextSub style={{fontSize: '16px', width: '60%'}}>{data?.hash ? data.hash.substr(0, 12) + '...' + data.hash.substr(-6) : '-'}</LocalStyle.ProjectTextSub>
-        <Text color={theme.colors.primary} fontWeight={'bold'}>View details</Text>
+        <Text color={theme.colors.primary} fontWeight={'bold'}>{t('View details')}</Text>
       </RowBetween>
     )
   }
@@ -89,7 +89,7 @@ const AccountPage: React.FunctionComponent = (props) => {
       <Container style={{minHeight: '80vh'}}>
         <RowBetween style={{marginTop: '40px', alignItems: 'center', marginBottom: '25px'}}>
           <Row>
-            <LocalStyle.ProjectText style={{fontSize: '32px'}}>My Account</LocalStyle.ProjectText>
+            <LocalStyle.ProjectText style={{fontSize: '32px'}}>{t("My Account")}</LocalStyle.ProjectText>
             <LocalStyle.AccountEye src={show ? eyeOpen : eyeClose} onClick={() => setShow(!show)}/>
           </Row>
           <Row 
@@ -110,10 +110,10 @@ const AccountPage: React.FunctionComponent = (props) => {
           <Col>
             <LocalStyle.AccountCard width="387px" height="246px" style={{marginBottom: '20px'}}>
               <RowBetween>
-                <LocalStyle.ProjectText style={{fontSize: '20px'}}>My Project</LocalStyle.ProjectText>
+                <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("My Project")}</LocalStyle.ProjectText>
                 <Row style={{width: 'auto', cursor: 'pointer'}}>
                   <LocalStyle.AccountImgEdit src={edit}/>
-                  <Text color={theme.colors.primary} fontWeight={'bold'}>Edit</Text>
+                  <Text color={theme.colors.primary} fontWeight={'bold'}>{t("Edit")}</Text>
                 </Row>
               </RowBetween>
               <LocalStyle.AccountLine />
@@ -122,11 +122,11 @@ const AccountPage: React.FunctionComponent = (props) => {
                 <LocalStyle.ProjectText style={{fontSize: '20px'}}>Sushi Swap</LocalStyle.ProjectText>
               </Row>
               <Row mt="15px">
-                <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>KCS Margin</LocalStyle.ProjectTextSub>
+                <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("KCS Margin")}</LocalStyle.ProjectTextSub>
                 <LocalStyle.ProjectText style={{fontSize: '24px'}}>1,000 <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
               </Row>
               <Row mt="15px">
-                <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>State</LocalStyle.ProjectTextSub>
+                <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("State")}</LocalStyle.ProjectTextSub>
                 <LocalStyle.AccountStatusShow>Displaying</LocalStyle.AccountStatusShow>
               </Row>
             </LocalStyle.AccountCard>  

@@ -127,7 +127,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   const renderDown = () => {
     return(
       <AutoRow onClick={() => {setPage(page + 1)}} justify="center" mt="21px" mb="24px" style={{cursor: 'pointer'}}>
-        <Text color={theme.colors.primary} fontSize="14px">Learn more</Text>
+        <Text color={theme.colors.primary} fontSize="14px">{t("Learn more")}</Text>
         <LocalStyle.ProjectImgDown src={down}/>
       </AutoRow>
     )
@@ -149,7 +149,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
                 </Row>
                 <Row mt="24px">
                   <LocalStyle.ProjectButton >
-                    Visit Website
+                    {t("Visit Website")}
                     <LocalStyle.ProjectImgSend src={send}/>
                   </LocalStyle.ProjectButton>
                   {detail.telegram && renderMedia('telegram', detail.telegram)}
@@ -164,7 +164,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             <Col style={{width: '49%', alignItems: 'center'}}>
               <LocalStyle.ProjectText style={{fontSize: '40px'}}>{Number(detail.score)}</LocalStyle.ProjectText>
               <Rate allowHalf disabled value={Number(detail.score)} />
-              <LocalStyle.ProjectTextSub mt="5px">{detail.comments} RATINGS</LocalStyle.ProjectTextSub>
+              <LocalStyle.ProjectTextSub mt="5px">{detail.comments} {t("RATINGS")}</LocalStyle.ProjectTextSub>
             </Col>
             {
               showRank ?
@@ -183,10 +183,10 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         <LocalStyle.ProjectLine />
         <div style={{maxWidth: '800px'}}>
           <RowBetween mb="40px">
-            <LocalStyle.ProjectText style={{fontSize: '20px'}}>Comments</LocalStyle.ProjectText>
+            <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("Comments")}</LocalStyle.ProjectText>
             <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => setModal(true)}>
               <LocalStyle.ProjectImgEdit src={edit}/>
-              <Text color={theme.colors.primary}>Write a Comment</Text>
+              <Text color={theme.colors.primary}>{t("Write a Comment")}</Text>
             </Row>
           </RowBetween>
           {
