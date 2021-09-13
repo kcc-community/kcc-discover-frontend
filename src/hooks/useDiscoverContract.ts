@@ -54,7 +54,7 @@ export function useComment(data: any , library?: any): {
       if(error[0] === '-32603'){
         message.error('You can only comment once per account')
       } else {
-        message.error('Error: please retry')
+        message.error('Contract call error')
       }
     })
   }
@@ -67,9 +67,7 @@ export function useCommentLike(data: any , library?: any): {
   const distributorContract = getDiscoverContract(library)
   const commentLikeCallback = async () => {
     if ( !library || !distributorContract) return
-    const args = [
-      
-    ]
+    const args = []
     // eslint-disable-next-line consistent-return
     console.log('contract =', distributorContract, args);
     return distributorContract.estimateGas.isLikeCommentInfo(...args, {}).then((estimatedGasLimit: BigNumber) => {
@@ -85,6 +83,32 @@ export function useCommentLike(data: any , library?: any): {
   }
   return { commentLikeCallback }
 }
+
+export function useCommentDelete(data: any , library?: any): {
+  commentDeleteCallback: () => Promise<string>
+} {
+  const distributorContract = getDiscoverContract(library)
+  const commentDeleteCallback = async () => {
+    if ( !library || !distributorContract) return
+    const args = [data.projectAddress]
+    // eslint-disable-next-line consistent-return
+    console.log('contract =', distributorContract, args);
+    return distributorContract.estimateGas.deleteComment(...args, {}).then((estimatedGasLimit: BigNumber) => {
+      return distributorContract
+        .deleteComment(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
+        .then((response: TransactionResponse) => {
+          console.log('response =', response)
+          return response.hash
+        })
+    }).catch(e => {
+      console.log(e)
+      throw Error(e)
+    })
+  }
+  return { commentDeleteCallback }
+}
+
+
 
 export function useCommit(data: any , library?: any): {
   commitCallback: () => Promise<string>
@@ -126,7 +150,7 @@ export function useCommit(data: any , library?: any): {
       } else if(error && error[0] === '-32603'){
         message.error('Only one submission is allowed for an account')
       } else {
-        message.error('Error: please retry')
+        message.error('Contract call error')
       }
     })
   }
@@ -175,7 +199,7 @@ export function useUpdateCommit(data: any , library?: any): {
       } else if(error && error[0] === '-32603'){
         message.error('Only one submission is allowed for an account')
       } else {
-        message.error('Error: please retry')
+        message.error('Contract call error')
       }
     })
   }

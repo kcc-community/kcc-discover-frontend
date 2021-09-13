@@ -9,7 +9,7 @@ import * as LocalStyle from '../../style/pages'
 import { Rate, message } from 'antd'
 import dayjs from 'dayjs'
 import { useWeb3React } from '@web3-react/core'
-import { useCommentLike } from '../../hooks/useDiscoverContract'
+import { useCommentLike, useCommentDelete } from '../../hooks/useDiscoverContract'
 
 const CommentWrapper = styled.div`
   width: 800px;
@@ -63,6 +63,22 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
     })
   }
 
+  const deleteComment = () => {
+    if(!account || !chainId) return;
+    let params = {
+      projectAddress: props.app,
+    }
+    const { commentDeleteCallback } = useCommentDelete(params, library);
+    commentDeleteCallback().then(res => {
+      console.log('delete action: ', res);
+      if(res){
+        message.success('Success Delete, please check later')
+      }
+    }).catch(e => {
+      message.error('Contract call error')
+    })
+  }
+
   const renderHand = (type: string) => {
     if(type === 'good'){
       return(
@@ -106,7 +122,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
               </Row>
             </Col>
           </Row>
-          <ImgDel src={del}/>
+          <ImgDel src={del} onClick={() => deleteComment()}/>
         </RowBetween>
       </CommentWrapper>
     )

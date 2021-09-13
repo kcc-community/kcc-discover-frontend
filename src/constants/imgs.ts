@@ -9,6 +9,7 @@ export const search = require('../assets/images/Icons/search.png').default
 export const iconRight = require('../assets/images/home/right-2.png').default
 export const iconLeft = require('../assets/images/home/left.png').default
 export const website = require('../assets/images/Icons/website.png').default
+export const websiteWhite = require('../assets/images/Icons/website-white.png').default
 export const twitter = require('../assets/images/Icons/twitter@2x.png').default
 export const github = require('../assets/images/Icons/github-logo@2x.png').default
 export const telegram = require('../assets/images/Icons/telegram@2x.png').default

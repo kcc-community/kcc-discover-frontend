@@ -1,28 +1,32 @@
+
 export const ChartData = {
   xAxis: {
-    data: ['2019-11-21', '2019-11-22', '2019-11-23', '2019-11-24', '2019-11-25', '2019-11-26'],
     axisLine: {
-      show: false //是否显示x轴刻度
+      show: false 
     },
     axisTick: {
-      show: false, //是否显示y坐标轴刻度
+      show: false,
     },
   },
   yAxis: {
-    data: [20, 50, 80, 70, 45, 85],
+    type: 'value',
+    min: 0,
     axisTick: {
-      show: false, //是否显示y坐标轴刻度
+      show: false,
     },
     axisLine: {
-      show: false //是否显示x轴刻度
+      show: false
     },
     axisLabel: {
+      show: false
+    },
+    splitLine: {
       show: false
     }
   },
   grid: {
-    left: '0%',
-    right: '0%',
+    left: '5%',
+    right: '5%',
     bottom: '0%',
     top: '0%',
     containLabel: true
@@ -39,14 +43,13 @@ export const ChartData = {
         show: false
       }
     },
-    formatter: "<span style={{color: 'red'}}>{b}</span><br/> 汇总：{c}",
+    formatter: "<span style={{color: 'red'}}>{b}</span><br/> $：{c}",
     extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
   },
   series: [{
     name: '销量',
     type: 'line',
     animation: true,
-    data: [1, 2, 3, 4, 2, 1, 0],
     symbolSize: 5,
     showSymbol: false,
     symbol: 'circle',
@@ -62,6 +65,11 @@ export const ChartData = {
         },
       } 
     }
+  }],
+  dataZoom: [{
+    type: 'inside',
+    start: 0,
+    xAxisIndex: [0]
   }]
 };
 
@@ -92,21 +100,25 @@ export const media = [
   {
     app: 'Twitter',
     icon: require('../assets/images/Icons/twitter-logo@2x.png').default,
+    hover: require('../assets/images/Icons/twitter-logo-hover@2x.png').default,
     route: 'https://twitter.com/KCCOfficialTW',
   },
   {
     app: 'Telegram',
     icon: require('../assets/images/Icons/telegram-logo@2x.png').default,
+    hover: require('../assets/images/Icons/telegram-logo-hover@2x.png').default,
     route: 'https://t.me/KCCOfficialEnglishCommunity',
   },
   {
     app: 'Medium',
     icon: require('../assets/images/Icons/medium-logo@2x.png').default,
+    hover: require('../assets/images/Icons/medium-logo-hover@2x.png').default,
     route: 'https://github.com/kcc-community',
   },
   {
     app: 'Discord',
     icon: require('../assets/images/Icons/discord-logo@2x.png').default,
+    hover: require('../assets/images/Icons/discord-logo-hover@2x.png').default,
     route: 'https://discord.com/invite/H5ucJydSyd',
   },
 ]

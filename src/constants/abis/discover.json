@@ -1,1605 +1,1689 @@
 [
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "primaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "AddPrimaryCategory",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "secondaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "AddSecondaryCategory",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "reviewer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "isLikeAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint8",
-				"name": "isLike",
-				"type": "uint8"
-			}
-		],
-		"name": "IsLikeCommentInfo",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "previousAdminRole",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "newAdminRole",
-				"type": "bytes32"
-			}
-		],
-		"name": "RoleAdminChanged",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "RoleGranted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "RoleRevoked",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "submitAddress",
-				"type": "address"
-			},
-			{
-				"components": [
-					{
-						"internalType": "uint8",
-						"name": "score",
-						"type": "uint8"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "review",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct DappStore.CommentInfo",
-				"name": "commentInfo",
-				"type": "tuple"
-			}
-		],
-		"name": "SubmitCommentInfo",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"components": [
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "title",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "primaryCategoryIndex",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "secondaryCategoryIndex",
-								"type": "uint256"
-							},
-							{
-								"internalType": "string",
-								"name": "shortIntroduction",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "logoLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "banner",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "websiteLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "contractAddresses",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "email",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "marginAmount",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct DappStore.RequiredProjectInfo",
-						"name": "requiredProjectInfo",
-						"type": "tuple"
-					},
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "tokenSymbol",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "tokenContractAddress",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "tvlInterface",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "detailDescription",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "twitterLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "telegramLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "githubLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "coinmarketcapLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "coingeckoLink",
-								"type": "string"
-							}
-						],
-						"internalType": "struct DappStore.OptionalProjectInfo",
-						"name": "optionalProjectInfo",
-						"type": "tuple"
-					},
-					{
-						"internalType": "uint8",
-						"name": "status",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint256",
-						"name": "curVersion",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "createTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "updateStatus",
-						"type": "bool"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct DappStore.ProjectInfo",
-				"name": "projectInfo",
-				"type": "tuple"
-			}
-		],
-		"name": "SubmitProjectInfo",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "UpdateMinMarginAmount",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "newPrimaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "UpdatePrimaryCategory",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "version",
-				"type": "uint256"
-			},
-			{
-				"components": [
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "tokenSymbol",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "tokenContractAddress",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "tvlInterface",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "detailDescription",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "twitterLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "telegramLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "githubLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "coinmarketcapLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "coingeckoLink",
-								"type": "string"
-							}
-						],
-						"internalType": "struct DappStore.OptionalProjectInfo",
-						"name": "optionalProjectInfo",
-						"type": "tuple"
-					},
-					{
-						"internalType": "uint256",
-						"name": "primaryCategory",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "secondaryCategory",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "shortIntroduction",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "logoLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "banner",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "websiteLink",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "addMarginAmount",
-						"type": "uint256"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct DappStore.ChangedInfo",
-				"name": "_changedInfo",
-				"type": "tuple"
-			}
-		],
-		"name": "UpdateProjectInfo",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "newSecondaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "UpdateSecondaryCategory",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint8",
-				"name": "status",
-				"type": "uint8"
-			}
-		],
-		"name": "VerifySubmitProjectInfo",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "version",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "isUpdate",
-				"type": "bool"
-			}
-		],
-		"name": "VerifyUpdateProjectInfo",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "VERIFIER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "primaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "addPrimaryCategory",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "secondaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "addSecondaryCategory",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address payable",
-				"name": "projectAddress",
-				"type": "address"
-			}
-		],
-		"name": "cancelledProject",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "changedInfos",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "tokenSymbol",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tokenContractAddress",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tvlInterface",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "detailDescription",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "twitterLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "telegramLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "githubLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "coinmarketcapLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "coingeckoLink",
-						"type": "string"
-					}
-				],
-				"internalType": "struct DappStore.OptionalProjectInfo",
-				"name": "optionalProjectInfo",
-				"type": "tuple"
-			},
-			{
-				"internalType": "uint256",
-				"name": "primaryCategory",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "secondaryCategory",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "shortIntroduction",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "logoLink",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "banner",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "websiteLink",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "addMarginAmount",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "commentInfos",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "score",
-				"type": "uint8"
-			},
-			{
-				"internalType": "string",
-				"name": "title",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "review",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "timestamp",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "curPrimaryCategoryIndex",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "curSecondaryCategoryIndex",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address payable",
-				"name": "projectAddress",
-				"type": "address"
-			}
-		],
-		"name": "defeatSubmittedProjectInfo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address payable",
-				"name": "projectAddress",
-				"type": "address"
-			}
-		],
-		"name": "defeatUpdatedProjectInfo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "existPrimaryCategories",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "existSecondaryCategories",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			}
-		],
-		"name": "getRoleAdmin",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "hasRole",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string[]",
-				"name": "_primaryCategories",
-				"type": "string[]"
-			},
-			{
-				"internalType": "string[]",
-				"name": "_secondaryCategories",
-				"type": "string[]"
-			}
-		],
-		"name": "initialize",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "reviewer",
-				"type": "address"
-			},
-			{
-				"internalType": "uint8",
-				"name": "isLike",
-				"type": "uint8"
-			}
-		],
-		"name": "isLikeCommentInfo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "isLikeCommentInfos",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "minMarginAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "primaryCategories",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "projectInfos",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "primaryCategoryIndex",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "secondaryCategoryIndex",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "shortIntroduction",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "logoLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "banner",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "websiteLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "contractAddresses",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "email",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "marginAmount",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct DappStore.RequiredProjectInfo",
-				"name": "requiredProjectInfo",
-				"type": "tuple"
-			},
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "tokenSymbol",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tokenContractAddress",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tvlInterface",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "detailDescription",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "twitterLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "telegramLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "githubLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "coinmarketcapLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "coingeckoLink",
-						"type": "string"
-					}
-				],
-				"internalType": "struct DappStore.OptionalProjectInfo",
-				"name": "optionalProjectInfo",
-				"type": "tuple"
-			},
-			{
-				"internalType": "uint8",
-				"name": "status",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint256",
-				"name": "curVersion",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "createTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "updateStatus",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "secondaryCategories",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint8",
-				"name": "score",
-				"type": "uint8"
-			},
-			{
-				"internalType": "string",
-				"name": "title",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "review",
-				"type": "string"
-			}
-		],
-		"name": "submitCommentInfo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "primaryCategoryIndex",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "secondaryCategoryIndex",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "shortIntroduction",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "logoLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "banner",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "websiteLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "contractAddresses",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "email",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "marginAmount",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct DappStore.RequiredProjectInfo",
-				"name": "requiredProjectInfo",
-				"type": "tuple"
-			},
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "tokenSymbol",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tokenContractAddress",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tvlInterface",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "detailDescription",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "twitterLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "telegramLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "githubLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "coinmarketcapLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "coingeckoLink",
-						"type": "string"
-					}
-				],
-				"internalType": "struct DappStore.OptionalProjectInfo",
-				"name": "optionalProjectInfo",
-				"type": "tuple"
-			}
-		],
-		"name": "submitProjectInfo",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			}
-		],
-		"name": "successSubmittedProjectInfo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			}
-		],
-		"name": "successUpdatedProjectInfo",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes4",
-				"name": "interfaceId",
-				"type": "bytes4"
-			}
-		],
-		"name": "supportsInterface",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "updateMinMarginAmount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "primaryCategory",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "newPrimaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "updatePrimaryCategory",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "projectAddress",
-				"type": "address"
-			},
-			{
-				"components": [
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "tokenSymbol",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "tokenContractAddress",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "tvlInterface",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "detailDescription",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "twitterLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "telegramLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "githubLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "coinmarketcapLink",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "coingeckoLink",
-								"type": "string"
-							}
-						],
-						"internalType": "struct DappStore.OptionalProjectInfo",
-						"name": "optionalProjectInfo",
-						"type": "tuple"
-					},
-					{
-						"internalType": "uint256",
-						"name": "primaryCategory",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "secondaryCategory",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "shortIntroduction",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "logoLink",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "banner",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "websiteLink",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "addMarginAmount",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct DappStore.ChangedInfo",
-				"name": "_changedInfo",
-				"type": "tuple"
-			}
-		],
-		"name": "updateProjectInfo",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "secondaryCategory",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "newSecondaryCategory",
-				"type": "string"
-			}
-		],
-		"name": "updateSecondaryCategory",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "tokenAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "withdrawKRC20Token",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address payable",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "withdrawMargin",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"index",
+              "type":"uint256"
+          },
+          {
+              "indexed":false,
+              "internalType":"string",
+              "name":"primaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"AddPrimaryCategory",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"index",
+              "type":"uint256"
+          },
+          {
+              "indexed":false,
+              "internalType":"string",
+              "name":"secondaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"AddSecondaryCategory",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"reviewer",
+              "type":"address"
+          }
+      ],
+      "name":"DeleteComment",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"reviewer",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"isLikeAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"uint8",
+              "name":"isLike",
+              "type":"uint8"
+          }
+      ],
+      "name":"IsLikeCommentInfo",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":true,
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "indexed":true,
+              "internalType":"bytes32",
+              "name":"previousAdminRole",
+              "type":"bytes32"
+          },
+          {
+              "indexed":true,
+              "internalType":"bytes32",
+              "name":"newAdminRole",
+              "type":"bytes32"
+          }
+      ],
+      "name":"RoleAdminChanged",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":true,
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "indexed":true,
+              "internalType":"address",
+              "name":"account",
+              "type":"address"
+          },
+          {
+              "indexed":true,
+              "internalType":"address",
+              "name":"sender",
+              "type":"address"
+          }
+      ],
+      "name":"RoleGranted",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":true,
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "indexed":true,
+              "internalType":"address",
+              "name":"account",
+              "type":"address"
+          },
+          {
+              "indexed":true,
+              "internalType":"address",
+              "name":"sender",
+              "type":"address"
+          }
+      ],
+      "name":"RoleRevoked",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"submitAddress",
+              "type":"address"
+          },
+          {
+              "components":[
+                  {
+                      "internalType":"uint8",
+                      "name":"score",
+                      "type":"uint8"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"title",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"review",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"timestamp",
+                      "type":"uint256"
+                  }
+              ],
+              "indexed":false,
+              "internalType":"struct DappStoreV5.CommentInfo",
+              "name":"commentInfo",
+              "type":"tuple"
+          }
+      ],
+      "name":"SubmitCommentInfo",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "components":[
+                  {
+                      "components":[
+                          {
+                              "internalType":"string",
+                              "name":"title",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"uint256",
+                              "name":"primaryCategoryIndex",
+                              "type":"uint256"
+                          },
+                          {
+                              "internalType":"uint256",
+                              "name":"secondaryCategoryIndex",
+                              "type":"uint256"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"shortIntroduction",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"logoLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"banner",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"websiteLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"contractAddresses",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"email",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"uint256",
+                              "name":"marginAmount",
+                              "type":"uint256"
+                          }
+                      ],
+                      "internalType":"struct DappStoreV5.RequiredProjectInfo",
+                      "name":"requiredProjectInfo",
+                      "type":"tuple"
+                  },
+                  {
+                      "components":[
+                          {
+                              "internalType":"string",
+                              "name":"tokenSymbol",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"tokenContractAddress",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"tvlInterface",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"detailDescription",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"twitterLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"telegramLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"githubLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"coinmarketcapLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"coingeckoLink",
+                              "type":"string"
+                          }
+                      ],
+                      "internalType":"struct DappStoreV5.OptionalProjectInfo",
+                      "name":"optionalProjectInfo",
+                      "type":"tuple"
+                  },
+                  {
+                      "internalType":"uint8",
+                      "name":"status",
+                      "type":"uint8"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"curVersion",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"createTime",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"bool",
+                      "name":"updateStatus",
+                      "type":"bool"
+                  }
+              ],
+              "indexed":false,
+              "internalType":"struct DappStoreV5.ProjectInfo",
+              "name":"projectInfo",
+              "type":"tuple"
+          }
+      ],
+      "name":"SubmitProjectInfo",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"amount",
+              "type":"uint256"
+          }
+      ],
+      "name":"UpdateMinMarginAmount",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"index",
+              "type":"uint256"
+          },
+          {
+              "indexed":false,
+              "internalType":"string",
+              "name":"newPrimaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"UpdatePrimaryCategory",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"version",
+              "type":"uint256"
+          },
+          {
+              "components":[
+                  {
+                      "components":[
+                          {
+                              "internalType":"string",
+                              "name":"tokenSymbol",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"tokenContractAddress",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"tvlInterface",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"detailDescription",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"twitterLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"telegramLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"githubLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"coinmarketcapLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"coingeckoLink",
+                              "type":"string"
+                          }
+                      ],
+                      "internalType":"struct DappStoreV5.OptionalProjectInfo",
+                      "name":"optionalProjectInfo",
+                      "type":"tuple"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"primaryCategory",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"secondaryCategory",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"shortIntroduction",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"logoLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"banner",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"websiteLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"addMarginAmount",
+                      "type":"uint256"
+                  }
+              ],
+              "indexed":false,
+              "internalType":"struct DappStoreV5.ChangedInfo",
+              "name":"_changedInfo",
+              "type":"tuple"
+          }
+      ],
+      "name":"UpdateProjectInfo",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"index",
+              "type":"uint256"
+          },
+          {
+              "indexed":false,
+              "internalType":"string",
+              "name":"newSecondaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"UpdateSecondaryCategory",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"uint8",
+              "name":"status",
+              "type":"uint8"
+          }
+      ],
+      "name":"VerifySubmitProjectInfo",
+      "type":"event"
+  },
+  {
+      "anonymous":false,
+      "inputs":[
+          {
+              "indexed":false,
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "indexed":false,
+              "internalType":"uint256",
+              "name":"version",
+              "type":"uint256"
+          },
+          {
+              "indexed":false,
+              "internalType":"bool",
+              "name":"isUpdate",
+              "type":"bool"
+          }
+      ],
+      "name":"VerifyUpdateProjectInfo",
+      "type":"event"
+  },
+  {
+      "inputs":[
+
+      ],
+      "name":"DEFAULT_ADMIN_ROLE",
+      "outputs":[
+          {
+              "internalType":"bytes32",
+              "name":"",
+              "type":"bytes32"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+
+      ],
+      "name":"VERIFIER_ROLE",
+      "outputs":[
+          {
+              "internalType":"bytes32",
+              "name":"",
+              "type":"bytes32"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"string",
+              "name":"primaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"addPrimaryCategory",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"string",
+              "name":"secondaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"addSecondaryCategory",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address payable",
+              "name":"projectAddress",
+              "type":"address"
+          }
+      ],
+      "name":"cancelledProject",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"",
+              "type":"address"
+          },
+          {
+              "internalType":"uint256",
+              "name":"",
+              "type":"uint256"
+          }
+      ],
+      "name":"changedInfos",
+      "outputs":[
+          {
+              "components":[
+                  {
+                      "internalType":"string",
+                      "name":"tokenSymbol",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"tokenContractAddress",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"tvlInterface",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"detailDescription",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"twitterLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"telegramLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"githubLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"coinmarketcapLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"coingeckoLink",
+                      "type":"string"
+                  }
+              ],
+              "internalType":"struct DappStoreV5.OptionalProjectInfo",
+              "name":"optionalProjectInfo",
+              "type":"tuple"
+          },
+          {
+              "internalType":"uint256",
+              "name":"primaryCategory",
+              "type":"uint256"
+          },
+          {
+              "internalType":"uint256",
+              "name":"secondaryCategory",
+              "type":"uint256"
+          },
+          {
+              "internalType":"string",
+              "name":"shortIntroduction",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"logoLink",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"banner",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"websiteLink",
+              "type":"string"
+          },
+          {
+              "internalType":"uint256",
+              "name":"addMarginAmount",
+              "type":"uint256"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"",
+              "type":"address"
+          },
+          {
+              "internalType":"address",
+              "name":"",
+              "type":"address"
+          }
+      ],
+      "name":"commentInfos",
+      "outputs":[
+          {
+              "internalType":"uint8",
+              "name":"score",
+              "type":"uint8"
+          },
+          {
+              "internalType":"string",
+              "name":"title",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"review",
+              "type":"string"
+          },
+          {
+              "internalType":"uint256",
+              "name":"timestamp",
+              "type":"uint256"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+
+      ],
+      "name":"curPrimaryCategoryIndex",
+      "outputs":[
+          {
+              "internalType":"uint256",
+              "name":"",
+              "type":"uint256"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+
+      ],
+      "name":"curSecondaryCategoryIndex",
+      "outputs":[
+          {
+              "internalType":"uint256",
+              "name":"",
+              "type":"uint256"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address payable",
+              "name":"projectAddress",
+              "type":"address"
+          }
+      ],
+      "name":"defeatSubmittedProjectInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address payable",
+              "name":"projectAddress",
+              "type":"address"
+          }
+      ],
+      "name":"defeatUpdatedProjectInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          }
+      ],
+      "name":"deleteComment",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"string",
+              "name":"",
+              "type":"string"
+          }
+      ],
+      "name":"existPrimaryCategories",
+      "outputs":[
+          {
+              "internalType":"bool",
+              "name":"",
+              "type":"bool"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"string",
+              "name":"",
+              "type":"string"
+          }
+      ],
+      "name":"existSecondaryCategories",
+      "outputs":[
+          {
+              "internalType":"bool",
+              "name":"",
+              "type":"bool"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          }
+      ],
+      "name":"getRoleAdmin",
+      "outputs":[
+          {
+              "internalType":"bytes32",
+              "name":"",
+              "type":"bytes32"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "internalType":"address",
+              "name":"account",
+              "type":"address"
+          }
+      ],
+      "name":"grantRole",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "internalType":"address",
+              "name":"account",
+              "type":"address"
+          }
+      ],
+      "name":"hasRole",
+      "outputs":[
+          {
+              "internalType":"bool",
+              "name":"",
+              "type":"bool"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"string[]",
+              "name":"_primaryCategories",
+              "type":"string[]"
+          },
+          {
+              "internalType":"string[]",
+              "name":"_secondaryCategories",
+              "type":"string[]"
+          }
+      ],
+      "name":"initialize",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "internalType":"address",
+              "name":"reviewer",
+              "type":"address"
+          },
+          {
+              "internalType":"uint8",
+              "name":"isLike",
+              "type":"uint8"
+          }
+      ],
+      "name":"isLikeCommentInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes32",
+              "name":"",
+              "type":"bytes32"
+          },
+          {
+              "internalType":"address",
+              "name":"",
+              "type":"address"
+          }
+      ],
+      "name":"isLikeCommentInfos",
+      "outputs":[
+          {
+              "internalType":"uint8",
+              "name":"",
+              "type":"uint8"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+
+      ],
+      "name":"minMarginAmount",
+      "outputs":[
+          {
+              "internalType":"uint256",
+              "name":"",
+              "type":"uint256"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"uint256",
+              "name":"",
+              "type":"uint256"
+          }
+      ],
+      "name":"primaryCategories",
+      "outputs":[
+          {
+              "internalType":"string",
+              "name":"",
+              "type":"string"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"",
+              "type":"address"
+          }
+      ],
+      "name":"projectInfos",
+      "outputs":[
+          {
+              "components":[
+                  {
+                      "internalType":"string",
+                      "name":"title",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"primaryCategoryIndex",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"secondaryCategoryIndex",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"shortIntroduction",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"logoLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"banner",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"websiteLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"contractAddresses",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"email",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"marginAmount",
+                      "type":"uint256"
+                  }
+              ],
+              "internalType":"struct DappStoreV5.RequiredProjectInfo",
+              "name":"requiredProjectInfo",
+              "type":"tuple"
+          },
+          {
+              "components":[
+                  {
+                      "internalType":"string",
+                      "name":"tokenSymbol",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"tokenContractAddress",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"tvlInterface",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"detailDescription",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"twitterLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"telegramLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"githubLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"coinmarketcapLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"coingeckoLink",
+                      "type":"string"
+                  }
+              ],
+              "internalType":"struct DappStoreV5.OptionalProjectInfo",
+              "name":"optionalProjectInfo",
+              "type":"tuple"
+          },
+          {
+              "internalType":"uint8",
+              "name":"status",
+              "type":"uint8"
+          },
+          {
+              "internalType":"uint256",
+              "name":"curVersion",
+              "type":"uint256"
+          },
+          {
+              "internalType":"uint256",
+              "name":"createTime",
+              "type":"uint256"
+          },
+          {
+              "internalType":"bool",
+              "name":"updateStatus",
+              "type":"bool"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "internalType":"address",
+              "name":"account",
+              "type":"address"
+          }
+      ],
+      "name":"renounceRole",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes32",
+              "name":"role",
+              "type":"bytes32"
+          },
+          {
+              "internalType":"address",
+              "name":"account",
+              "type":"address"
+          }
+      ],
+      "name":"revokeRole",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"uint256",
+              "name":"",
+              "type":"uint256"
+          }
+      ],
+      "name":"secondaryCategories",
+      "outputs":[
+          {
+              "internalType":"string",
+              "name":"",
+              "type":"string"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "internalType":"uint8",
+              "name":"score",
+              "type":"uint8"
+          },
+          {
+              "internalType":"string",
+              "name":"title",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"review",
+              "type":"string"
+          }
+      ],
+      "name":"submitCommentInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "components":[
+                  {
+                      "internalType":"string",
+                      "name":"title",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"primaryCategoryIndex",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"secondaryCategoryIndex",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"shortIntroduction",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"logoLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"banner",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"websiteLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"contractAddresses",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"email",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"marginAmount",
+                      "type":"uint256"
+                  }
+              ],
+              "internalType":"struct DappStoreV5.RequiredProjectInfo",
+              "name":"requiredProjectInfo",
+              "type":"tuple"
+          },
+          {
+              "components":[
+                  {
+                      "internalType":"string",
+                      "name":"tokenSymbol",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"tokenContractAddress",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"tvlInterface",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"detailDescription",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"twitterLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"telegramLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"githubLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"coinmarketcapLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"coingeckoLink",
+                      "type":"string"
+                  }
+              ],
+              "internalType":"struct DappStoreV5.OptionalProjectInfo",
+              "name":"optionalProjectInfo",
+              "type":"tuple"
+          }
+      ],
+      "name":"submitProjectInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"payable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          }
+      ],
+      "name":"successSubmittedProjectInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          }
+      ],
+      "name":"successUpdatedProjectInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"bytes4",
+              "name":"interfaceId",
+              "type":"bytes4"
+          }
+      ],
+      "name":"supportsInterface",
+      "outputs":[
+          {
+              "internalType":"bool",
+              "name":"",
+              "type":"bool"
+          }
+      ],
+      "stateMutability":"view",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"uint256",
+              "name":"amount",
+              "type":"uint256"
+          }
+      ],
+      "name":"updateMinMarginAmount",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"uint256",
+              "name":"index",
+              "type":"uint256"
+          },
+          {
+              "internalType":"string",
+              "name":"primaryCategory",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"newPrimaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"updatePrimaryCategory",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"projectAddress",
+              "type":"address"
+          },
+          {
+              "components":[
+                  {
+                      "components":[
+                          {
+                              "internalType":"string",
+                              "name":"tokenSymbol",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"tokenContractAddress",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"tvlInterface",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"detailDescription",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"twitterLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"telegramLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"githubLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"coinmarketcapLink",
+                              "type":"string"
+                          },
+                          {
+                              "internalType":"string",
+                              "name":"coingeckoLink",
+                              "type":"string"
+                          }
+                      ],
+                      "internalType":"struct DappStoreV5.OptionalProjectInfo",
+                      "name":"optionalProjectInfo",
+                      "type":"tuple"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"primaryCategory",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"secondaryCategory",
+                      "type":"uint256"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"shortIntroduction",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"logoLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"banner",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"string",
+                      "name":"websiteLink",
+                      "type":"string"
+                  },
+                  {
+                      "internalType":"uint256",
+                      "name":"addMarginAmount",
+                      "type":"uint256"
+                  }
+              ],
+              "internalType":"struct DappStoreV5.ChangedInfo",
+              "name":"_changedInfo",
+              "type":"tuple"
+          }
+      ],
+      "name":"updateProjectInfo",
+      "outputs":[
+
+      ],
+      "stateMutability":"payable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"uint256",
+              "name":"index",
+              "type":"uint256"
+          },
+          {
+              "internalType":"string",
+              "name":"secondaryCategory",
+              "type":"string"
+          },
+          {
+              "internalType":"string",
+              "name":"newSecondaryCategory",
+              "type":"string"
+          }
+      ],
+      "name":"updateSecondaryCategory",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address",
+              "name":"tokenAddress",
+              "type":"address"
+          },
+          {
+              "internalType":"address",
+              "name":"to",
+              "type":"address"
+          },
+          {
+              "internalType":"uint256",
+              "name":"amount",
+              "type":"uint256"
+          }
+      ],
+      "name":"withdrawKRC20Token",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  },
+  {
+      "inputs":[
+          {
+              "internalType":"address payable",
+              "name":"to",
+              "type":"address"
+          },
+          {
+              "internalType":"uint256",
+              "name":"amount",
+              "type":"uint256"
+          }
+      ],
+      "name":"withdrawMargin",
+      "outputs":[
+
+      ],
+      "stateMutability":"nonpayable",
+      "type":"function"
+  }
 ]

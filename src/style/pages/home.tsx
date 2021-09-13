@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { Text } from '../../style'
 import Col from '../../components/Column'
 import { RowBetween } from '../../components/Row'
@@ -16,13 +16,18 @@ export const RankCard = styled(cardTransparent)`
 `
 
 export const RankImg = styled.div`
-  width: 40px;
-  margin-right: 3px;
+  width: 55px;
 `
 
 export const RankLogo = styled.img`
   width: 40px;
   margin-right: 12px;
+  border-radius: 4px;
+`
+
+export const RankDAppLogo = styled.img`
+  width: 40px;
+  margin-right: 13px;
 `
 
 export const RightImg = styled.img`

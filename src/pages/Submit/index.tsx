@@ -23,6 +23,7 @@ interface SubmitProps {
   title: string
   shortIntroduction: string
   logoLink: string
+  banner: string
   websiteLink: string
   contractAddresses: string
   email: string
@@ -86,6 +87,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   const [contractAddresses, setContract] = useState('')
   const [email, setEmail] = useState('')
   const [marginAmount, setMargin] = useState('')
+  const [banner, setBanner] = useState('')
 
 
   const [tokenSymbol, setTokenSymbol] = useState('')
@@ -121,7 +123,8 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         setPrimary(res[1].priCategory.name)
         setSecondary(res[1].secCategory.name)
         setIntro(res[1].intro)
-        setLogo(res[1].logo)
+        setLogo(res[1].logo.includes('ipfs/') ? res[1].logo.split('ipfs/')[1] : res[1].logo)
+        setBanner(res[1].banner.includes('ipfs/') ? res[1].banner.split('ipfs/')[1] : res[1].banner)
         setWebsite(res[1].website)
         setEmail(res[1].contact)
         res[1].detail && setDes(res[1].detail)
@@ -144,7 +147,13 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
       websiteLink, email, marginAmount,
-      contractAddresses, secondaryCategoryIndex, primaryCategoryIndex
+      contractAddresses, secondaryCategoryIndex, primaryCategoryIndex, banner
+    }
+    if(!logoLink.includes('https') && !logoLink.includes('ipfs')){
+      params.logoLink = 'https://cloudflare-ipfs.com/ipfs/' + logoLink
+    }
+    if(!banner.includes('https') && !logoLink.includes('ipfs')){
+      params.banner = 'https://cloudflare-ipfs.com/ipfs/' + banner
     }
     for(let item of primaryList){
       if(item.name === primaryCategoryIndex){
@@ -202,16 +211,6 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         return false;
     },
     fileList,
-    onChange: (e) => {
-      console.log(e)
-      //@ts-ignore
-      // const client = create({ host: 'localhost', port: '5001', protocol: 'http' });
-      const client = create(process.env.REACT_APP_IPFS_URL);
-      console.log('client =', client)
-      client.add(e.file).then((res: any) => {
-        setLogo(res.path)
-      })
-    }
   };
 
   return (
@@ -300,6 +299,12 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             className="avatar-uploader"
             showUploadList={false}
             {...upLoadProps}
+            onChange={(e) => {
+              const client = create(process.env.REACT_APP_IPFS_URL);
+              client.add(e.file).then((res: any) => {
+                setLogo(res.path)
+              })
+            }}
           > 
             <Col>
               <LocalStyle.ProjectImgCamera src={camera}/>
@@ -307,6 +312,31 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             </Col>
           </Upload>
           <Input value={logoLink} onChange={(e) => {setLogo(e.target.value)}} style={{marginTop: '15px'}}/>
+          <div style={{height: '36px'}}/>
+          <Row mb="8px">
+            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Banner</Text>
+            <RequiredPoint>*</RequiredPoint>
+            <Text color={'#737E8D'} fontSize="14px" ml={'5px'}>Image Size: 880*400 px</Text>
+          </Row>
+          <Upload
+            name="avatar"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            {...upLoadProps}
+            onChange={(e) => {
+              const client = create(process.env.REACT_APP_IPFS_URL);
+              client.add(e.file).then((res: any) => {
+                setBanner(res.path)
+              })
+            }}
+          > 
+            <Col>
+              <LocalStyle.ProjectImgCamera src={camera}/>
+              <Text fontSize="14px" color="#737E8D">Upload</Text>
+            </Col>
+          </Upload>
+          <Input value={banner} onChange={(e) => {setBanner(e.target.value)}} style={{marginTop: '15px'}}/>
           <div style={{height: '36px'}}/>
           <InputItem 
             title={'Smart Contract Addresses'}

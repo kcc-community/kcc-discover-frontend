@@ -36,9 +36,9 @@ const Chart = (props: ChartProps): React.ReactElement => {
         function showLoading(instance): void {
             instance.showLoading("default", {
                 text: "",
-                color: "#c23531",
+                color: "#18BB97",
                 textColor: "#000000",
-                maskColor: "rgba(255, 255, 255, 0.8)",
+                maskColor: "transparent",
                 zlevel: 0
             });
         }

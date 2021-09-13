@@ -19,3 +19,19 @@ export function getDappComment(data): Object{
 export function getDappReviwer(data): Object{
   return get('/api/v1/comments/' + `${data?.reviewer}?page=${data?.page}&limit=${data?.limit}`)
 }
+
+export async function getGlobalChart(){
+  return get('/api/v1/global_chart')
+}
+
+export function getTopDappRank(){
+  return get('/api/v1/topTvl')
+}
+
+export function getHomeDiscover(){
+  return get('/api/v1/recommend/discover')
+}
+
+export function getHomePriceInfo(){
+  return get('/api/v1/kcs/price')
+}

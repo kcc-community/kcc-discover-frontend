@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import { Container, Text } from '../../style'
 import Row, { RowBetween } from 'components/Row'
 import { media } from '../../constants/home'
+import $ from 'jquery'
 
 const FooterWrap = styled.div<{ transparent?: boolean }>`
   width: 100%;
@@ -22,8 +23,8 @@ const MediaItem = styled.a`
   align-items: center;
   margin-left: 24px;
   :hover{
-    // background: #B8C6D8;
-    opacity: .75;
+    background: #B8C6D8;
+    // opacity: .75;
   }
 `
 
@@ -32,11 +33,20 @@ interface FooterProps {
 } 
 
 const Footer: React.FunctionComponent<FooterProps> = (props) => {
-  const theme = useTheme()
+  useEffect(() => {
+    for(let index in media){
+      $('.' + media[index].app).hover(function(){
+        $('.' + media[index].app + 'Logo').attr('src', media[index].hover)
+      }, function(){
+        $('.' + media[index].app + 'Logo').attr('src', media[index].icon)
+      })
+    }
+  }, [])
+
   const renderMedia = (data, index) => {
     return(
-      <MediaItem href={data?.route} target="_blank" key={index}>
-        <img src={data?.icon} width="50%" alt={data?.app}/> 
+      <MediaItem href={data?.route} target="_blank" key={index} className={data?.app}>
+        <img src={data?.icon} style={{width: '20px'}} alt={data?.app} className={data?.app + 'Logo'}/> 
       </MediaItem>
     )
   }
