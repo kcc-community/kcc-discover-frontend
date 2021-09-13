@@ -5,7 +5,6 @@ import ResetCSS from './style/ResetCSS'
 import Providers from './Providers'
 import App from './pages/App'
 import './utils/i18n'
-import 'axios'
 
 import './assets/font/style.css'
 import './style/antd.less'
@@ -32,7 +31,6 @@ ReactDOM.render(
       <GlobalStyle />
       <App />
     </Providers>
-  </StrictMode>
-  ,
+  </StrictMode>,
   document.getElementById('root')
 )

@@ -130,7 +130,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <CountUp 
               start={0} 
               end={num} 
-              decimals={key ? 0 : 11}
+              decimals={key ? 0 : 13}
               duration={1.5} 
               separator=","/>
           </LocalStyle.SecondText>
