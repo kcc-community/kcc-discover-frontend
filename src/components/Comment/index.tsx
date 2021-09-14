@@ -53,9 +53,6 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
       reviewer: props.address,
       isLike: type ? (props.attitude === 1 ? 0 : 1) : (props.attitude === 2 ? 0 : 2)
     }
-    // if((type && props.attitude === 2) || (!type && props.attitude === 1)) {
-    //   message.error('You can not click both action')
-    // }
     console.log('params =', params);
     const { commentLikeCallback } = useCommentLike(params, library);
     commentLikeCallback().then(res => {

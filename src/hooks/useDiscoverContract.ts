@@ -50,8 +50,9 @@ export function useComment(data: any , library?: any): {
           return response.hash
         })
     }).catch(e => {
+      console.log(e)
       let error = e?.toString().split('code":')[1]?.split(',')
-      if(error[0] === '-32603'){
+      if(error && error[0] === '-32603'){
         message.error('You can only comment once per account')
       } else {
         message.error('Contract call error')
@@ -67,7 +68,7 @@ export function useCommentLike(data: any , library?: any): {
   const distributorContract = getDiscoverContract(library)
   const commentLikeCallback = async () => {
     if ( !library || !distributorContract) return
-    const args = []
+    const args = [data.projectAddress, data.reviewer, data.isLike]
     // eslint-disable-next-line consistent-return
     console.log('contract =', distributorContract, args);
     return distributorContract.estimateGas.isLikeCommentInfo(...args, {}).then((estimatedGasLimit: BigNumber) => {

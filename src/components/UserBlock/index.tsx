@@ -10,15 +10,19 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import { Dropdown, Menu, message } from 'antd'
 import Row, { RowBetween } from '../Row'
 import Col from '../Column'
+import { supportedChainIds } from '../../constants/wallet'
 import { rightDark, copy } from '../../constants/imgs'
 import Copy from 'copy-to-clipboard'
 import { useHistory } from 'react-router'
 import { useTranslation } from 'react-i18next'
+import { useChainError } from '../../state/wallet/hooks'
+import { switchNetwork } from '../../utils/wallet'
 
 export type Login = (connectorId: ConnectorNames) => void
 
 interface Props {
   account?: string
+  chainId?: number
   login: Login
   logout: () => void
 }
@@ -33,7 +37,8 @@ const ConnectButton = styled.div`
   justify-content: center;
   margin: 0px;
   margin-left: 18px;
-  width: 110px;
+  min-width: 110px;
+  padding: 0 12px;
   outline: none;
   white-space: nowrap;
   border: 1px solid ${({ theme }) => theme.colors.darkGrey};
@@ -87,7 +92,7 @@ const RightImg = styled.img`
   cursor: pointer;
 `
 
-const UserBlock: React.FC<Props> = ({ account, login, logout }) => {
+const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
   const accountEllipsis = account ? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : null
   const [connectVisible, setCVisible] = useState(false)
   const [accountVisible, setAVisible] = useState(false)
@@ -95,6 +100,11 @@ const UserBlock: React.FC<Props> = ({ account, login, logout }) => {
   const history = useHistory()
   const theme = useTheme()
   const { t } = useTranslation()
+  const chainError = useChainError()
+  const walletStatus = () => {
+    if(chainError) { return chainError }
+    return 'Connect'
+  }
   const menu = (
     <Menu>
       <Row mb="10px" ml="12px" style={{paddingTop: '12px'}}>
@@ -150,10 +160,14 @@ const UserBlock: React.FC<Props> = ({ account, login, logout }) => {
       ) : (
         <ConnectButton
           onClick={() => {
+            if(chainError && window.ethereum){
+              switchNetwork(Number(process.env.REACT_APP_CHAIN_ID))
+              return;
+            } 
             setCVisible(!connectVisible)
           }}
         >
-          <ConnectButtonText> Connect </ConnectButtonText>
+          <ConnectButtonText> {walletStatus()} </ConnectButtonText>
         </ConnectButton>
       )}
       <ConnectModal 

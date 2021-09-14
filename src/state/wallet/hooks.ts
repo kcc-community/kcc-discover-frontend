@@ -4,7 +4,7 @@ import { isAddress } from '../../utils'
 import { useSelector } from 'react-redux'
 import { useMulticallContract } from '../../hooks/useContract'
 import ERC20_INTERFACE from '../../constants/abis/erc20'
-import { useSingleContractMultipleData, useMultipleContractSingleData, useSingleCallResult } from '../multicall/hooks'
+import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
 import { AppState } from '../index'
 
 
@@ -12,6 +12,18 @@ export function useBalance(): string {
   return useSelector((state: AppState) => {
     return state.wallet.balance
   })
+}
+
+export function useChainError(): string {
+  return useSelector((state: AppState) => {
+    return state.wallet.chainError
+  }) 
+}
+
+export function useKCSPrice(): number {
+  return useSelector((state: AppState) => {
+    return state.wallet.price
+  }) 
 }
 
 /**

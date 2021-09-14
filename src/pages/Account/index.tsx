@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
 import { Container, Text } from '../../style'
 import { eyeOpen, eyeClose, edit, copy } from '../../constants/imgs'
+import { stateTipsColor } from '../../constants/home'
 import Row, { RowBetween } from 'components/Row'
 import Col from 'components/Column'
 import Empty from 'components/Empty'
@@ -17,30 +18,43 @@ import { useWeb3React } from '@web3-react/core'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import Comment from '../../components/Comment'
 import Footer from '../../components/Footer'
+import useAccountInfo from '../../hooks/useAccount'
+import { useKCSPrice } from '../../state/wallet/hooks'
 
+// todo: 1.api 2.delete refresh 
 
 const AccountPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const balance = useCurrencyBalances(account ?? undefined, [ETHER])
   const { t } = useTranslation()
   const [show, setShow] = useState(true)
+  const usdtPrice = useKCSPrice();
   const [reviewLoading, getReviewList] = useLoading(ApiService.getDappReviwer)
   const [reviewPage, setReviewPage] = useState(1)
   const [reviewTotal, setReviewTotal] = useState(1)
   const [reviewList, setReviewList] = useState([])
 
+  const [transPage, setTransPage] = useState(1)
+
+
+  const accountInfo = useAccountInfo(account, chainId);
+  const hasProject = accountInfo.project.state === 'None' ? false : true
+  const totalValueKcs = balance[0]?.toSignificant(4) ?? '0.00'
+  const totalValueUsdt = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4)).multipliedBy(usdtPrice).toFixed(2) : '0.00'
+  const totalLockKcs = accountInfo.project?.info?.margin ? new BN(accountInfo.project?.info?.margin).toFixed(2) : '0.00'
+  const totalLockUsdt = accountInfo.project?.info?.margin ? new BN(accountInfo.project?.info?.margin).multipliedBy(usdtPrice).toFixed(2) : '0.00'
+  console.log('useAccountInfo =', accountInfo)
+
   const history = useHistory();
 
   useEffect(() => {
-    Promise.all([
-      getReviewList({ page: reviewPage, limit: 3, reviewer: account}),
-      // getCategoryList()
-    ]).then((res: any) => {
-      setReviewList(res[0].list)
-      setReviewTotal(res[0].total)
+    getReviewList({ page: reviewPage, limit: 3, reviewer: account})
+    .then((res: any) => {
+      setReviewList(res.list)
+      setReviewTotal(res.total)
     })
-  }, [])
+  }, [reviewPage])
 
   const TopCard = (type: string) => {
     const isBalance = type === 'balance' ? true : false;
@@ -54,10 +68,10 @@ const AccountPage: React.FunctionComponent = (props) => {
     }
     return(
       <LocalStyle.AccountCard key={type}>
-        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? balance[0]?.toSignificant(4) ?? '0.00' : `$103,223.89`) : '-')}
+        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2).toString() }`) : '-')}
         <RowBetween>
-          {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance'), show ? (isBalance ? `10000.12` : `$103,223.89`) : '-', '50%', '35px')}
-          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance'), show ? (isBalance ? `10000.12` : `$103,223.89`) : '-', '50%', '35px')}
+          {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '-', '50%', '35px')}
+          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : totalLockUsdt) : '-', '50%', '35px')}
         </RowBetween>
       </LocalStyle.AccountCard>
     )
@@ -76,10 +90,10 @@ const AccountPage: React.FunctionComponent = (props) => {
 
   const renderTransItem = (data: any) => {
     return(
-      <RowBetween mb="15px" style={{cursor: 'pointer'}}>
+      <LocalStyle.AccountExplore key={data.txid} href={process.env.REACT_APP_EXPLORE + '/' + data.hash} target="_blank">
         <LocalStyle.ProjectTextSub style={{fontSize: '16px', width: '60%'}}>{data?.hash ? data.hash.substr(0, 12) + '...' + data.hash.substr(-6) : '-'}</LocalStyle.ProjectTextSub>
         <Text color={theme.colors.primary} fontWeight={'bold'}>{t('View details')}</Text>
-      </RowBetween>
+      </LocalStyle.AccountExplore>
     )
   }
 
@@ -111,35 +125,66 @@ const AccountPage: React.FunctionComponent = (props) => {
             <LocalStyle.AccountCard width="387px" height="246px" style={{marginBottom: '20px'}}>
               <RowBetween>
                 <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("My Project")}</LocalStyle.ProjectText>
-                <Row style={{width: 'auto', cursor: 'pointer'}}>
-                  <LocalStyle.AccountImgEdit src={edit}/>
-                  <Text color={theme.colors.primary} fontWeight={'bold'}>{t("Edit")}</Text>
-                </Row>
+                {
+                  hasProject && accountInfo.project.state === 'Displaying' &&
+                  <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => history.push(`/submit?name=${accountInfo.project?.info?.owner}`)}>
+                    <LocalStyle.AccountImgEdit src={edit}/>
+                    <Text color={theme.colors.primary} fontWeight={'bold'}>{t("Edit")}</Text>
+                  </Row>
+                }
               </RowBetween>
               <LocalStyle.AccountLine />
-              <Row>
-                <LocalStyle.AccountImgDApp src={'https://cloudflare-ipfs.com/ipfs/QmWoRyyU7N16irq9xL6x9kwj6kMmWZgVE12kcCJZZH6y9e'} alt="DApp logo"/>
-                <LocalStyle.ProjectText style={{fontSize: '20px'}}>Sushi Swap</LocalStyle.ProjectText>
-              </Row>
-              <Row mt="15px">
-                <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("KCS Margin")}</LocalStyle.ProjectTextSub>
-                <LocalStyle.ProjectText style={{fontSize: '24px'}}>1,000 <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
-              </Row>
-              <Row mt="15px">
-                <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("State")}</LocalStyle.ProjectTextSub>
-                <LocalStyle.AccountStatusShow>Displaying</LocalStyle.AccountStatusShow>
-              </Row>
+              {
+                hasProject && !accountInfo.projectLoading ?
+                <>
+                  <Row>
+                    <LocalStyle.AccountImgDApp src={accountInfo.project?.info?.logo} alt="DApp logo"/>
+                    <LocalStyle.ProjectText style={{fontSize: '20px'}}>{accountInfo.project?.info?.title}</LocalStyle.ProjectText>
+                  </Row>
+                  <Row mt="15px">
+                    <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("KCS Margin")}</LocalStyle.ProjectTextSub>
+                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{new BN(accountInfo.project?.info?.margin).toFixed(2).toString()} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
+                  </Row>
+                  <Row mt="15px">
+                    <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("State")}</LocalStyle.ProjectTextSub>
+                    <LocalStyle.AccountStatusShow status={stateTipsColor[accountInfo.project.state].bg} color={stateTipsColor[accountInfo.project.state].color}>Displaying</LocalStyle.AccountStatusShow>
+                  </Row>
+                </>
+                :
+                (
+                  accountInfo.projectLoading ? 
+                  <Skeleton paragraph={{ rows: 3 }} />
+                  :
+                  <Empty margin="20px auto 0 auto"/>
+                )
+              }
             </LocalStyle.AccountCard>  
             <LocalStyle.AccountCard width="387px" height="332px">
               {renderTitle('Transaction History')}
               <LocalStyle.AccountTransContent>
-                {renderTransItem({hash: '0x1231312321321321312321321321312666666666'})}
-                {renderTransItem({hash: '0x1231312321321321312321321321312666666666'})}
-                {renderTransItem({hash: '0x1231312321321321312321321321312666666666'})}
-                {renderTransItem({hash: '0x1231312321321321312321321321312666666666'})}
-                {renderTransItem({hash: '0x1231312321321321312321321321312666666666'})}
+                {
+                  accountInfo.transaction.length && !accountInfo.transLoading ?
+                  accountInfo.transaction.map((item: any, index) => {
+                    if(transPage === 1 && index <= 4 || (transPage === 2 && index > 4)){
+                      return (renderTransItem({hash: item?.txid}))
+                    }
+                    return null
+                  })
+                  :
+                  (
+                    accountInfo.transLoading ? 
+                    <Skeleton paragraph={{ rows: 3 }} />
+                    :
+                    <Empty margin="20px auto 0 auto"/>
+                  )
+                }
               </LocalStyle.AccountTransContent>
-              <Pagination size="small" total={10} className={'kcc-pagination'}/>
+              <Pagination 
+                size="small" 
+                onChange={(page, size) => {setTransPage(page)}}
+                pageSize={5} 
+                total={accountInfo?.transaction.length} 
+                className={'kcc-pagination'}/>
             </LocalStyle.AccountCard>   
           </Col>
           <LocalStyle.AccountCard width="793px" height="597px">
@@ -152,7 +197,13 @@ const AccountPage: React.FunctionComponent = (props) => {
                 (reviewLoading ? <Skeleton avatar paragraph={{ rows: 4 }} /> : <Empty />)
               }
             </LocalStyle.AccountReviewContent>
-            <Pagination size="small" total={10} className={'kcc-pagination'}/>
+            {reviewList.length > 0 && 
+              <Pagination 
+                size="small" 
+                pageSize={3} 
+                onChange={(page) => {setReviewPage(page)}}
+                total={reviewTotal} 
+                className={'kcc-pagination'}/>}
           </LocalStyle.AccountCard> 
         </RowBetween>
       </Container>

@@ -3,6 +3,8 @@ import { Contract } from '@ethersproject/contracts'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { AddressZero } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
+import web3 from 'web3'
+import {networks, NetworkType} from '../constants/network'
 
 // returns the check summed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -68,4 +70,12 @@ export function hashSpilt(str: string ,nums?: number){
 // add 10%
 export function calculateGasMargin(value: BigNumber): BigNumber {
   return value.mul(BigNumber.from(10000).add(BigNumber.from(1000))).div(BigNumber.from(10000))
+}
+
+
+const {utils} = new web3()
+export const web3Utils = utils
+
+export function getNetworkInfo(networkId): NetworkType {
+    return networks[networkId]
 }

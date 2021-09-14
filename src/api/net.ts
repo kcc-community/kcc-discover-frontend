@@ -35,3 +35,11 @@ export function getHomeDiscover(){
 export function getHomePriceInfo(){
   return get('/api/v1/kcs/price')
 }
+
+export function getAccountTransaction(data): Object{
+  return get('/api/v1/my/history?address=0x2326E4155712b2D6bDfCD705e755518eD7F0E076')
+}
+
+export function getAccountProject(data): Object{
+  return get('/api/v1/my/project?app=' + data)
+}

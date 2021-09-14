@@ -105,6 +105,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     const { commentCallback } = useComment(params, library);
     commentCallback().then(res => {
       if(res){
+        setModal(false)
         message.success('Success');
       }
     })

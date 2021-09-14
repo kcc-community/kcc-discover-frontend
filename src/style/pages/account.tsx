@@ -67,6 +67,14 @@ export const AccountReviewContent = styled.div`
   height: 465px;
 `
 
+export const AccountExplore = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+`
+
 
 
 

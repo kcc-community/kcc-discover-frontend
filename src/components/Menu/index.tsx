@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import { useWeb3React } from '@web3-react/core'
+import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import styled, { useTheme } from 'styled-components'
 import useAuth from 'hooks/useAuth'
 import { RowFixed, RowBetween } from '../Row'
@@ -7,8 +7,12 @@ import { Text } from '../../style'
 import Flex from '../../style/components/Box/Flex'
 import UserBlock from '../UserBlock'
 import Language from '../ChangeLanguage'
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+import { injected } from '../../connectors'
+import { updateChainError } from '../../state/wallet/actions'
+import usePriceInfo from '../../hooks/usePriceInfo'
 
 const Wrapper = styled.div`
   position: relative;
@@ -54,12 +58,14 @@ interface MenuList {
 
 const Menu: React.FunctionComponent = (props) => {
   const { t } = useTranslation();
-  const { account } = useWeb3React()
+  const { account, chainId, activate } = useWeb3React()
   const { login, logout } = useAuth()
+  const priceInfo = usePriceInfo(account)
   const history = useHistory();
   const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true });
   const matchAccount = useRouteMatch({ path: '/account', strict: true, sensitive: true });
   const theme = useTheme()
+  const dispatch = useDispatch()
   const href = window.location.href
   const menuList: MenuList[] = [
     {
@@ -75,6 +81,21 @@ const Menu: React.FunctionComponent = (props) => {
       route: '/submit',
     },
   ]
+
+  useEffect(() => {
+    const { ethereum } = window
+    if(ethereum){
+      activate(injected, undefined, true).then(() => {
+        console.log('active success')
+        dispatch(updateChainError({chainError: ''}))
+      })
+      .catch((e) => {
+        if(e instanceof UnsupportedChainIdError){
+          dispatch(updateChainError({chainError: 'Unsupported Network'}))
+        }
+      })
+    }
+  }, [chainId])
 
   useEffect(() => {
     const isHome = matchHome && matchHome.isExact;
@@ -117,7 +138,7 @@ const Menu: React.FunctionComponent = (props) => {
           <RowFixed>
             {!!login && !!logout && (
               <Flex>
-                <UserBlock account={account as string} login={login} logout={logout} />
+                <UserBlock account={account as string} chainId={chainId} login={login} logout={logout} />
               </Flex>
             )}
             <Language />

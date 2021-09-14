@@ -12,8 +12,10 @@ import { FadeInUp } from '../../utils/animation'
 import { gold, sliver, bronze, right, iconLeft, iconRight, websiteWhite } from '../../constants/imgs'
 import { ApiService, useLoading } from '../../api'
 import { Skeleton } from 'antd'
-import { uriToHttp } from '../../utils'
 import { useTranslation } from 'react-i18next'
+import { updateKCSPrice } from '../../state/wallet/actions'
+import { useDispatch } from 'react-redux'
+import usePriceInfo from '../../hooks/usePriceInfo'
 import $ from 'jquery'
 import dayjs from 'dayjs'
 import BN from 'bignumber.js'
@@ -37,6 +39,7 @@ interface SliderProps {
 
 
 const HomePage: React.FunctionComponent = (props) => {
+  const dispatch = useDispatch();
   let [chart1Data, setChart1Data] = React.useState(null);
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
@@ -44,9 +47,9 @@ const HomePage: React.FunctionComponent = (props) => {
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([])
   const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
-  const [priceInfo, setPriceInfo] = useState<PriceProps>({avgGasPrice: '0', addressCount: '0', txCount: 0, priceUsd: '0'})
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }])
   const [dailyVolumeRate, setDailyRate] = useState('0.00')
+  const priceInfo: PriceProps = usePriceInfo()
   const [active, setActive] = useState(2);
   const theme = useTheme();
   const { t } = useTranslation();
@@ -83,13 +86,11 @@ const HomePage: React.FunctionComponent = (props) => {
       console.log("chart1", chart1);
       Promise.all([
         getTopDapp(),
-        getPriceInfo(),
         getSliderInfo()
       ]).then((res: any) => {
         setTopDapp(res[0].list)
-        setPriceInfo(res[1])
         //deal slider info
-        let slider = [res[2].dayComments, res[2].dayTxCount, res[2].txCount ,res[2].totalLiquidityETH, res[2].dayScore];
+        let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
         setSlider(slider as any)
       })
       updateChart();

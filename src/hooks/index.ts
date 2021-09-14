@@ -1,12 +1,14 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { ChainId } from 'mojito-testnet-sdk'
 import { connectorLocalStorageKey } from '../style'
-import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
+import { useWeb3React as useWeb3ReactCore, UnsupportedChainIdError } from '@web3-react/core'
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { injected } from '../connectors'
 import { NetworkContextName } from '../constants/wallet'
+import { useDispatch } from 'react-redux'
+import { updateChainError } from '../state/wallet/actions'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & { chainId?: ChainId } {
   const context = useWeb3ReactCore<Web3Provider>()
@@ -49,29 +51,37 @@ export function useEagerConnect() {
  */
 export function useInactiveListener(suppress = false) {
   const { active, error, activate } = useWeb3ReactCore() // specifically using useWeb3React because of what this hook does
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const { ethereum } = window
-
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleChainChanged = () => {
-        // eat errors
-        activate(injected, undefined, true).catch((e) => {
-          console.error('Failed to activate after chain changed', e)
-        })
+          // eat errors
+          activate(injected, undefined, true).then(() => {
+            console.log('active success')
+            dispatch(updateChainError({chainError: ''}))
+          })
+          .catch((e) => {
+            console.error('Failed to activate after chain changed', e)
+            if(e instanceof UnsupportedChainIdError){
+              dispatch(updateChainError({chainError: 'Unsupported Network'}))
+            }
+          })
       }
 
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length > 0) {
           // eat errors
-          activate(injected, undefined, true).catch((e) => {
+          activate(injected, undefined, true)
+          .catch((e) => {
             console.error('Failed to activate after accounts changed', e)
           })
         }
       }
 
       ethereum.on('chainChanged', handleChainChanged)
-      ethereum.on('accountsChanged', handleAccountsChanged)
+      ethereum.on('accountsChanged', (accounts) => handleAccountsChanged(accounts))
 
       return () => {
         if (ethereum.removeListener) {

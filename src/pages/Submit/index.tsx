@@ -80,8 +80,8 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
 
   const [title, setTitle] = useState('')
   const [shortIntroduction, setIntro] = useState('')
-  const [primaryCategoryIndex, setPrimary] = useState('')
-  const [secondaryCategoryIndex, setSecondary] = useState('')
+  const [primaryCategoryIndex, setPrimary] = useState(undefined)
+  const [secondaryCategoryIndex, setSecondary] = useState(undefined)
   const [logoLink, setLogo] = useState('')
   const [websiteLink, setWebsite] = useState('')
   const [contractAddresses, setContract] = useState('')
@@ -237,7 +237,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             optionFilterProp="children"
             style={{marginBottom: '36px'}}
             value={primaryCategoryIndex}
-            onChange={(e: string) => {setPrimary(e)}}
+            onChange={(e) => {setPrimary(e)}}
             filterOption={(input, option) =>
               //@ts-ignore
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -259,7 +259,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             optionFilterProp="children"
             value={secondaryCategoryIndex}
             style={{marginBottom: '36px'}}
-            onChange={(e: string) => {setSecondary(e)}}
+            onChange={(e) => {setSecondary(e)}}
             filterOption={(input, option) =>
               //@ts-ignore
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0

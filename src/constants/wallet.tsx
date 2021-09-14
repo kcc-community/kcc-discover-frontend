@@ -13,3 +13,5 @@ export const WalletList: any[] = [
     logo: require('../assets/images/home/logo.png').default,
   },
 ]
+
+export const supportedChainIds = [4, 321, 322];
