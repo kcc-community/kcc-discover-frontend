@@ -94,6 +94,7 @@ export const CateItem = styled(cardTransparent)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `
 
 export const CateLogo = styled.img`

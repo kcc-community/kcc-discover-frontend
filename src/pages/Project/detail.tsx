@@ -88,7 +88,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
           if(page < (res.total / 5)) { setMore(true) } else { setMore(false) }
         }
       })
-    }, 15000)
+    }, 30000)
     return () => {
       clearInterval(timer);
     }

@@ -49,12 +49,14 @@ const AccountPage: React.FunctionComponent = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    getReviewList({ page: reviewPage, limit: 3, reviewer: account})
-    .then((res: any) => {
-      setReviewList(res.list)
-      setReviewTotal(res.total)
-    })
-  }, [reviewPage])
+    if(account){
+      getReviewList({ page: reviewPage, limit: 3, reviewer: account})
+      .then((res: any) => {
+        setReviewList(res.list)
+        setReviewTotal(res.total)
+      })
+    }
+  }, [reviewPage, account])
 
   const TopCard = (type: string) => {
     const isBalance = type === 'balance' ? true : false;
@@ -182,6 +184,7 @@ const AccountPage: React.FunctionComponent = (props) => {
               <Pagination 
                 size="small" 
                 onChange={(page, size) => {setTransPage(page)}}
+                current={transPage}
                 pageSize={5} 
                 total={accountInfo?.transaction.length} 
                 className={'kcc-pagination'}/>
@@ -201,6 +204,7 @@ const AccountPage: React.FunctionComponent = (props) => {
               <Pagination 
                 size="small" 
                 pageSize={3} 
+                current={reviewPage}
                 onChange={(page) => {setReviewPage(page)}}
                 total={reviewTotal} 
                 className={'kcc-pagination'}/>}

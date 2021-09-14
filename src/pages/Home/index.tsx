@@ -13,8 +13,9 @@ import { gold, sliver, bronze, right, iconLeft, iconRight, websiteWhite } from '
 import { ApiService, useLoading } from '../../api'
 import { Skeleton } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { updateKCSPrice } from '../../state/wallet/actions'
 import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
+import { useCategorySubtle } from '../../state/wallet/hooks'
 import usePriceInfo from '../../hooks/usePriceInfo'
 import $ from 'jquery'
 import dayjs from 'dayjs'
@@ -40,17 +41,20 @@ interface SliderProps {
 
 const HomePage: React.FunctionComponent = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   let [chart1Data, setChart1Data] = React.useState(null);
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
   const [priceLoading, getPriceInfo] = useLoading(ApiService.getHomePriceInfo);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
-  const [topDapps, setTopDapp] = useState([])
+  const [topDapps, setTopDapp] = useState([]);
   const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
-  const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }])
-  const [dailyVolumeRate, setDailyRate] = useState('0.00')
-  const priceInfo: PriceProps = usePriceInfo()
+  const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
+  const [dailyVolumeRate, setDailyRate] = useState('0.00');
+  const priceInfo: PriceProps = usePriceInfo();
   const [active, setActive] = useState(2);
+  const categorySubtle = useCategorySubtle();
+  console.log('categorySubtle =', categorySubtle)
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -156,12 +160,12 @@ const HomePage: React.FunctionComponent = (props) => {
     )
   }
 
-  const cateItem = (title: string, index: number) => {
+  const cateItem = (data: any, index: number) => {
     return(
-      <FadeInUp delay={index * 100}>
-        <LocalStyle.CateItem>
-          <LocalStyle.CateLogo src={Categories[title]}/>
-          <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>{title}</LocalStyle.SecondText>
+      <FadeInUp delay={index * 100} key={index}>
+        <LocalStyle.CateItem onClick={() => history.push('/project?sec=' + data.index)}>
+          <LocalStyle.CateLogo src={Categories[index - 1]}/>
+          <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>{data?.name}</LocalStyle.SecondText>
         </LocalStyle.CateItem>
       </FadeInUp>
     )
@@ -285,7 +289,13 @@ const HomePage: React.FunctionComponent = (props) => {
               <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
             <RowBetween>
-              { [t('Exchange'), t('LaunchPad'), t('Earn'), t('Gaming'), t('Tools'), t('More')].map((item, index) => cateItem(item, index)) }
+              { categorySubtle.map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
+              <FadeInUp delay={700} >
+                <LocalStyle.CateItem onClick={() => history.push('/project')}>
+                  <LocalStyle.CateLogo src={Categories[5]}/>
+                  <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
+                </LocalStyle.CateItem>
+              </FadeInUp>
             </RowBetween>
           </>
         </Container>

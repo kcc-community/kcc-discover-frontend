@@ -17,6 +17,7 @@ import { useHistory } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useChainError } from '../../state/wallet/hooks'
 import { switchNetwork } from '../../utils/wallet'
+import useAccountInfo from '../../hooks/useAccount'
 
 export type Login = (connectorId: ConnectorNames) => void
 
@@ -97,6 +98,9 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
   const [connectVisible, setCVisible] = useState(false)
   const [accountVisible, setAVisible] = useState(false)
   const balance = useCurrencyBalances(account ?? undefined, [ETHER])
+  const accountInfo = useAccountInfo(account, chainId)
+  const projectCount = accountInfo.project.state === 'None' ? 0 : 1
+  const commentCount = accountInfo.review.total
   const history = useHistory()
   const theme = useTheme()
   const { t } = useTranslation()
@@ -116,7 +120,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
       }}>
         <Col>
           <Text fontSize={'14px'} color={theme.colors.text} fontWeight="bold">{t("Connected Metamask")}</Text>
-          <Text fontSize={'12px'} color={theme.colors.textSubtle} >{accountEllipsis}</Text>
+          <Text fontSize={'12px'} color={theme.colors.textSubtle}>{accountEllipsis}</Text>
         </Col>
         <CopyImg src={copy}/>
       </AccountWrapper>
@@ -124,7 +128,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
         <RowBetween onClick={() => history.push('/account')}>
           <Text fontSize={'14px'} fontWeight={'500'} color={theme.colors.text}>{t("My Project")}</Text>
           <Row style={{width: 'auto'}}>
-            <Text fontSize={'14px'} color={theme.colors.textSubtle} >2</Text>
+            <Text fontSize={'14px'} color={theme.colors.textSubtle}>{projectCount}</Text>
             <RightImg src={rightDark}/>
           </Row>
         </RowBetween>
@@ -134,7 +138,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
         <RowBetween onClick={() => history.push('/account')}>
           <Text fontSize={'14px'} fontWeight={'500'} color={theme.colors.text}>{t("My Comment")}</Text>
           <Row style={{width: 'auto'}}>
-            <Text fontSize={'14px'} color={theme.colors.textSubtle} >3</Text>
+            <Text fontSize={'14px'} color={theme.colors.textSubtle}>{commentCount}</Text>
             <RightImg src={rightDark}/>
           </Row>
         </RowBetween>

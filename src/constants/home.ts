@@ -87,14 +87,14 @@ export const DiscoverReason = [
   }
 ]
 
-export const Categories = {
-  'Exchange': require('../assets/images/home/exchange.png').default,
-  'LaunchPad': require('../assets/images/home/launchpad.png').default,
-  'Earn': require('../assets/images/home/earn.png').default,
-  'Gaming': require('../assets/images/home/gaming.png').default,
-  'Tools': require('../assets/images/home/tools.png').default,
-  'More': require('../assets/images/home/more.png').default,
-}
+export const Categories = [
+  require('../assets/images/home/exchange.png').default,
+  require('../assets/images/home/launchpad.png').default,
+  require('../assets/images/home/earn.png').default,
+  require('../assets/images/home/gaming.png').default,
+  require('../assets/images/home/tools.png').default,
+  require('../assets/images/home/more.png').default,
+]
 
 export const media = [
   {

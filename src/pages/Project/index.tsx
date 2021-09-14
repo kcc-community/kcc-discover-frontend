@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState, useCallback } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
@@ -11,12 +11,15 @@ import BN from 'bignumber.js'
 import { Skeleton } from 'antd'
 import * as LocalStyle from '../../style/pages'
 import { useHistory } from 'react-router-dom'
+import { getUrlParam } from '../../utils'
+import { useCategorySubtle, useCategoryPrimary } from '../../state/wallet/hooks'
+import useCategory from '../../hooks/useCategory'
 import Footer from '../../components/Footer'
 
 interface DappFilterParams {
-  limit: number
+  limit?: number
   pri?: number
-  sec?: number
+  sec?: number | string
   title?: string
 }
 
@@ -34,30 +37,23 @@ const ProjectPage: React.FunctionComponent = (props) => {
     index?: number
   }>({ name: 'All', nums: 0 })
   const [content, setInput] = useState(null)
-  const [primaryList, setPList] = useState([{ name: 'All', nums: 0 }])
-  const [subList, setSList] = useState([{ name: 'All', nums: 0 }])
+  const subList = useCategorySubtle();
+  const primaryList = useCategoryPrimary();
+  const { cateLoading } = useCategory();
   const [dappList, setDapp] = useState([])
-  const [cateLoading, getCategoryList] = useLoading(ApiService.getDappCategory)
   const [dappLoading, getDappList] = useLoading(ApiService.getDappList)
   const history = useHistory()
+  const urlSec = getUrlParam('sec');
 
   useEffect(() => {
-    Promise.all([getDappList({ limit: 100 }), getCategoryList()]).then((res: any) => {
-      let primary: object[] = [{ name: 'All', nums: res[0]?.total }],
-        sub: object[] = [{ name: 'All', nums: res[0]?.total }]
-      for (let item of res[1]) {
-        if (item?.level === 1) {
-          primary.push(item)
-        }
-        if (item?.level === 2) {
-          sub.push(item)
+    if(subList.length){
+      for(let i = 0; i < subList.length; i++){
+        if(urlSec && subList[i].index === Number(urlSec)){
+          setSub(subList[i])
         }
       }
-      setDapp(res[0].list)
-      setPList(primary as any)
-      setSList(sub as any)
-    })
-  }, [])
+    }
+  }, [subList])
 
   /*** filter DApp  ***/
   useEffect(() => {
@@ -81,6 +77,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
         onClick={() => {
           setSub(data)
         }}
+        key={data.name}
         style={{ background: subSec.name === data?.name ? theme.colors.invertedContrast : 'transparent' }}
       >
         <Row>
@@ -114,6 +111,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
               onClick={() => {
                 setPrimary(item)
               }}
+              key={item?.name}
               sec={item?.name === primarySec?.name}
             >
               {item.name}

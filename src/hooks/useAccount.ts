@@ -8,6 +8,11 @@ interface ProjectProps {
   title: string
 }
 
+interface CommentProps {
+  total: number 
+  list: Object[]
+}
+
 export function useAccountInfo(account?: string | undefined | null, chainId?: number | undefined){
   const [reviewLoading, getReviewList] = useLoading(ApiService.getDappReviwer)
   const [transLoading, getTransList] = useLoading(ApiService.getAccountTransaction)
@@ -17,9 +22,19 @@ export function useAccountInfo(account?: string | undefined | null, chainId?: nu
     state: string
     info: ProjectProps }>({state: 'None', info: {margin: '', owner: '', logo: '', title: ''}})
   const [transList, setTrans] = useState([])
-  const [reviewList, setReviewList] = useState({})
+  const [reviewList, setReviewList] = useState<CommentProps>({total: 0, list: []})
 
   useEffect(() => {
+    if(account) getAccountInfo();
+    const timer = setInterval(() => {
+      if(account) getAccountInfo();
+    }, 30000)
+    return(() => {
+      clearInterval(timer);
+    })
+  }, [account, chainId])
+
+  const getAccountInfo = () => {
     Promise.all([
       getReviewList({ page: 1, limit: 3, reviewer: account}),
       getProjectList(account),
@@ -30,7 +45,7 @@ export function useAccountInfo(account?: string | undefined | null, chainId?: nu
       //@ts-ignore
       setTrans(Array.isArray(res[2]) ? res[2] : [])
     })
-  }, [account, chainId])
+  }
 
   return useMemo(
     () => ({

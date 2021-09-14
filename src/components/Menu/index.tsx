@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { injected } from '../../connectors'
 import { updateChainError } from '../../state/wallet/actions'
-import usePriceInfo from '../../hooks/usePriceInfo'
 
 const Wrapper = styled.div`
   position: relative;
@@ -60,7 +59,6 @@ const Menu: React.FunctionComponent = (props) => {
   const { t } = useTranslation();
   const { account, chainId, activate } = useWeb3React()
   const { login, logout } = useAuth()
-  const priceInfo = usePriceInfo(account)
   const history = useHistory();
   const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true });
   const matchAccount = useRouteMatch({ path: '/account', strict: true, sensitive: true });
@@ -119,7 +117,7 @@ const Menu: React.FunctionComponent = (props) => {
   
   const renderMenu = (data) => {
     return(
-      <a onClick={() => history.push(data?.route)}>
+      <a onClick={() => history.push(data?.route)} key={data.route}>
         <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml="40px">{data?.title}</Text>
       </a>
     )
