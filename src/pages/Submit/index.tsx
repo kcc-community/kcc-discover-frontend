@@ -206,12 +206,37 @@ const SubmitPage: React.FunctionComponent = (props) => {
         setFile(newFileList)
     },
     beforeUpload: (file: any) => {
+        console.log('file =', file)
         //@ts-ignore
         setFile([...fileList, file])
         return false;
     },
     fileList,
   };
+
+  const limitUploadImg = (file: any, standardWidth: number, standardHeight: number): boolean => {
+    let reader = new FileReader();
+    let result = false;
+    reader.onload = function (e: any) {
+        //@ts-ignore
+        let data = e.target.result;
+        let image = new Image();
+        image.onload=function(){
+          let width = image.width;
+          let height = image.height;
+          if(width !== standardWidth || height !== standardHeight){
+            message.error('unacceptable img size', 3);
+            result = false;
+          } else {
+            result = true
+          }
+        };
+        //@ts-ignore
+        image.src= data;
+    };
+    reader.readAsDataURL(file);
+    return result
+  }
 
   return (
     <>
@@ -300,6 +325,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
             showUploadList={false}
             {...upLoadProps}
             onChange={(e) => {
+              let result = limitUploadImg(e.file, 288, 288);
+              if(!result) return;
               const client = create(process.env.REACT_APP_IPFS_URL);
               client.add(e.file).then((res: any) => {
                 setLogo(res.path)
@@ -311,7 +338,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
               <Text fontSize="14px" color="#737E8D">Upload</Text>
             </Col>
           </Upload>
-          <Input value={logoLink} onChange={(e) => {setLogo(e.target.value)}} style={{marginTop: '15px'}}/>
+          <Input value={logoLink} disabled onChange={(e) => {setLogo(e.target.value)}} style={{marginTop: '15px'}}/>
           <div style={{height: '36px'}}/>
           <Row mb="8px">
             <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Banner</Text>
@@ -325,6 +352,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
             showUploadList={false}
             {...upLoadProps}
             onChange={(e) => {
+              let result = limitUploadImg(e.file, 880, 400);
+              if(!result) return;
               const client = create(process.env.REACT_APP_IPFS_URL);
               client.add(e.file).then((res: any) => {
                 setBanner(res.path)
@@ -336,7 +365,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
               <Text fontSize="14px" color="#737E8D">Upload</Text>
             </Col>
           </Upload>
-          <Input value={banner} onChange={(e) => {setBanner(e.target.value)}} style={{marginTop: '15px'}}/>
+          <Input value={banner} disabled onChange={(e) => {setBanner(e.target.value)}} style={{marginTop: '15px'}}/>
           <div style={{height: '36px'}}/>
           <InputItem 
             title={'Smart Contract Addresses'}
@@ -421,7 +450,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
             titleInfoContent={`The minimum margin is ${minMargin} KCS and will also be shown in the project details.  it will be refunded if the subsequent application is taken off the shelf.`}
             error={(!checkMargin && !name)? `The minimum margin is ${minMargin} KCS` : ''}
             onChange={e => {
-              if(/^\d*$/.test(e.target.value)) { setMargin(e.target.value) }
+              setMargin(e.target.value)
+              // if(/^\d*$/.test(e.target.value)) { setMargin(e.target.value) }
             }}
           />
           <InputItem 

@@ -64,6 +64,7 @@ const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
         required={true}
         isTextArea={true}
         value={content}
+        maxLength={100}
         placeholder={'Enter the content'}
         //@ts-ignore
         onChange={e => {setContent(Mint.filterSync(e.target.value ?? '').text)}}

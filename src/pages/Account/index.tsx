@@ -129,7 +129,7 @@ const AccountPage: React.FunctionComponent = (props) => {
               <RowBetween>
                 <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("My Project")}</LocalStyle.ProjectText>
                 {
-                  hasProject && projectInfo.state === 'Displaying' &&
+                  hasProject && (projectInfo.state === 'Displaying' || projectInfo.state === 'Refused') &&
                   <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => history.push(`/submit?name=${projectInfo?.info?.owner}`)}>
                     <LocalStyle.AccountImgEdit src={edit}/>
                     <Text color={theme.colors.primary} fontWeight={'bold'}>{t("Edit")}</Text>

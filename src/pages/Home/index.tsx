@@ -102,7 +102,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const DappItem = (data: any, index: number) => {
     const rank = [gold, sliver, bronze]
     return (
-      <LocalStyle.RankItem style={{cursor: 'pointer'}} href={data?.website} target="_blank" key={index}>
+      <LocalStyle.RankItem onClick={() => history.push('/project_detail?name=' + data?.name)} key={index}>
         <LocalStyle.RankImg>
           { 
             rank[index] ? <LocalStyle.RankDAppLogo src={rank[index]}/>
@@ -116,7 +116,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <LocalStyle.RankLogo src={data?.logo} alt="DApp Logo"/>
             <Col>
               <LocalStyle.SecondText style={{fontSize: '14px'}}>{data?.title}</LocalStyle.SecondText>
-              <Text color="darkGrey" fontSize="12px">{data?.name}</Text>
+              <Text color="darkGrey" fontSize="12px">{data?.intro}</Text>
             </Col>
           </Row>
           <LocalStyle.RightImg src={right}/>

@@ -37,7 +37,7 @@ export function getHomePriceInfo(){
 }
 
 export function getAccountTransaction(data): Object{
-  return get('/api/v1/my/history?address=0x2326E4155712b2D6bDfCD705e755518eD7F0E076')
+  return get('/api/v1/my/history?address=' + data)
 }
 
 export function getAccountProject(data): Object{
