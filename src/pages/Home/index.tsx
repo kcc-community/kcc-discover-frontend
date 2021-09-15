@@ -15,7 +15,7 @@ import { Skeleton } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
-import { useCategorySubtle } from '../../state/wallet/hooks'
+import { useCategorySubtle } from '../../state/application/hooks'
 import usePriceInfo from '../../hooks/usePriceInfo'
 import $ from 'jquery'
 import dayjs from 'dayjs'
@@ -54,7 +54,6 @@ const HomePage: React.FunctionComponent = (props) => {
   const priceInfo: PriceProps = usePriceInfo();
   const [active, setActive] = useState(2);
   const categorySubtle = useCategorySubtle();
-  console.log('categorySubtle =', categorySubtle)
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -114,7 +113,7 @@ const HomePage: React.FunctionComponent = (props) => {
         <RowBetween>
           <Row>
           {/* https://cloudflare-ipfs.com/ipfs/QmapdyKYtgCY1BWuPNzF5qpykUkiCeaD1WhNFq5SWirWJv */}
-            <LocalStyle.RankLogo src={'https://cloudflare-ipfs.com/ipfs/QmWoRyyU7N16irq9xL6x9kwj6kMmWZgVE12kcCJZZH6y9e'} alt="DApp Logo"/>
+            <LocalStyle.RankLogo src={data?.logo} alt="DApp Logo"/>
             <Col>
               <LocalStyle.SecondText style={{fontSize: '14px'}}>{data?.title}</LocalStyle.SecondText>
               <Text color="darkGrey" fontSize="12px">{data?.name}</Text>
@@ -135,7 +134,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <CountUp 
               start={0} 
               end={num} 
-              decimals={key ? 0 : 13}
+              decimals={key ? 0 : 11}
               duration={1.5} 
               separator=","/>
           </LocalStyle.SecondText>

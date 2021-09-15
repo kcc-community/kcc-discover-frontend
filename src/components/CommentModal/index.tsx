@@ -4,6 +4,7 @@ import { Text } from '../../style'
 import Row, { AutoRow } from 'components/Row'
 import InputItem from 'components/InputItem'
 import { Modal, Rate, Button } from 'antd'
+import Mint from '../../utils/sensitiveWord'
 
 const RequiredPoint = styled.div`
   color: #F5455B;
@@ -16,8 +17,6 @@ interface CommentModalProps {
   onConfirm: (val: any) => any,
 }
 
-//todo: sensitive words
-
 const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
   const theme = useTheme()
   const [title, setTitle] = useState('')
@@ -29,7 +28,7 @@ const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
     setContent('');
     setRate(0);
   }
- 
+
   return (
     <Modal
       title="My Comment"
@@ -57,7 +56,8 @@ const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
         value={title}
         placeholder={'Enter the title'}
         maxLength={30}
-        onChange={e => {setTitle(e.target.value)}}
+        //@ts-ignore
+        onChange={e => {setTitle(Mint.filterSync(e.target.value ?? '').text)}}
       />
       <InputItem 
         title={'Content'}
@@ -65,7 +65,8 @@ const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
         isTextArea={true}
         value={content}
         placeholder={'Enter the content'}
-        onChange={e => {setContent(e.target.value)}}
+        //@ts-ignore
+        onChange={e => {setContent(Mint.filterSync(e.target.value ?? '').text)}}
       />
     </Modal>
   )

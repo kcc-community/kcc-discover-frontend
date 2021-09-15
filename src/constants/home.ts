@@ -125,8 +125,9 @@ export const media = [
 
 
 export const stateTipsColor = {
-  Reviewing: {bg: '#28CD9629', color: '#18BB97'},
-  Displaying: {bg: '#5C95E829', color: '#5C95E8'},
+  None: {bg: 'linear-gradient(0deg, rgba(0, 20, 42, 0.08), rgba(0, 20, 42, 0.08)), #FFFFFF;', color: '#00142A99'},
+  Reviewing: {bg: '#5C95E829', color: '#5C95E8'},
+  Displaying: {bg: '#28CD9629', color: '#18BB97'},
   Rejected: {bg: 'linear-gradient(0deg, rgba(0, 20, 42, 0.08), rgba(0, 20, 42, 0.08)), #FFFFFF;', color: '#00142A99'},
 }
 

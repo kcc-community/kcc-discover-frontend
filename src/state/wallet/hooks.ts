@@ -26,18 +26,6 @@ export function useKCSPrice(): number {
   }) 
 }
 
-export function useCategoryPrimary(): any[] {
-  return useSelector((state: AppState) => {
-    return state.wallet.categoryPrimary
-  }) 
-}
-
-export function useCategorySubtle(): any[] {
-  return useSelector((state: AppState) => {
-    return state.wallet.categorySubtle
-  }) 
-}
-
 /**
  * Returns a map of the given addresses to their eventually consistent kcs balances.
  */

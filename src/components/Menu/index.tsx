@@ -115,9 +115,9 @@ const Menu: React.FunctionComponent = (props) => {
     }
   }, [history, href])
   
-  const renderMenu = (data) => {
+  const renderMenu = (data, index) => {
     return(
-      <a onClick={() => history.push(data?.route)} key={data.route}>
+      <a onClick={() => history.push(data?.route)} key={index}>
         <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml="40px">{data?.title}</Text>
       </a>
     )
@@ -131,7 +131,7 @@ const Menu: React.FunctionComponent = (props) => {
             <div onClick={() => history.push('/')} style={{cursor: 'pointer'}} aria-label="KCC home page">
               <Text color={theme.colors.primary} fontSize="24px" fontWeight="bold">DISCOVER KCC</Text>
             </div>
-            { menuList.map((item) => renderMenu(item)) }
+            { menuList.map((item, index) => renderMenu(item, index)) }
           </RowFixed>
           <RowFixed>
             {!!login && !!logout && (

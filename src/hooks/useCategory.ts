@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from 'react'
 import { ApiService, useLoading } from '../api'
 import { useDispatch } from 'react-redux'
-import { updateCategoryPrimary, updateCategorySubtle } from '../state/wallet/actions'
+import { updateCategoryPrimary, updateCategorySubtle, updateCategoryLoading } from '../state/application/actions'
 
 interface CategoryProps {
   id?: number 
@@ -36,6 +36,7 @@ export function useCategory(){
       sub[0].nums = subTotal
       setPList(primary as any)
       setSList(sub as any)
+      dispatch(updateCategoryLoading({ cateLoading }))
       dispatch(updateCategoryPrimary({ categoryPrimary: primary }))
       dispatch(updateCategorySubtle({ categorySubtle: sub }))
     })

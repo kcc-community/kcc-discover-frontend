@@ -34,6 +34,7 @@ interface CommentProps {
   dislikeCount: number
   score: number
   type?: string
+  logo?: string
 }
 
 const Comment: React.FunctionComponent<CommentProps> = (props) => {
@@ -98,7 +99,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
       <CommentWrapper key={props.id} style={{width: '720px'}}>
         <RowBetween align="flex-start">
           <Row align="flex-start">
-            <LocalStyle.AccountImgDApp src={'https://cloudflare-ipfs.com/ipfs/QmWoRyyU7N16irq9xL6x9kwj6kMmWZgVE12kcCJZZH6y9e'} alt="DApp logo" style={{marginTop: '5px'}}/>
+            <LocalStyle.AccountImgDApp src={props.logo} alt="DApp logo" style={{marginTop: '5px'}}/>
             <Col>
               <RowBetween>
                 <Row mb="5px">

@@ -53,7 +53,7 @@ const ImgDown = styled.img`
 `
 
 //todo: score plus 10, margin < 100
-const ProjectDetailPage: React.FunctionComponent = (props) => {
+const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
@@ -150,10 +150,10 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       contractAddresses, secondaryCategoryIndex, primaryCategoryIndex, banner
     }
     if(!logoLink.includes('https') && !logoLink.includes('ipfs')){
-      params.logoLink = 'https://cloudflare-ipfs.com/ipfs/' + logoLink
+      params.logoLink = process.env.REACT_APP_IPFS_IMG_URL + logoLink
     }
     if(!banner.includes('https') && !logoLink.includes('ipfs')){
-      params.banner = 'https://cloudflare-ipfs.com/ipfs/' + banner
+      params.banner = process.env.REACT_APP_IPFS_IMG_URL + banner
     }
     for(let item of primaryList){
       if(item.name === primaryCategoryIndex){
@@ -245,7 +245,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
           > 
             {
               primaryList.map((item: any) => {
-                return (<Option value={item.name}>{item.name}</Option>)
+                return (<Option value={item.name} key={item.id}>{item.name}</Option>)
               })
             }
           </Select>
@@ -267,7 +267,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
           > 
             {
               subList.map((item: any) => {
-                return (<Option value={item.name}>{item.name}</Option>)
+                return (<Option value={item.name} key={item.id}>{item.name}</Option>)
               })
             }
           </Select>
@@ -447,4 +447,4 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   )
 }
 
-export default ProjectDetailPage
+export default SubmitPage

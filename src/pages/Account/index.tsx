@@ -18,8 +18,8 @@ import { useWeb3React } from '@web3-react/core'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import Comment from '../../components/Comment'
 import Footer from '../../components/Footer'
-import useAccountInfo from '../../hooks/useAccount'
 import { useKCSPrice } from '../../state/wallet/hooks'
+import { useProjectLoading, useTransactionLoading, useTransactionInfo, useProjectInfo } from '../../state/application/hooks'
 
 // todo: 1.api 2.delete refresh 
 
@@ -34,17 +34,18 @@ const AccountPage: React.FunctionComponent = (props) => {
   const [reviewPage, setReviewPage] = useState(1)
   const [reviewTotal, setReviewTotal] = useState(1)
   const [reviewList, setReviewList] = useState([])
-
   const [transPage, setTransPage] = useState(1)
+  const projectLoading = useProjectLoading();
+  const transactionLoading = useTransactionLoading();
+  const projectInfo = useProjectInfo();
+  const transactionInfo = useTransactionInfo();
 
-
-  const accountInfo = useAccountInfo(account, chainId);
-  const hasProject = accountInfo.project.state === 'None' ? false : true
+  console.log('projectInfo =', projectInfo)
+  const hasProject = projectInfo.state === 'None' ? false : true
   const totalValueKcs = balance[0]?.toSignificant(4) ?? '0.00'
   const totalValueUsdt = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4)).multipliedBy(usdtPrice).toFixed(2) : '0.00'
-  const totalLockKcs = accountInfo.project?.info?.margin ? new BN(accountInfo.project?.info?.margin).toFixed(2) : '0.00'
-  const totalLockUsdt = accountInfo.project?.info?.margin ? new BN(accountInfo.project?.info?.margin).multipliedBy(usdtPrice).toFixed(2) : '0.00'
-  console.log('useAccountInfo =', accountInfo)
+  const totalLockKcs = projectInfo?.info?.margin ? new BN(projectInfo?.info?.margin).toFixed(2) : '0.00'
+  const totalLockUsdt = projectInfo?.info?.margin ? new BN(projectInfo?.info?.margin).multipliedBy(usdtPrice).toFixed(2) : '0.00'
 
   const history = useHistory();
 
@@ -70,10 +71,10 @@ const AccountPage: React.FunctionComponent = (props) => {
     }
     return(
       <LocalStyle.AccountCard key={type}>
-        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2).toString() }`) : '-')}
+        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2).toString() }`) : '--')}
         <RowBetween>
-          {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '-', '50%', '35px')}
-          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : totalLockUsdt) : '-', '50%', '35px')}
+          {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', '35px')}
+          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : totalLockUsdt) : '--', '50%', '35px')}
         </RowBetween>
       </LocalStyle.AccountCard>
     )
@@ -93,7 +94,7 @@ const AccountPage: React.FunctionComponent = (props) => {
   const renderTransItem = (data: any) => {
     return(
       <LocalStyle.AccountExplore key={data.txid} href={process.env.REACT_APP_EXPLORE + '/' + data.hash} target="_blank">
-        <LocalStyle.ProjectTextSub style={{fontSize: '16px', width: '60%'}}>{data?.hash ? data.hash.substr(0, 12) + '...' + data.hash.substr(-6) : '-'}</LocalStyle.ProjectTextSub>
+        <LocalStyle.ProjectTextSub style={{fontSize: '16px', width: '70%'}}>{data?.hash ? data.hash.substr(0, 12) + '...' + data.hash.substr(-6) : '-'}</LocalStyle.ProjectTextSub>
         <Text color={theme.colors.primary} fontWeight={'bold'}>{t('View details')}</Text>
       </LocalStyle.AccountExplore>
     )
@@ -128,8 +129,8 @@ const AccountPage: React.FunctionComponent = (props) => {
               <RowBetween>
                 <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("My Project")}</LocalStyle.ProjectText>
                 {
-                  hasProject && accountInfo.project.state === 'Displaying' &&
-                  <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => history.push(`/submit?name=${accountInfo.project?.info?.owner}`)}>
+                  hasProject && projectInfo.state === 'Displaying' &&
+                  <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => history.push(`/submit?name=${projectInfo?.info?.owner}`)}>
                     <LocalStyle.AccountImgEdit src={edit}/>
                     <Text color={theme.colors.primary} fontWeight={'bold'}>{t("Edit")}</Text>
                   </Row>
@@ -137,24 +138,24 @@ const AccountPage: React.FunctionComponent = (props) => {
               </RowBetween>
               <LocalStyle.AccountLine />
               {
-                hasProject && !accountInfo.projectLoading ?
+                hasProject && !projectLoading ?
                 <>
                   <Row>
-                    <LocalStyle.AccountImgDApp src={accountInfo.project?.info?.logo} alt="DApp logo"/>
-                    <LocalStyle.ProjectText style={{fontSize: '20px'}}>{accountInfo.project?.info?.title}</LocalStyle.ProjectText>
+                    <LocalStyle.AccountImgDApp src={projectInfo?.info?.logo} alt="DApp logo"/>
+                    <LocalStyle.ProjectText style={{fontSize: '20px'}}>{projectInfo?.info?.title}</LocalStyle.ProjectText>
                   </Row>
                   <Row mt="15px">
                     <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("KCS Margin")}</LocalStyle.ProjectTextSub>
-                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{new BN(accountInfo.project?.info?.margin).toFixed(2).toString()} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
+                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{new BN(projectInfo?.info?.margin).toFixed(2).toString()} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
                   </Row>
                   <Row mt="15px">
                     <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("State")}</LocalStyle.ProjectTextSub>
-                    <LocalStyle.AccountStatusShow status={stateTipsColor[accountInfo.project.state].bg} color={stateTipsColor[accountInfo.project.state].color}>Displaying</LocalStyle.AccountStatusShow>
+                    <LocalStyle.AccountStatusShow status={stateTipsColor[projectInfo.state].bg} color={stateTipsColor[projectInfo.state].color}>{projectInfo.state}</LocalStyle.AccountStatusShow>
                   </Row>
                 </>
                 :
                 (
-                  accountInfo.projectLoading ? 
+                  projectLoading ? 
                   <Skeleton paragraph={{ rows: 3 }} />
                   :
                   <Empty margin="20px auto 0 auto"/>
@@ -165,8 +166,8 @@ const AccountPage: React.FunctionComponent = (props) => {
               {renderTitle('Transaction History')}
               <LocalStyle.AccountTransContent>
                 {
-                  accountInfo.transaction.length && !accountInfo.transLoading ?
-                  accountInfo.transaction.map((item: any, index) => {
+                  transactionInfo.length && !transactionLoading ?
+                  transactionInfo.map((item: any, index) => {
                     if(transPage === 1 && index <= 4 || (transPage === 2 && index > 4)){
                       return (renderTransItem({hash: item?.txid}))
                     }
@@ -174,7 +175,7 @@ const AccountPage: React.FunctionComponent = (props) => {
                   })
                   :
                   (
-                    accountInfo.transLoading ? 
+                    transactionLoading ? 
                     <Skeleton paragraph={{ rows: 3 }} />
                     :
                     <Empty margin="20px auto 0 auto"/>
@@ -186,7 +187,7 @@ const AccountPage: React.FunctionComponent = (props) => {
                 onChange={(page, size) => {setTransPage(page)}}
                 current={transPage}
                 pageSize={5} 
-                total={accountInfo?.transaction.length} 
+                total={transactionInfo.length} 
                 className={'kcc-pagination'}/>
             </LocalStyle.AccountCard>   
           </Col>

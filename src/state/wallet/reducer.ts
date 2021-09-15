@@ -1,13 +1,11 @@
 import {createReducer} from '@reduxjs/toolkit'
-import {updateBalance, updateChainError, updateKCSPrice, updateCategoryPrimary, updateCategorySubtle} from './actions'
+import {updateBalance, updateChainError, updateKCSPrice} from './actions'
 
 export interface WalletState {
     balance: string
     walletId: number
     chainError: string
     price: number
-    categoryPrimary: any[]
-    categorySubtle: any[]
 }
 
 const initialState: WalletState = {
@@ -15,8 +13,6 @@ const initialState: WalletState = {
     walletId: 0,
     chainError: '',
     price: 0,
-    categoryPrimary: [],
-    categorySubtle: [],
 }
 
 export default createReducer(initialState, (builder) =>
@@ -32,13 +28,5 @@ export default createReducer(initialState, (builder) =>
       .addCase(updateKCSPrice, (state, action) => {
         const {price} = action.payload
         state.price = price
-      })
-      .addCase(updateCategoryPrimary, (state, action) => {
-        const {categoryPrimary} = action.payload
-        state.categoryPrimary = categoryPrimary
-      })
-      .addCase(updateCategorySubtle, (state, action) => {
-        const {categorySubtle} = action.payload
-        state.categorySubtle = categorySubtle
       })
 )

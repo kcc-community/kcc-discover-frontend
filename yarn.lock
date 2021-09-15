@@ -15511,6 +15511,11 @@ minizlib@^2.1.1:
     minipass "^3.0.0"
     yallist "^4.0.0"
 
+mint-filter@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mint-filter/-/mint-filter-3.0.1.tgz#1e85785e50a7c16c47567d3add339388965de062"
+  integrity sha512-mBMrNggwa5JtMvBWx0hC4t04iGwHChovV7gg+43CQg+vHYxPiHCwEc3DYHC0Wdq+Hxt2HBP0HdsT0QKmSxE9tA==
+
 mississippi@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/mississippi/-/mississippi-3.0.0.tgz#ea0a3291f97e0b5e8776b363d5f0a12d94c67022"

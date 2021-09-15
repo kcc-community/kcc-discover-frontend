@@ -2,8 +2,9 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import wallet from './wallet/reducer'
 import multicall from './multicall/reducer'
+import application from './application/reducer'
 
-type ModuleTypes = 'wallet' | 'multicall'
+type ModuleTypes = 'wallet' | 'multicall' | 'application'
 
 type MergedState = {
   [key in ModuleTypes]: {
@@ -14,7 +15,8 @@ type MergedState = {
 const store = configureStore({
   reducer: {
     wallet,
-    multicall
+    multicall,
+    application
   },
 })
 

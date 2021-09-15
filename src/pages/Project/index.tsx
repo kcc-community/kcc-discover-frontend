@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState, useCallback } from 'react'
+import React, { FunctionComponent, useEffect, useState, useRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
@@ -12,7 +12,7 @@ import { Skeleton } from 'antd'
 import * as LocalStyle from '../../style/pages'
 import { useHistory } from 'react-router-dom'
 import { getUrlParam } from '../../utils'
-import { useCategorySubtle, useCategoryPrimary } from '../../state/wallet/hooks'
+import { useCategorySubtle, useCategoryPrimary, useCategoryLoading } from '../../state/application/hooks'
 import useCategory from '../../hooks/useCategory'
 import Footer from '../../components/Footer'
 
@@ -39,11 +39,12 @@ const ProjectPage: React.FunctionComponent = (props) => {
   const [content, setInput] = useState(null)
   const subList = useCategorySubtle();
   const primaryList = useCategoryPrimary();
-  const { cateLoading } = useCategory();
+  const cateLoading = useCategoryLoading();
   const [dappList, setDapp] = useState([])
   const [dappLoading, getDappList] = useLoading(ApiService.getDappList)
   const history = useHistory()
   const urlSec = getUrlParam('sec');
+  const filterFirstUpdate = useRef(true)
 
   useEffect(() => {
     if(subList.length){
@@ -55,12 +56,21 @@ const ProjectPage: React.FunctionComponent = (props) => {
     }
   }, [subList])
 
+  useEffect(() => {
+    if(!urlSec){
+      getDappList({limit: 100}).then((res: any) => {
+        setDapp(res.list)
+      })
+    }
+  }, [])
+
   /*** filter DApp  ***/
   useEffect(() => {
     let params: DappFilterParams = { limit: 100 }
     if (primarySec.name !== 'All') params.pri = primarySec?.index
     if (subSec.name !== 'All') params.sec = subSec?.index
     if (content) params.title = content
+    if (filterFirstUpdate.current) { filterFirstUpdate.current = false; return; }
     getDappList(params).then((res: any) => {
       if (content) {
         setPrimary(primaryList[0])
@@ -162,7 +172,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
                       key={item.id}
                       onClick={() => history.push(`/project_detail?name=${item.name}`)}
                     >
-                      <LocalStyle.ProjectDappLogo src={require('../../assets/images/home/banner.png').default} />
+                      <LocalStyle.ProjectDappLogo src={item.logo} alt="DApp Logo" />
                       <Col>
                         <Text fontSize="18px" fontWeight="bold" color={theme.colors.text}>
                           {item.title}

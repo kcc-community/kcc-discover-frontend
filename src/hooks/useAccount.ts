@@ -1,7 +1,9 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect, useState, useRef } from 'react'
 import { ApiService, useLoading } from '../api'
+import { useDispatch } from 'react-redux';
+import { updateProjectLoading, updateTransactionLoading, updateProjectInfo, updateTransactionInfo } from '../state/application/actions';
 
-interface ProjectProps {
+interface ProjectInfoProps {
   margin: string | number 
   owner: string 
   logo: string 
@@ -13,6 +15,11 @@ interface CommentProps {
   list: Object[]
 }
 
+export interface ProjectProps{
+  state: string
+  info: ProjectInfoProps
+}
+
 export function useAccountInfo(account?: string | undefined | null, chainId?: number | undefined){
   const [reviewLoading, getReviewList] = useLoading(ApiService.getDappReviwer)
   const [transLoading, getTransList] = useLoading(ApiService.getAccountTransaction)
@@ -20,21 +27,24 @@ export function useAccountInfo(account?: string | undefined | null, chainId?: nu
 
   const [projectInfo, setProject] = useState<{ 
     state: string
-    info: ProjectProps }>({state: 'None', info: {margin: '', owner: '', logo: '', title: ''}})
+    info: ProjectInfoProps }>({state: 'None', info: {margin: '', owner: '', logo: '', title: ''}})
   const [transList, setTrans] = useState([])
   const [reviewList, setReviewList] = useState<CommentProps>({total: 0, list: []})
+  const filterFirstUpdate = useRef(true)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    if(account) getAccountInfo();
+    if (filterFirstUpdate.current) { filterFirstUpdate.current = false; return; }
+    if(account) getAccountInfo(true);
     const timer = setInterval(() => {
-      if(account) getAccountInfo();
+      if(account) getAccountInfo(false);
     }, 30000)
     return(() => {
       clearInterval(timer);
     })
   }, [account, chainId])
 
-  const getAccountInfo = () => {
+  const getAccountInfo = (isFirstPost: boolean) => {
     Promise.all([
       getReviewList({ page: 1, limit: 3, reviewer: account}),
       getProjectList(account),
@@ -44,6 +54,13 @@ export function useAccountInfo(account?: string | undefined | null, chainId?: nu
       setProject(res[1])
       //@ts-ignore
       setTrans(Array.isArray(res[2]) ? res[2] : [])
+      dispatch(updateProjectInfo({projectInfo: res[1]}))
+      //@ts-ignore
+      dispatch(updateTransactionInfo({transactionInfo: Array.isArray(res[2]) ? res[2] : []}))
+      if(isFirstPost){
+        dispatch(updateProjectLoading({projectLoading: false}))
+        dispatch(updateTransactionLoading({transactionLoading: false}))
+      }
     })
   }
 

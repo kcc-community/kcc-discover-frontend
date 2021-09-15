@@ -39,6 +39,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     website?: string
     rankPrimary: number
     rankSecond: number
+    logo?: string
   }>({
     title: '-',
     intro: '-',
@@ -94,6 +95,18 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     }
   }, [name, page])
 
+  useEffect(() => {
+    getComment({app: name, page: page, user: account ?? ''})
+    .then((res: any) => {
+      console.log(res)
+      //@ts-ignore
+      setList(res.list);
+      setTotal(res.total)
+      if(page < (res.total / 5)) { setMore(true) } else { setMore(false) }
+      setLoad(true);
+    })
+  }, [account])
+
   const confirmComment = (data) => {
     let params = {
       title: data.title,
@@ -139,7 +152,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
           <Col style={{width: '800px'}}>
             <LocalStyle.ProjectDappWrapper style={{width: '800px'}}>
-              <LocalStyle.ProjectDappLogo src={require('../../assets/images/home/banner.png').default} style={{width: '140px', height: '140px', marginRight: '34px'}}/>
+              <LocalStyle.ProjectDappLogo src={detail.logo} alt="DApp Logo" style={{width: '140px', height: '140px', marginRight: '34px'}}/>
               <Col>
                 <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
                 <LocalStyle.ProjectTextSubTwo>{detail.intro}</LocalStyle.ProjectTextSubTwo>
