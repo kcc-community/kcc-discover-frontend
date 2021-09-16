@@ -16,6 +16,8 @@ import Footer from '../../components/Footer'
 import SuccessModal from '../../components/SuccessModal'
 import { useCommit, getMinMarginAmount, useUpdateCommit } from '../../hooks/useDiscoverContract'
 import InputItem from 'components/InputItem'
+import { switchNetwork } from '../../utils/wallet'
+import { useCategoryPrimary, useCategorySubtle } from '../../state/application/hooks'
 const { create } = require('ipfs-http-client')
 const { Option } = Select;
 
@@ -52,25 +54,15 @@ const ImgDown = styled.img`
   height: 20px;
 `
 
-//todo: score plus 10, margin < 100
+//todo: reset margin limit
 const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
   const [detailLoading, getInfo] = useLoading(ApiService.getDappInfo)
   const [cateLoading, getCategoryList] = useLoading(ApiService.getDappCategory)
-  const [primaryList, setPList] = useState<[{
-    name?: string 
-    index?: number
-    id?: number
-    level?: number
-  }]>([{}])
-  const [subList, setSList] = useState<[{
-    name?: string 
-    index?: number
-    id?: number
-    level?: number
-  }]>([{}])
+  const primaryList = useCategoryPrimary()
+  const subList = useCategorySubtle()
   const [showModal, setModal] = useState(false)
   const history = useHistory();
   const name = getUrlParam('name')
@@ -104,43 +96,43 @@ const SubmitPage: React.FunctionComponent = (props) => {
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
   useEffect(() => {
+    if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
+      message.error('Unsupported chain, Please change the network', 2);
+      return;
+      // todo: check the network type
+      // switchNetwork(Number(process.env.REACT_APP_CHAIN_ID))
+    }
+    if(!chainId && !name) return
+    console.log('chainId =', chainId, 'process.env.REACT_APP_CHAIN_ID =', process.env.REACT_APP_CHAIN_ID)
     Promise.all([
-      getCategoryList(),
       getInfo(name),
       getMinMarginAmount(library)
     ]).then((res: any) => {
-      let primary: object[] = [], sub: object[] = [];
-      for(let item of res[0]){
-        if(item?.level === 1){ primary.push(item) }
-        if(item?.level === 2){ sub.push(item) }
-      }
       if(name){
         //when project is edited, data can not be changed
-        setTitle(res[1].title)
-        setContract(res[1].contract)
-        res[1].tokenSymbol && setTokenSymbol(res[1].tokenSymbol) && setEditSymbol(false)
+        setTitle(res[0].title)
+        setContract(res[0].contract)
+        res[0].tokenSymbol && setTokenSymbol(res[0].tokenSymbol) && setEditSymbol(false)
         //can be change
-        setPrimary(res[1].priCategory.name)
-        setSecondary(res[1].secCategory.name)
-        setIntro(res[1].intro)
-        setLogo(res[1].logo.includes('ipfs/') ? res[1].logo.split('ipfs/')[1] : res[1].logo)
-        setBanner(res[1].banner.includes('ipfs/') ? res[1].banner.split('ipfs/')[1] : res[1].banner)
-        setWebsite(res[1].website)
-        setEmail(res[1].contact)
-        res[1].detail && setDes(res[1].detail)
-        res[1].tokenContract && setTokenContract(res[1].tokenContract)
-        res[1].graphUrl && setTvl(res[1].graphUrl)
-        res[1].twitter && setTwitter(res[1].twitter)
-        res[1].telegram && setTelegram(res[1].telegram)
-        res[1].github && setGithub(res[1].github)
-        res[1].coinMarketCap && setCoinMarket(res[1].coinMarketCap)
-        res[1].coinGecko && setCoinGecko(res[1].coinGecko)
+        setPrimary(res[0].priCategory.name)
+        setSecondary(res[0].secCategory.name)
+        setIntro(res[0].intro)
+        setLogo(res[0].logo.includes('ipfs/') ? res[0].logo.split('ipfs/')[1] : res[0].logo)
+        setBanner(res[0].banner.includes('ipfs/') ? res[0].banner.split('ipfs/')[1] : res[0].banner)
+        setWebsite(res[0].website)
+        setEmail(res[0].contact)
+        res[0].detail && setDes(res[0].detail)
+        res[0].tokenContract && setTokenContract(res[0].tokenContract)
+        res[0].graphUrl && setTvl(res[0].graphUrl)
+        res[0].twitter && setTwitter(res[0].twitter)
+        res[0].telegram && setTelegram(res[0].telegram)
+        res[0].github && setGithub(res[0].github)
+        res[0].coinMarketCap && setCoinMarket(res[0].coinMarketCap)
+        res[0].coinGecko && setCoinGecko(res[0].coinGecko)
       }
-      setPList(primary as any);
-      setSList(sub as any);
-      setMinMargin(Number(res[2]))
+      setMinMargin(Number(res[1]))
     })
-  }, [name])
+  }, [name, chainId])
 
   const onConfirm = () => {
     if(!account || !chainId) { message.error('Please connect your wallet'); return; };
@@ -214,28 +206,29 @@ const SubmitPage: React.FunctionComponent = (props) => {
     fileList,
   };
 
-  const limitUploadImg = (file: any, standardWidth: number, standardHeight: number): boolean => {
-    let reader = new FileReader();
-    let result = false;
-    reader.onload = function (e: any) {
-        //@ts-ignore
-        let data = e.target.result;
-        let image = new Image();
-        image.onload=function(){
-          let width = image.width;
-          let height = image.height;
-          if(width !== standardWidth || height !== standardHeight){
-            message.error('unacceptable img size', 3);
-            result = false;
-          } else {
-            result = true
-          }
-        };
-        //@ts-ignore
-        image.src= data;
-    };
-    reader.readAsDataURL(file);
-    return result
+  const limitUploadImg = (file: any, standardWidth: number, standardHeight: number) => {
+    return new Promise(function(resolve, reject){
+      let reader = new FileReader();
+      reader.onload = function (e: any) {
+          //@ts-ignore
+          let data = e.target.result;
+          let image = new Image();
+          image.onload=function(){
+            let width = image.width;
+            let height = image.height;
+            console.log('width =', width, 'height =', height)
+            if(width !== standardWidth || height !== standardHeight){
+              message.error('unacceptable img size', 3);
+              resolve(false)
+            } else {
+              resolve(true)
+            }
+          };
+          //@ts-ignore
+          image.src= data;
+      };
+      reader.readAsDataURL(file);
+    })
   }
 
   return (
@@ -324,13 +317,15 @@ const SubmitPage: React.FunctionComponent = (props) => {
             className="avatar-uploader"
             showUploadList={false}
             {...upLoadProps}
-            onChange={(e) => {
-              let result = limitUploadImg(e.file, 288, 288);
+            onChange={async (e) => {
+              let result = await limitUploadImg(e.file, 288, 288);
+              console.log('result =', result);
               if(!result) return;
               const client = create(process.env.REACT_APP_IPFS_URL);
               client.add(e.file).then((res: any) => {
+                console.log('upload success =', res)
                 setLogo(res.path)
-              })
+              }).catch(e => {console.log('upload e = ', e)})
             }}
           > 
             <Col>
@@ -351,8 +346,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
             className="avatar-uploader"
             showUploadList={false}
             {...upLoadProps}
-            onChange={(e) => {
-              let result = limitUploadImg(e.file, 880, 400);
+            onChange={async (e) => {
+              let result = await limitUploadImg(e.file, 880, 400);
               if(!result) return;
               const client = create(process.env.REACT_APP_IPFS_URL);
               client.add(e.file).then((res: any) => {

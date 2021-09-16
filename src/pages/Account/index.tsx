@@ -21,8 +21,6 @@ import Footer from '../../components/Footer'
 import { useKCSPrice } from '../../state/wallet/hooks'
 import { useProjectLoading, useTransactionLoading, useTransactionInfo, useProjectInfo } from '../../state/application/hooks'
 
-// todo: 1.api 2.delete refresh 
-
 const AccountPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { account, chainId } = useWeb3React()
@@ -40,7 +38,6 @@ const AccountPage: React.FunctionComponent = (props) => {
   const projectInfo = useProjectInfo();
   const transactionInfo = useTransactionInfo();
 
-  console.log('projectInfo =', projectInfo)
   const hasProject = projectInfo.state === 'None' ? false : true
   const totalValueKcs = balance[0]?.toSignificant(4) ?? '0.00'
   const totalValueUsdt = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4)).multipliedBy(usdtPrice).toFixed(2) : '0.00'
