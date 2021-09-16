@@ -84,7 +84,7 @@ const Menu: React.FunctionComponent = (props) => {
     const { ethereum } = window
     if(ethereum){
       activate(injected, undefined, true).then(() => {
-        console.log('active success')
+        console.log('active success ??')
         dispatch(updateChainError({chainError: ''}))
       })
       .catch((e) => {
@@ -93,7 +93,7 @@ const Menu: React.FunctionComponent = (props) => {
         }
       })
     }
-  }, [chainId])
+  }, [])
 
   useEffect(() => {
     const isHome = matchHome && matchHome.isExact;
