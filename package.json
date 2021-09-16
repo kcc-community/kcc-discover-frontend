@@ -87,10 +87,10 @@
   },
   "scripts": {
     "start": "craco start",
-    "start-main": "env-cmd -f ./.env.production  craco start",
+    "start-main": "env-cmd -f ./.env.production craco start",
     "build": "craco craco build",
-    "build-testnet": "env-cmd -f ./.env.testnet.production  craco start",
-    "build-preview": "env-cmd -f ./.env.preview.production  craco start",
+    "build-testnet": "env-cmd -f ./.env.testnet.production craco start",
+    "build-preview": "env-cmd -f ./.env.preview.production craco start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
@@ -117,6 +117,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "https://bridge-testnet.kcc.network/discover_server"
+  }
 }

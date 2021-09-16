@@ -31,8 +31,6 @@ const Chart = (props: ChartProps): React.ReactElement => {
 
     type Callback = () => void;
     React.useEffect((): Callback => {
-        console.log("useEffect");
-
         function showLoading(instance): void {
             instance.showLoading("default", {
                 text: "",

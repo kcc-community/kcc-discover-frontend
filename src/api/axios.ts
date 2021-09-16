@@ -159,7 +159,7 @@ export const get = (url, params?) => new Promise((resolve, reject) => {
           }
       }
   }
-  Axios(url, {
+  service(url, {
       method: 'GET',
       headers: {
           Accept: 'application/json',
@@ -174,7 +174,7 @@ export const get = (url, params?) => new Promise((resolve, reject) => {
 })
 
 export const post = (url, jsonData) => new Promise((resolve, reject) => {
-  Axios(url, {
+  service(url, {
       method: 'POST',
       headers: {
           Accept: 'application/json',
@@ -189,7 +189,7 @@ export const post = (url, jsonData) => new Promise((resolve, reject) => {
 })
 
 export const form = (url, formData) => new Promise((resolve, reject) => {
-  Axios(url, {
+  service(url, {
       method: 'POST',
       headers: {
           Accept: 'application/json',

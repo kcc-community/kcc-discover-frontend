@@ -64,7 +64,7 @@ const HomePage: React.FunctionComponent = (props) => {
       opts = JSON.parse(JSON.stringify(ChartData));
       getChart().then((res: any) => {
         let xAxisData = [], seriesData = [], max = 0;
-        setChartData(res);
+        if(res.length) setChartData(res)
         if(res[res.length - 1] && res[res.length - 2]){
           setDailyRate(new BN(res[res.length - 1].dailyVolumeETH).minus(res[res.length - 2].dailyVolumeETH).div(res[res.length - 1].dailyVolumeETH).multipliedBy(100).toFixed(2).toString())
         }
@@ -252,21 +252,24 @@ const HomePage: React.FunctionComponent = (props) => {
                   {/* @ts-ignore */}
                   {
                     sliderPics.map((item, index) => {
-                      return(
-                        <LocalStyle.SliderWrapper target="_blank" href={item.website} key={index}>
-                          <LocalStyle.SliderCard src={item.banner}/>
-                          <LocalStyle.SliderBottom>
-                            <AutoRow>
-                              <LocalStyle.SliderBottomBall src={websiteWhite}/>
-                              <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{item.title}</Text>
-                            </AutoRow>
-                            <AutoRow style={{width: '14%'}}>
-                              <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>Learn more</Text>
-                              <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
-                            </AutoRow>
-                          </LocalStyle.SliderBottom>
-                        </LocalStyle.SliderWrapper>
-                      )
+                      if(item){
+                        return(
+                          <LocalStyle.SliderWrapper target="_blank" href={item.website} key={index}>
+                            <LocalStyle.SliderCard src={item.banner}/>
+                            <LocalStyle.SliderBottom>
+                              <AutoRow>
+                                <LocalStyle.SliderBottomBall src={websiteWhite}/>
+                                <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{item.title}</Text>
+                              </AutoRow>
+                              <AutoRow style={{width: '14%'}}>
+                                <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>Learn more</Text>
+                                <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
+                              </AutoRow>
+                            </LocalStyle.SliderBottom>
+                          </LocalStyle.SliderWrapper>
+                        )
+                      }
+                      return null
                     })
                   }
                 </Slider>

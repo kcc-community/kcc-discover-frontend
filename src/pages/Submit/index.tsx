@@ -189,6 +189,11 @@ const SubmitPage: React.FunctionComponent = (props) => {
     }
   }
 
+  const splitSpace = (value?: string | undefined) => {
+    if(value === ' ') { return '' }
+    else return value ?? ''
+  }
+
   const upLoadProps = {
     onRemove: (file: any) => {
         //@ts-ignore
@@ -243,7 +248,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
             maxLength={30}
             placeholder={'Enter the title'}
             disabled={name ? true : false}
-            onChange={e => {setTitle(e.target.value)}}
+            onChange={e => {
+              setTitle(splitSpace(e.target.value))
+            }}
           />
           <Row mb="8px">
             <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Primary Category</Text>
@@ -262,7 +269,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
             }
           > 
             {
-              primaryList.map((item: any) => {
+              primaryList.map((item: any, index: number) => {
+                if(index === 0) return
                 return (<Option value={item.name} key={item.id}>{item.name}</Option>)
               })
             }
@@ -284,7 +292,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
             }
           > 
             {
-              subList.map((item: any) => {
+              subList.map((item: any, index: number) => {
+                if(index === 0) return
                 return (<Option value={item.name} key={item.id}>{item.name}</Option>)
               })
             }
@@ -296,7 +305,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             maxLength={50}
             value={shortIntroduction}
             placeholder={'Enter some words'}
-            onChange={e => {setIntro(e.target.value)}}
+            onChange={e => {setIntro(splitSpace(e.target.value))}}
           />
           <InputItem 
             title={'Detail Description'}
@@ -304,7 +313,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             isTextArea={true}
             value={detailDescription}
             placeholder={'Enter some words'}
-            onChange={e => {setDes(e.target.value)}}
+            onChange={e => {setDes(splitSpace(e.target.value))}}
           />
           <Row mb="8px">
             <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Logo</Text>
@@ -333,7 +342,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
               <Text fontSize="14px" color="#737E8D">Upload</Text>
             </Col>
           </Upload>
-          <Input value={logoLink} disabled onChange={(e) => {setLogo(e.target.value)}} style={{marginTop: '15px'}}/>
+          <Input value={logoLink} disabled onChange={(e) => {setLogo(splitSpace(e.target.value))}} style={{marginTop: '15px'}}/>
           <div style={{height: '36px'}}/>
           <Row mb="8px">
             <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Banner</Text>
@@ -368,14 +377,14 @@ const SubmitPage: React.FunctionComponent = (props) => {
             disabled={name ? true : false}
             value={contractAddresses}
             placeholder={'Enter your Smart Contract Address'}
-            onChange={e => {setContract(e.target.value)}}
+            onChange={e => {setContract(splitSpace(e.target.value))}}
           />
           <InputItem 
             title={'Token Contract Address'}
             required={false}
             value={tokenContractAddress}
             placeholder={'Enter your Token Contract Address'}
-            onChange={e => {setTokenContract(e.target.value)}}
+            onChange={e => {setTokenContract(e.target.value.trim())}}
           />
           <InputItem 
             title={'Token Symbol'}
@@ -383,7 +392,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             value={tokenSymbol}
             disabled={!editSymbol ? true : false}
             placeholder={'Enter your Token Symbol'}
-            onChange={e => {setTokenSymbol(e.target.value)}}
+            onChange={e => {setTokenSymbol(splitSpace(e.target.value))}}
           />
           <InputItem 
             title={'Tvl Interface (graphql)'}
@@ -392,49 +401,49 @@ const SubmitPage: React.FunctionComponent = (props) => {
             placeholder={'Enter your Tvl Interface（graphql）'}
             titleInfo={true}
             titleInfoContent={'If your project involves asset related, please submit your Tvl interface（graphql）'}
-            onChange={e => {setTvl(e.target.value)}}
+            onChange={e => {setTvl(e.target.value.trim())}}
           />
           <InputItem 
             title={'Website'}
             required={true}
             value={websiteLink}
             placeholder={'Enter your Website'}
-            onChange={e => {setWebsite(e.target.value)}}
+            onChange={e => {setWebsite(e.target.value.trim())}}
           />
           <InputItem 
             title={'Twitter'}
             required={false}
             value={twitterLink}
             placeholder={'Enter your Twitter'}
-            onChange={e => {setTwitter(e.target.value)}}
+            onChange={e => {setTwitter(e.target.value.trim())}}
           />
           <InputItem 
             title={'Telegram'}
             required={false}
             value={telegramLink}
             placeholder={'Enter your Telegram'}
-            onChange={e => {setTelegram(e.target.value)}}
+            onChange={e => {setTelegram(e.target.value.trim())}}
           />
           <InputItem 
             title={'Github'}
             required={false}
             value={githubLink}
             placeholder={'Enter your Github'}
-            onChange={e => {setGithub(e.target.value)}}
+            onChange={e => {setGithub(e.target.value.trim())}}
           />
           <InputItem 
             title={'Coin Market Cap'}
             required={false}
             value={coinmarketcapLink}
             placeholder={'Enter your Coin Market Cap'}
-            onChange={e => {setCoinMarket(e.target.value)}}
+            onChange={e => {setCoinMarket(splitSpace(e.target.value))}}
           />
           <InputItem 
             title={'Coin Gecko'}
             required={false}
             value={coingeckoLink}
             placeholder={'Enter your Coin Gecko'}
-            onChange={e => {setCoinGecko(e.target.value)}}
+            onChange={e => {setCoinGecko(splitSpace(e.target.value))}}
           />
           <InputItem 
             title={name ? 'The amount of KCS margin call' : 'Amount of KCS margin'}
@@ -455,7 +464,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             value={email}
             placeholder={'Enter your Mailbox'}
             error={!checkEmail ? 'Please input correct email' : ''}
-            onChange={e => {setEmail(e.target.value)}}
+            onChange={e => {setEmail(e.target.value.trim())}}
           />
           <Button 
             style={{width: '100px'}} 
