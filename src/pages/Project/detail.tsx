@@ -10,13 +10,14 @@ import Col from 'components/Column'
 import Empty from 'components/Empty'
 import Comment from 'components/Comment'
 import BN from 'bignumber.js'
-import { Skeleton, Rate, message } from 'antd'
+import { Skeleton, Rate, message, Popover } from 'antd'
 import { getUrlParam } from '../../utils'
 import * as LocalStyle from '../../style/pages'
 import { useHistory } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import CommentModal from '../../components/CommentModal'
 import { useComment } from '../../hooks/useDiscoverContract'
+import $ from 'jquery'
 
 const ProjectDetailPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
@@ -27,6 +28,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     intro: string
     margin: string | number
     contract: string
+    detail?: string
     rank?: string | number
     score?: string | number
     comments?: number
@@ -52,6 +54,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   const [commentLoading, getComment] = useLoading(ApiService.getDappComment)
   const [loaded, setLoad] = useState(false)
   const [page, setPage] = useState(1)
+  const [showTips, setShow] = useState(false)
   const [total, setTotal] = useState(0)
   const [list, setList] = useState([])
   const [showMore, setMore] = useState(false)
@@ -106,6 +109,15 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     })
   }, [account])
 
+  useEffect(() => {
+    if(detail.detail){
+      const height = $('#projectDetail').height() ?? 0
+      if(height > 48){
+        setShow(true)
+      }
+    }
+  }, [detail])
+
   const confirmComment = (data) => {
     let params = {
       title: data.title,
@@ -150,11 +162,19 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       <Container style={{minHeight: '80vh'}}>
         <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
           <Col style={{width: '800px'}}>
-            <LocalStyle.ProjectDappWrapper style={{width: '800px'}}>
+            <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto'}}>
               <LocalStyle.ProjectDappLogo src={detail.logo} alt="DApp Logo" style={{width: '140px', height: '140px', marginRight: '34px'}}/>
-              <Col>
+              <Col style={{width: '70%'}}>
                 <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
-                <LocalStyle.ProjectTextSubTwo>{detail.intro}</LocalStyle.ProjectTextSubTwo>
+                {
+                  showTips ?
+                  <Popover overlayClassName={'projectDetailPopover'} content={<p style={{wordBreak: 'break-all'}}>{detail.detail}</p>} trigger="hover">
+                    <LocalStyle.ProjectTextSubTwo style={{cursor: 'pointer'}}>{detail.detail}</LocalStyle.ProjectTextSubTwo>
+                  </Popover>
+                  :
+                  <LocalStyle.ProjectTextSubTwo>{detail.detail}</LocalStyle.ProjectTextSubTwo>
+                }
+                <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
                 <Row mt="10px">
                   <LocalStyle.ProjectTips grey={false}>{new BN(detail.margin).toFixed(2).toString()} KCS</LocalStyle.ProjectTips>
                   {detail.priCategory ? <LocalStyle.ProjectTips grey={true}>{detail.priCategory.name}</LocalStyle.ProjectTips> : '-'}

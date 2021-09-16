@@ -112,11 +112,10 @@ const HomePage: React.FunctionComponent = (props) => {
         </LocalStyle.RankImg>
         <RowBetween>
           <Row>
-          {/* https://cloudflare-ipfs.com/ipfs/QmapdyKYtgCY1BWuPNzF5qpykUkiCeaD1WhNFq5SWirWJv */}
             <LocalStyle.RankLogo src={data?.logo} alt="DApp Logo"/>
-            <Col>
+            <Col style={{width: '70%'}}>
               <LocalStyle.SecondText style={{fontSize: '14px'}}>{data?.title}</LocalStyle.SecondText>
-              <Text color="darkGrey" fontSize="12px">{data?.intro}</Text>
+              <Text ellipsis color="darkGrey" fontSize="12px">{data?.intro}</Text>
             </Col>
           </Row>
           <LocalStyle.RightImg src={right}/>

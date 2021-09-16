@@ -3,7 +3,7 @@ import i18next from 'i18next'
 import { getNetworkInfo, web3Utils } from './index'
 
 export const switchNetworkInPc = async (selectedNetworkInfo: any) => {
-  await window.ethereum?.request({
+  const res = await window.ethereum?.request({
       method: 'wallet_switchEthereumChain',
       params: [{chainId: web3Utils.toHex(selectedNetworkInfo.chain_id).toString()}],
   })

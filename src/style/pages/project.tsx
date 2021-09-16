@@ -42,7 +42,6 @@ export const ProjectTextSub = styled(Text)`
   text-overflow: -o-ellipsis-lastline;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -52,6 +51,8 @@ export const ProjectTextSubTwo = styled(Text)`
   font-size: 14px;
   line-height: 24px;
   letter-spacing: .5px;
+  white-space: normal;
+  word-break: break-all;
   color: ${({ theme }) => theme.colors.textSubtle};
   text-overflow: -o-ellipsis-lastline;
   overflow: hidden;
@@ -172,6 +173,7 @@ export const ProjectButton = styled(Row)`
   border-radius: 18px;
   margin-right: 24px;
   background: #18BB97;
+  cursor: pointer;
   justify-content: center;
   color: ${({ theme }) => theme.colors.invertedContrast};
   font-size: 16px;
@@ -209,6 +211,20 @@ export const ProjectImgCamera = styled.img`
   width: 32px;
   height: 32px;
   margin: 0 auto 5px auto;
+`
+
+export const ProjectHiddenDetail = styled.div`
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: .5px;
+  white-space: normal;
+  word-break: break-all;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  display: none;
 `
 
 

@@ -18,7 +18,6 @@ const useAuth = () => {
   const login = useCallback((connectorID: ConnectorNames) => {
     const connector = connectorsByName[connectorID]
     if (connector) {
-      connector.supportedChainIds = [322]
       activate(connector, async (error: Error) => {
         window.localStorage.removeItem(connectorLocalStorageKey)
         if (error instanceof UnsupportedChainIdError) {
@@ -35,7 +34,7 @@ const useAuth = () => {
           }
           message.error('Authorization Error Please authorize to access your account')
         } else {
-          message.error(error.name + error.message)
+          message.error((error.name ?? '') + error.message)
         }
       })
     } else {

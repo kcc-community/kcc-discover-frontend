@@ -18,6 +18,8 @@ import { useCommit, getMinMarginAmount, useUpdateCommit } from '../../hooks/useD
 import InputItem from 'components/InputItem'
 import { switchNetwork } from '../../utils/wallet'
 import { useCategoryPrimary, useCategorySubtle } from '../../state/application/hooks'
+import { updateChainError } from '../../state/wallet/actions'
+import { useDispatch } from 'react-redux'
 const { create } = require('ipfs-http-client')
 const { Option } = Select;
 
@@ -59,6 +61,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
+  const dispatch = useDispatch()
   const [detailLoading, getInfo] = useLoading(ApiService.getDappInfo)
   const [cateLoading, getCategoryList] = useLoading(ApiService.getDappCategory)
   const primaryList = useCategoryPrimary()
@@ -97,6 +100,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
+      dispatch(updateChainError({chainError: 'Unsupported Network'}))
       message.error('Unsupported chain, Please change the network', 2);
       return;
       // todo: check the network type

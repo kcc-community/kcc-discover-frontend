@@ -81,19 +81,10 @@ const Menu: React.FunctionComponent = (props) => {
   ]
 
   useEffect(() => {
-    const { ethereum } = window
-    if(ethereum){
-      activate(injected, undefined, true).then(() => {
-        console.log('active success ??')
-        dispatch(updateChainError({chainError: ''}))
-      })
-      .catch((e) => {
-        if(e instanceof UnsupportedChainIdError){
-          dispatch(updateChainError({chainError: 'Unsupported Network'}))
-        }
-      })
+    if(chainId && chainId === Number(process.env.REACT_APP_CHAIN_ID)){
+      dispatch(updateChainError({chainError: ''}))
     }
-  }, [])
+  }, [chainId])
 
   useEffect(() => {
     const isHome = matchHome && matchHome.isExact;

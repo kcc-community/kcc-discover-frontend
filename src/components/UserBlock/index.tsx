@@ -148,7 +148,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
   )
   return (
     <>
-      {account ? (
+      {account && walletStatus() === 'Connect' ? (
         <Dropdown overlay={menu}>
           <ConnectButton
             style={{width: 'auto', padding: '0 12px'}}
