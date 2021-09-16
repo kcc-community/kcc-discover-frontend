@@ -36,6 +36,7 @@
     "cross-env": "^7.0.3",
     "dayjs": "^1.10.6",
     "echarts": "4.9.0",
+    "env-cmd": "^10.1.0",
     "ethers": "^5.0.7",
     "i18next": "^20.5.0",
     "i18next-browser-languagedetector": "^3.0.1",
@@ -85,8 +86,11 @@
     "webpack-env": "^0.8.0"
   },
   "scripts": {
-    "start": "cross-env NETWORK=test craco start",
-    "build": "cross-env NETWORK=main craco build",
+    "start": "env-cmd craco start",
+    "start-main": "env-cmd -f ./.env.production react-scripts craco start",
+    "build": "react-scripts craco build",
+    "build-testnet": "env-cmd -f ./.env.testnet.production react-scripts craco start",
+    "build-preview": "env-cmd -f ./.env.preview.production react-scripts craco start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",

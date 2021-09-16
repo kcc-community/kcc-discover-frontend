@@ -31,7 +31,7 @@ export function useCategory(){
           subTotal += item.nums;
         }
       }
-      sub.sort((a,b) => {return b.nums - a.nums })
+      sub.sort((prev, next) => {return next.nums - prev.nums })
       primary[0].nums = primaryTotal
       sub[0].nums = subTotal
       setPList(primary as any)

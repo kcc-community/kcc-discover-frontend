@@ -65,7 +65,7 @@ const AccountPage: React.FunctionComponent = (props) => {
       return(
         <Col style={{width: width ?? 'auto', marginTop: mt ?? '0px'}}>
           <LocalStyle.ProjectTextSub style={{fontSize: '14px'}}>{title}</LocalStyle.ProjectTextSub>
-          <LocalStyle.ProjectText style={{fontSize: '32px'}}>{content}</LocalStyle.ProjectText>
+          <LocalStyle.ProjectText style={{fontSize: '32px', letterSpacing: '1.5px'}}>{content}</LocalStyle.ProjectText>
         </Col>
       )
     }
@@ -74,7 +74,7 @@ const AccountPage: React.FunctionComponent = (props) => {
         {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2).toString() }`) : '--')}
         <RowBetween>
           {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', '35px')}
-          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : totalLockUsdt) : '--', '50%', '35px')}
+          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : `$${totalLockUsdt}`) : '--', '50%', '35px')}
         </RowBetween>
       </LocalStyle.AccountCard>
     )
@@ -110,7 +110,7 @@ const AccountPage: React.FunctionComponent = (props) => {
             <LocalStyle.AccountEye src={show ? eyeOpen : eyeClose} onClick={() => setShow(!show)}/>
           </Row>
           <Row 
-            style={{width: 'auto'}}
+            style={{justifyContent: 'flex-end'}}
             onClick={() => {
               Copy(account ?? '');
               message.success('Copied')
@@ -182,13 +182,17 @@ const AccountPage: React.FunctionComponent = (props) => {
                   )
                 }
               </LocalStyle.AccountTransContent>
-              <Pagination 
-                size="small" 
-                onChange={(page, size) => {setTransPage(page)}}
-                current={transPage}
-                pageSize={5} 
-                total={transactionInfo.length} 
-                className={'kcc-pagination'}/>
+              {
+                transactionInfo.length > 0 && 
+                <Pagination 
+                  size="small" 
+                  onChange={(page, size) => {setTransPage(page)}}
+                  current={transPage}
+                  pageSize={5} 
+                  total={transactionInfo.length} 
+                  className={'kcc-pagination'}
+                />
+              }
             </LocalStyle.AccountCard>   
           </Col>
           <LocalStyle.AccountCard width="793px" height="597px">

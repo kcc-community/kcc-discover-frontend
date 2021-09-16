@@ -95,6 +95,7 @@ const RightImg = styled.img`
 
 const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
   const accountEllipsis = account ? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : null
+  const accountDropDownEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
   const [connectVisible, setCVisible] = useState(false)
   const [accountVisible, setAVisible] = useState(false)
   const balance = useCurrencyBalances(account ?? undefined, [ETHER])
@@ -120,7 +121,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
       }}>
         <Col>
           <Text fontSize={'14px'} color={theme.colors.text} fontWeight="bold">{t("Connected Metamask")}</Text>
-          <Text fontSize={'12px'} color={theme.colors.textSubtle}>{accountEllipsis}</Text>
+          <Text fontSize={'12px'} color={theme.colors.textSubtle}>{accountDropDownEllipsis}</Text>
         </Col>
         <CopyImg src={copy}/>
       </AccountWrapper>
