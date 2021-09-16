@@ -18,7 +18,6 @@ import Footer from '../../components/Footer'
 import CommentModal from '../../components/CommentModal'
 import { useComment } from '../../hooks/useDiscoverContract'
 
-//todo: score plus 10
 const ProjectDetailPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
