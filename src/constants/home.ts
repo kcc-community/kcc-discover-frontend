@@ -113,7 +113,7 @@ export const media = [
     app: 'Medium',
     icon: require('../assets/images/Icons/medium-logo@2x.png').default,
     hover: require('../assets/images/Icons/medium-logo-hover@2x.png').default,
-    route: 'https://github.com/kcc-community',
+    route: 'https://kccofficial.medium.com/',
   },
   {
     app: 'Discord',

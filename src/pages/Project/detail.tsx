@@ -162,7 +162,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       <Container style={{minHeight: '80vh'}}>
         <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
           <Col style={{width: '800px'}}>
-            <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto'}}>
+            <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto', height: 'auto', marginBottom: '0'}}>
               <LocalStyle.ProjectDappLogo src={detail.logo} alt="DApp Logo" style={{width: '140px', height: '140px', marginRight: '34px'}}/>
               <Col style={{width: '70%'}}>
                 <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
