@@ -86,11 +86,11 @@
     "webpack-env": "^0.8.0"
   },
   "scripts": {
-    "start": "env-cmd craco start",
-    "start-main": "env-cmd -f ./.env.production react-scripts craco start",
-    "build": "react-scripts craco build",
-    "build-testnet": "env-cmd -f ./.env.testnet.production react-scripts craco start",
-    "build-preview": "env-cmd -f ./.env.preview.production react-scripts craco start",
+    "start": "craco start",
+    "start-main": "env-cmd -f ./.env.production  craco start",
+    "build": "craco craco build",
+    "build-testnet": "env-cmd -f ./.env.testnet.production  craco start",
+    "build-preview": "env-cmd -f ./.env.preview.production  craco start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
