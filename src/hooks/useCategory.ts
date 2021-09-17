@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState } from 'react'
 import { ApiService, useLoading } from '../api'
 import { useDispatch } from 'react-redux'
 import { updateCategoryPrimary, updateCategorySubtle, updateCategoryLoading } from '../state/application/actions'
+import { subCategoryRank } from '../constants/home'
 
 interface CategoryProps {
   id?: number 
@@ -31,7 +32,12 @@ export function useCategory(){
           subTotal += item.nums;
         }
       }
-      sub.sort((prev, next) => {return next.nums - prev.nums })
+      sub.sort((prev, next) => { 
+        if(prev.nums !== next.nums){
+          return prev.nums - next.nums
+        } 
+        return subCategoryRank[next.name] - subCategoryRank[prev.name]
+      })
       primary[0].nums = primaryTotal
       sub[0].nums = subTotal
       setPList(primary as any)
