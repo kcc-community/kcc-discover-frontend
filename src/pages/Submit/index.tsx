@@ -21,6 +21,9 @@ import { useCategoryPrimary, useCategorySubtle } from '../../state/application/h
 import { useChainError } from 'state/wallet/hooks'
 import { updateChainError } from '../../state/wallet/actions'
 import { useDispatch } from 'react-redux'
+import { NFTStorage, File } from 'nft.storage'
+const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDVlOTc4MjdCZWREY0FGYTAyMWQ2NjRiMjE5QWE2MTM3MkY1MDBmZTIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMTg4NzM3MjUxMywibmFtZSI6ImRpc2NvdmVyIn0.G7Cl_zC4ADBEaDW-epPpon4vSC8XhWocETL-NX-7w8Q'
+const client = new NFTStorage({ token: apiKey })
 const { create } = require('ipfs-http-client')
 const { Option } = Select;
 
@@ -222,6 +225,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
         setFile([...fileList, file])
         return false;
     },
+    accept: 'image/*',
     fileList,
   };
 
@@ -343,13 +347,18 @@ const SubmitPage: React.FunctionComponent = (props) => {
             {...upLoadProps}
             onChange={async (e) => {
               let result = await limitUploadImg(e.file, 288, 288);
-              console.log('result =', result);
               if(!result) return;
-              const client = create(process.env.REACT_APP_IPFS_URL);
-              client.add(e.file).then((res: any) => {
-                console.log('upload success =', res)
-                setLogo(res.path)
-              }).catch(e => {console.log('upload e = ', e)})
+              message.info('uploading', 0);
+              const metadata = await client.storeBlob(new Blob([e.file] as any))
+              console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
+              message.destroy();
+              message.success('upload success')
+              setLogo(metadata['cid']);
+              // const client = create(process.env.REACT_APP_IPFS_URL);
+              // client.add(e.file).then((res: any) => {
+              //   console.log('upload success =', res)
+              //   setLogo(res.path)
+              // }).catch(e => {console.log('upload e = ', e)})
             }}
           > 
             <Col>
@@ -373,10 +382,15 @@ const SubmitPage: React.FunctionComponent = (props) => {
             onChange={async (e) => {
               let result = await limitUploadImg(e.file, 880, 400);
               if(!result) return;
-              const client = create(process.env.REACT_APP_IPFS_URL);
-              client.add(e.file).then((res: any) => {
-                setBanner(res.path)
-              })
+              message.info('uploading', 0);
+              const metadata = await client.storeBlob(new Blob([e.file] as any))
+              message.destroy();
+              message.success('upload success')
+              setBanner(metadata['cid']);
+              // const client = create(process.env.REACT_APP_IPFS_URL);
+              // client.add(e.file).then((res: any) => {
+              //   setBanner(res.path)
+              // })
             }}
           > 
             <Col>

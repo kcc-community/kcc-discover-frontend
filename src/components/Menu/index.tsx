@@ -137,7 +137,7 @@ const Menu: React.FunctionComponent = (props) => {
                 <UserBlock account={account as string} chainId={chainId} login={login} logout={logout} />
               </Flex>
             )}
-            <Language />
+            {/* <Language /> */}
           </RowFixed>
         </RowBetween>
       </StyledNav>
