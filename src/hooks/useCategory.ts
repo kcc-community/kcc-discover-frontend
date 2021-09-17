@@ -34,9 +34,9 @@ export function useCategory(){
       }
       sub.sort((prev, next) => { 
         if(prev.nums !== next.nums){
-          return prev.nums - next.nums
+          return next.nums - prev.nums 
         } 
-        return subCategoryRank[next.name] - subCategoryRank[prev.name]
+        return subCategoryRank[prev.name] - subCategoryRank[next.name]
       })
       primary[0].nums = primaryTotal
       sub[0].nums = subTotal

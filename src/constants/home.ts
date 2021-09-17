@@ -133,3 +133,15 @@ export const stateTipsColor = {
   "Rejected": {bg: 'linear-gradient(0deg, rgba(0, 20, 42, 0.08), rgba(0, 20, 42, 0.08)), #FFFFFF;', color: '#00142A99'},
 }
 
+export const subCategoryRank = {
+  'Exchange': 1,
+  'NFT': 2,
+  'Game': 3,
+  'Earn': 4,
+  'Lending': 5,
+  'DAO': 6,
+  'Wallet': 7,
+  'Community': 8,
+  'Others': 9,
+}
+
