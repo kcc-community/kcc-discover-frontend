@@ -7,6 +7,7 @@ interface Window {
     removeListener?: (...args: any[]) => void
     autoRefreshOnNetworkChange: boolean
     request: any
+    networkVersion: string | number
   }
   web3?: any
 }

@@ -28,6 +28,9 @@ export const copy = require('../assets/images/Icons/copy.png').default
 export const eyeOpen = require('../assets/images/Icons/eyes_on.png').default
 export const eyeClose = require('../assets/images/Icons/eyes_off.png').default
 export const del = require('../assets/images/Icons/del.png').default
+export const bannerDef = require('../assets/images/home/banner-def.png').default
+export const logoDef = require('../assets/images/home/logo-def.png').default
+
 
 
 

@@ -138,6 +138,12 @@ const ResetCSS = createGlobalStyle`
     display: flex;
     justify-content: center;
   }
+  .homeBanner{
+    img[src=""],img:not([src]){
+      background: url('/assets/images/home/banner-def.png') no-repeat center;
+      background-size:100% 100% ;
+    }
+  }
 `
 
 export default ResetCSS

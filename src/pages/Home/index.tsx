@@ -9,7 +9,7 @@ import Col from '../../components/Column'
 import Footer from '../../components/Footer'
 import CountUp from 'react-countup'
 import { FadeInUp } from '../../utils/animation'
-import { gold, sliver, bronze, right, iconLeft, iconRight, websiteWhite } from '../../constants/imgs'
+import { gold, sliver, bronze, right, iconLeft, iconRight, websiteWhite, bannerDef, logoDef } from '../../constants/imgs'
 import { ApiService, useLoading } from '../../api'
 import { Skeleton } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
 import { useCategorySubtle } from '../../state/application/hooks'
 import usePriceInfo from '../../hooks/usePriceInfo'
+import loadIpfsImgs from '../../utils/loadIpfsImg'
 import $ from 'jquery'
 import dayjs from 'dayjs'
 import BN from 'bignumber.js'
@@ -48,7 +49,9 @@ const HomePage: React.FunctionComponent = (props) => {
   const [priceLoading, getPriceInfo] = useLoading(ApiService.getHomePriceInfo);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([]);
+  const [topDappsLoad, setTopLoad] = useState([])
   const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
+  const [sliderLoad, setSliderLoad] = useState([])
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
   const priceInfo: PriceProps = usePriceInfo();
@@ -95,10 +98,12 @@ const HomePage: React.FunctionComponent = (props) => {
         //deal slider info
         let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
         setSlider(slider as any)
+        loadIpfsImgs('banner', slider, (list: []) => setSliderLoad(list))
+        loadIpfsImgs('logo', res[0].list, (list: []) => setTopLoad(list))
       })
       updateChart();
   }, [chart1]);
-  
+
   const DappItem = (data: any, index: number) => {
     const rank = [gold, sliver, bronze]
     return (
@@ -112,7 +117,7 @@ const HomePage: React.FunctionComponent = (props) => {
         </LocalStyle.RankImg>
         <RowBetween>
           <Row>
-            <LocalStyle.RankLogo src={data?.logo} alt="DApp Logo"/>
+            <LocalStyle.RankLogo src={topDappsLoad[index] ? data?.logo : logoDef} alt="DApp Logo"/>
             <Col style={{width: '70%'}}>
               <LocalStyle.SecondText style={{fontSize: '14px'}}>{data?.title}</LocalStyle.SecondText>
               <Text ellipsis color="darkGrey" fontSize="12px">{data?.intro}</Text>
@@ -245,16 +250,16 @@ const HomePage: React.FunctionComponent = (props) => {
             </FadeInUp>
             <FadeInUp>
               <AutoRow justify="center">
-                <LocalStyle.SliderLeftA url={sliderPics[sliderA] ? sliderPics[sliderA].banner : ''} className={'home-slider'}/>
-                <LocalStyle.SliderLeftB url={sliderPics[sliderB] ? sliderPics[sliderB].banner : ''} className={'home-slider'}/>
+                <LocalStyle.SliderLeftA url={sliderLoad[sliderA] ? sliderPics[sliderA].banner : bannerDef} className={'home-slider'}/>
+                <LocalStyle.SliderLeftB url={sliderLoad[sliderB] ? sliderPics[sliderB].banner : bannerDef} className={'home-slider'}/>
                 <Slider {...settings}>
                   {/* @ts-ignore */}
                   {
                     sliderPics.map((item, index) => {
                       if(item){
                         return(
-                          <LocalStyle.SliderWrapper target="_blank" href={item.website} key={index}>
-                            <LocalStyle.SliderCard src={item.banner}/>
+                          <LocalStyle.SliderWrapper target="_blank" href={item.website} key={index} className="homeBanner">
+                            <LocalStyle.SliderCard src={sliderLoad[index] ? item.banner  : bannerDef}/>
                             <LocalStyle.SliderBottom>
                               <AutoRow>
                                 <LocalStyle.SliderBottomBall src={websiteWhite}/>
@@ -272,8 +277,8 @@ const HomePage: React.FunctionComponent = (props) => {
                     })
                   }
                 </Slider>
-                <LocalStyle.SliderRightD url={sliderPics[sliderD] ? sliderPics[sliderD].banner : ''} className={'home-slider'}/>
-                <LocalStyle.SliderRightE url={sliderPics[sliderE] ? sliderPics[sliderE].banner : ''} className={'home-slider'}/>
+                <LocalStyle.SliderRightD url={sliderLoad[sliderD] ? sliderPics[sliderD].banner : bannerDef} className={'home-slider'}/>
+                <LocalStyle.SliderRightE url={sliderLoad[sliderE] ? sliderPics[sliderE].banner : bannerDef} className={'home-slider'}/>
               </AutoRow>
             </FadeInUp>
           </>

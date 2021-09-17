@@ -13,7 +13,6 @@ import * as LocalStyle from '../../style/pages'
 import { useHistory } from 'react-router-dom'
 import { getUrlParam } from '../../utils'
 import { useCategorySubtle, useCategoryPrimary, useCategoryLoading } from '../../state/application/hooks'
-import useCategory from '../../hooks/useCategory'
 import Footer from '../../components/Footer'
 
 interface DappFilterParams {
@@ -36,7 +35,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
     nums: number
     index?: number
   }>({ name: 'All', nums: 0 })
-  const [content, setInput] = useState(null)
+  const [content, setInput] = useState('')
   const subList = useCategorySubtle();
   const primaryList = useCategoryPrimary();
   const cateLoading = useCategoryLoading();
@@ -107,7 +106,10 @@ const ProjectPage: React.FunctionComponent = (props) => {
     return (
       <LocalStyle.ProjectInputWrapper>
         <LocalStyle.ProjectImgSearch src={search}/>
-        <LocalStyle.ProjectInput placeholder={t('Search')} onChange={(e) => setInput(e.target.value as any)}/>
+        <LocalStyle.ProjectInput placeholder={t('Search')} value={content} onChange={(e) => {
+          let value = e.target.value.replace(/[\W]/g,'')
+          setInput(value as any)
+        }}/>
       </LocalStyle.ProjectInputWrapper>
     )
   }
@@ -140,7 +142,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
       website: website,
     }
     return (
-      <LocalStyle.ProjectMedia href={url} target="_blank">
+      <LocalStyle.ProjectMedia href={url} target="_blank" onClick={(e) => {e.stopPropagation()}}>
         <LocalStyle.ProjectMediaImg src={logo[type]} />
       </LocalStyle.ProjectMedia>
     )

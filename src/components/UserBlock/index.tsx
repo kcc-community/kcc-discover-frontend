@@ -125,7 +125,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
         </Col>
         <CopyImg src={copy}/>
       </AccountWrapper>
-      <Menu.Item>
+      <Menu.Item key="account">
         <RowBetween onClick={() => history.push('/account')}>
           <Text fontSize={'14px'} fontWeight={'500'} color={theme.colors.text}>{t("My Project")}</Text>
           <Row style={{width: 'auto'}}>
@@ -135,7 +135,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
         </RowBetween>
         
       </Menu.Item>
-      <Menu.Item style={{width: '100%'}}>
+      <Menu.Item style={{width: '100%'}} key="comment">
         <RowBetween onClick={() => history.push('/account')}>
           <Text fontSize={'14px'} fontWeight={'500'} color={theme.colors.text}>{t("My Comment")}</Text>
           <Row style={{width: 'auto'}}>

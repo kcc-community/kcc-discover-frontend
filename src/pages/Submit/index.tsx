@@ -18,6 +18,7 @@ import { useCommit, getMinMarginAmount, useUpdateCommit } from '../../hooks/useD
 import InputItem from 'components/InputItem'
 import { switchNetwork } from '../../utils/wallet'
 import { useCategoryPrimary, useCategorySubtle } from '../../state/application/hooks'
+import { useChainError } from 'state/wallet/hooks'
 import { updateChainError } from '../../state/wallet/actions'
 import { useDispatch } from 'react-redux'
 const { create } = require('ipfs-http-client')
@@ -72,6 +73,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const [fileList, setFile] = useState([])
   const [minMargin, setMinMargin] = useState(100)
   const [editSymbol, setEditSymbol] = useState(true)
+  const chainError = useChainError();
 
   const [title, setTitle] = useState('')
   const [shortIntroduction, setIntro] = useState('')
@@ -98,10 +100,10 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const checkEmail = email && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(email) ? false : true
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
+
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
       dispatch(updateChainError({chainError: 'Unsupported Network'}))
-      message.error('Unsupported chain, Please change the network', 2);
       return;
       // todo: check the network type
       // switchNetwork(Number(process.env.REACT_APP_CHAIN_ID))
@@ -142,8 +144,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(!account || !chainId) { message.error('Please connect your wallet'); return; };
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
-      websiteLink, email, marginAmount,
-      contractAddresses, secondaryCategoryIndex, primaryCategoryIndex, banner
+      email, marginAmount, contractAddresses, 
+      secondaryCategoryIndex, primaryCategoryIndex, banner,
+      websiteLink: checkHttps(websiteLink)
     }
     if(!logoLink.includes('https') && !logoLink.includes('ipfs')){
       params.logoLink = process.env.REACT_APP_IPFS_IMG_URL + logoLink
@@ -165,9 +168,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(detailDescription) {params.detailDescription = detailDescription};
     if(tokenContractAddress) {params.tokenContractAddress = tokenContractAddress};
     if(tvlInterface) {params.tvlInterface = tvlInterface};
-    if(twitterLink) {params.twitterLink = twitterLink};
-    if(telegramLink) {params.telegramLink = telegramLink};
-    if(githubLink) {params.githubLink = githubLink};
+    if(twitterLink) {params.twitterLink = checkHttps(twitterLink)};
+    if(telegramLink) {params.telegramLink = checkHttps(telegramLink)};
+    if(githubLink) {params.githubLink = checkHttps(githubLink)};
     if(coinmarketcapLink) {params.coinmarketcapLink = coinmarketcapLink};
     if(coingeckoLink) {params.coingeckoLink = coingeckoLink};
     console.log('params =', params);
@@ -191,6 +194,13 @@ const SubmitPage: React.FunctionComponent = (props) => {
         }
       })
     }
+  }
+
+  const checkHttps = (url: string) => {
+    if(!url.includes('https') && (!url.includes('http'))){
+      return 'https://' + url
+    }
+    return url
   }
 
   const splitSpace = (value?: string | undefined) => {
@@ -239,6 +249,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
       reader.readAsDataURL(file);
     })
   }
+
 
   return (
     <>
@@ -374,9 +385,10 @@ const SubmitPage: React.FunctionComponent = (props) => {
             </Col>
           </Upload>
           <Input value={banner} disabled onChange={(e) => {setBanner(e.target.value)}} style={{marginTop: '15px'}}/>
+          <img src="" id="test"/>
           <div style={{height: '36px'}}/>
           <InputItem 
-            title={'Smart Contract Addresses'}
+            title={'Smart Contract Address'}
             required={true}
             disabled={name ? true : false}
             value={contractAddresses}
@@ -384,11 +396,25 @@ const SubmitPage: React.FunctionComponent = (props) => {
             onChange={e => {setContract(splitSpace(e.target.value))}}
           />
           <InputItem 
-            title={'Token Contract Address'}
-            required={false}
-            value={tokenContractAddress}
-            placeholder={'Enter your Token Contract Address'}
-            onChange={e => {setTokenContract(e.target.value.trim())}}
+            title={name ? 'The amount of KCS margin call' : 'Amount of KCS margin'}
+            required={name ? false : true}
+            value={marginAmount}
+            placeholder={'Submit your KCS margin'}
+            titleInfo={true}
+            titleInfoContent={`The minimum margin is ${minMargin} KCS and will also be shown in the project details.  it will be refunded if the subsequent application is taken off the shelf.`}
+            error={(!checkMargin && !name)? `The minimum margin is ${minMargin} KCS` : ''}
+            onChange={e => {
+              setMargin(e.target.value)
+              // if(/^\d*$/.test(e.target.value)) { setMargin(e.target.value) }
+            }}
+          />
+          <InputItem 
+            title={'Your Mailbox (For information update)'}
+            required={true}
+            value={email}
+            placeholder={'Enter your Mailbox'}
+            error={!checkEmail ? 'Please input correct email' : ''}
+            onChange={e => {setEmail(e.target.value.trim())}}
           />
           <InputItem 
             title={'Token Symbol'}
@@ -397,6 +423,13 @@ const SubmitPage: React.FunctionComponent = (props) => {
             disabled={!editSymbol ? true : false}
             placeholder={'Enter your Token Symbol'}
             onChange={e => {setTokenSymbol(splitSpace(e.target.value))}}
+          />
+          <InputItem 
+            title={'Token Contract Address'}
+            required={false}
+            value={tokenContractAddress}
+            placeholder={'Enter your Token Contract Address'}
+            onChange={e => {setTokenContract(e.target.value.trim())}}
           />
           <InputItem 
             title={'Tvl Interface (graphql)'}
@@ -449,32 +482,11 @@ const SubmitPage: React.FunctionComponent = (props) => {
             placeholder={'Enter your Coin Gecko'}
             onChange={e => {setCoinGecko(splitSpace(e.target.value))}}
           />
-          <InputItem 
-            title={name ? 'The amount of KCS margin call' : 'Amount of KCS margin'}
-            required={name ? false : true}
-            value={marginAmount}
-            placeholder={'Submit your KCS margin'}
-            titleInfo={true}
-            titleInfoContent={`The minimum margin is ${minMargin} KCS and will also be shown in the project details.  it will be refunded if the subsequent application is taken off the shelf.`}
-            error={(!checkMargin && !name)? `The minimum margin is ${minMargin} KCS` : ''}
-            onChange={e => {
-              setMargin(e.target.value)
-              // if(/^\d*$/.test(e.target.value)) { setMargin(e.target.value) }
-            }}
-          />
-          <InputItem 
-            title={'Your Mailbox (For information update)'}
-            required={true}
-            value={email}
-            placeholder={'Enter your Mailbox'}
-            error={!checkEmail ? 'Please input correct email' : ''}
-            onChange={e => {setEmail(e.target.value.trim())}}
-          />
           <Button 
             style={{width: '100px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
             || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || !contractAddresses 
-            || !checkEmail || (!checkMargin && !name)}
+            || !checkEmail || (!checkMargin && !name) || chainError}
             type="primary"
             onClick={() => onConfirm()}>Submit</Button>
         </Col>
