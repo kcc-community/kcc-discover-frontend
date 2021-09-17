@@ -167,7 +167,9 @@ export const ProjectColLine = styled.div`
   background: rgba(115, 126, 141, 0.16);
 `
 
-export const ProjectButton = styled(Row)`
+export const ProjectButton = styled.a`
+  display: flex;
+  align-items: center;
   width: 160px;
   height: 36px;
   border-radius: 18px;
@@ -178,8 +180,8 @@ export const ProjectButton = styled(Row)`
   color: ${({ theme }) => theme.colors.invertedContrast};
   font-size: 16px;
   font-weight: bold;
-  :hover{
-    opacity: .75;
+  :hover {
+    color: ${({ theme }) => theme.colors.invertedContrast};
   }
 `
 

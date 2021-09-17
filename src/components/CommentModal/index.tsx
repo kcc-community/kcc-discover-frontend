@@ -31,7 +31,7 @@ const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
 
   return (
     <Modal
-      title="My Comment"
+      title="My Review"
       className={'comment'}
       visible={props.visible}
       onCancel={() => {clearInfo(); props.onClose()}}
@@ -52,22 +52,28 @@ const CommentModal: React.FunctionComponent<CommentModalProps>= (props) => {
       </AutoRow>
       <InputItem 
         title={'Title'}
-        required={false}
+        required={true}
         value={title}
         placeholder={'Enter the title'}
         maxLength={30}
-        //@ts-ignore
-        onChange={e => {setTitle(Mint.filterSync(e.target.value ?? '').text)}}
+        onChange={e => {
+          let title = e.target.value === ' ' ? '' : e.target.value
+          //@ts-ignore
+          setTitle(Mint.filterSync(title).text)
+        }}
       />
       <InputItem 
         title={'Content'}
-        required={true}
+        required={false}
         isTextArea={true}
         value={content}
         maxLength={100}
         placeholder={'Enter the content'}
-        //@ts-ignore
-        onChange={e => {setContent(Mint.filterSync(e.target.value ?? '').text)}}
+        onChange={e => {
+          let content = e.target.value === ' ' ? '' : e.target.value
+          //@ts-ignore
+          setContent(Mint.filterSync(content).text)
+        }}
       />
     </Modal>
   )

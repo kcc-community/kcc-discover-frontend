@@ -125,7 +125,10 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       score: data.rate,
       projectAddress: detail.contract
     }
-    if(!account || !chainId) return;
+    if(!account || !chainId) {
+      message.error('Wallet not connected')
+      return;
+    };
     const { commentCallback } = useComment(params, library);
     commentCallback().then(res => {
       if(res){
@@ -181,7 +184,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
                   {detail.secCategory ? <LocalStyle.ProjectTips grey={true}>{detail.secCategory.name}</LocalStyle.ProjectTips> : '-'}
                 </Row>
                 <Row mt="24px">
-                  <LocalStyle.ProjectButton >
+                  <LocalStyle.ProjectButton href={detail.website} target="_blank">
                     {t("Visit Website")}
                     <LocalStyle.ProjectImgSend src={send}/>
                   </LocalStyle.ProjectButton>

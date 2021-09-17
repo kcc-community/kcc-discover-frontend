@@ -143,7 +143,7 @@ const AccountPage: React.FunctionComponent = (props) => {
                   </Row>
                   <Row mt="15px">
                     <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("KCS Margin")}</LocalStyle.ProjectTextSub>
-                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{new BN(projectInfo?.info?.margin).toFixed(2).toString()} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
+                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{show ? new BN(projectInfo?.info?.margin).toFixed(2).toString() : '--'} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
                   </Row>
                   <Row mt="15px">
                     <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("State")}</LocalStyle.ProjectTextSub>

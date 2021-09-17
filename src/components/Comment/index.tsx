@@ -104,7 +104,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
               <RowBetween>
                 <Row mb="5px">
                   <Text fontWeight="bold" color={theme.colors.text} mr="20px">{props.title}</Text>
-                  <Rate allowHalf disabled value={props.score}/>
+                  <Rate allowHalf disabled value={props.score / 10}/>
                   <LocalStyle.ProjectTextSub ml="20px">{dayjs(props.createTime).format('YYYY-MM-DD') }</LocalStyle.ProjectTextSub>
                 </Row>
               </RowBetween>
@@ -134,7 +134,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
       </RowBetween>
       <Row mt="5px" mb="5px">
         <Text fontWeight="bold" color={theme.colors.text} mr="20px">{props.title}</Text>
-        <Rate allowHalf disabled value={props.score} />
+        <Rate allowHalf disabled value={props.score / 10} />
       </Row>
       <Row style={{position: 'relative'}}>
         <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px'}}>

@@ -57,7 +57,7 @@ interface MenuList {
 
 const Menu: React.FunctionComponent = (props) => {
   const { t } = useTranslation();
-  const { account, chainId, activate } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { login, logout } = useAuth()
   const history = useHistory();
   const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true });
