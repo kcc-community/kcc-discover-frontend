@@ -235,7 +235,7 @@ const HomePage: React.FunctionComponent = (props) => {
               <LocalStyle.RankCard>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>
                 {dappLoading ? <Skeleton paragraph={{ rows: 5 }} /> : null}
-                {topDapps.length ? topDapps.map((item, index) => DappItem(item, index)) : null}
+                {topDapps.length ? topDapps.map((item, index) => {if(index < 5) {return DappItem(item, index)} return null }) : null}
               </LocalStyle.RankCard>
             </FadeInUp>
           </RowBetween>

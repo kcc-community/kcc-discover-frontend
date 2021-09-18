@@ -229,7 +229,31 @@ const SubmitPage: React.FunctionComponent = (props) => {
     fileList,
   };
 
-  const limitUploadImg = (file: any, standardWidth: number, standardHeight: number) => {
+  const uploadImg = async (type: string, file: any, limit: {width: number, height: number}) => {
+    let sizeResult = await limitUploadSize(file, limit.width, limit.height);
+    let volumeResult = limitUploadVolume(type, file.size);
+    if(!sizeResult || !volumeResult) { message.error('unacceptable img size', 3); return };
+    message.info('uploading', 0);
+    const metadata = await client.storeBlob(new Blob([file] as any))
+    console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
+    message.destroy();
+    message.success('upload success')
+    switch(type){
+      case 'logo':
+        setLogo(metadata);
+        break;
+      case 'banner':
+        setBanner(metadata);
+        break;
+    }
+  }
+
+  const limitUploadVolume = (type: string, size: number) => {
+    const limit = {logo: 512, banner: 2048}
+    return size <= limit[type]
+  }
+
+  const limitUploadSize = (file: any, standardWidth: number, standardHeight: number) => {
     return new Promise(function(resolve, reject){
       let reader = new FileReader();
       reader.onload = function (e: any) {
@@ -239,9 +263,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
           image.onload=function(){
             let width = image.width;
             let height = image.height;
-            console.log('width =', width, 'height =', height)
             if(width !== standardWidth || height !== standardHeight){
-              message.error('unacceptable img size', 3);
               resolve(false)
             } else {
               resolve(true)
@@ -253,7 +275,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
       reader.readAsDataURL(file);
     })
   }
-
 
   return (
     <>
@@ -346,14 +367,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             showUploadList={false}
             {...upLoadProps}
             onChange={async (e) => {
-              let result = await limitUploadImg(e.file, 288, 288);
-              if(!result) return;
-              message.info('uploading', 0);
-              const metadata = await client.storeBlob(new Blob([e.file] as any))
-              console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
-              message.destroy();
-              message.success('upload success')
-              setLogo(metadata['cid']);
+              uploadImg('logo', e.file, {width: 288, height: 288});
               // const client = create(process.env.REACT_APP_IPFS_URL);
               // client.add(e.file).then((res: any) => {
               //   console.log('upload success =', res)
@@ -380,13 +394,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             showUploadList={false}
             {...upLoadProps}
             onChange={async (e) => {
-              let result = await limitUploadImg(e.file, 880, 400);
-              if(!result) return;
-              message.info('uploading', 0);
-              const metadata = await client.storeBlob(new Blob([e.file] as any))
-              message.destroy();
-              message.success('upload success')
-              setBanner(metadata['cid']);
+              uploadImg('banner', e.file, {width: 880, height: 400});
               // const client = create(process.env.REACT_APP_IPFS_URL);
               // client.add(e.file).then((res: any) => {
               //   setBanner(res.path)
