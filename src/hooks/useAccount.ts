@@ -8,6 +8,7 @@ interface ProjectInfoProps {
   owner: string 
   logo: string 
   title: string
+  name?: string
 }
 
 interface CommentProps {

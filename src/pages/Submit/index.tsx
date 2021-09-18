@@ -67,7 +67,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const { account, library, chainId } = useWeb3React()
   const dispatch = useDispatch()
   const [detailLoading, getInfo] = useLoading(ApiService.getDappInfo)
-  const [cateLoading, getCategoryList] = useLoading(ApiService.getDappCategory)
   const primaryList = useCategoryPrimary()
   const subList = useCategorySubtle()
   const [showModal, setModal] = useState(false)
@@ -103,6 +102,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const checkEmail = email && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(email) ? false : true
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
+  const checkContractAddress = ['Wallet', 'Community', 'Others'].includes(secondaryCategoryIndex ?? '') ? false : true
 
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
@@ -112,11 +112,12 @@ const SubmitPage: React.FunctionComponent = (props) => {
       // switchNetwork(Number(process.env.REACT_APP_CHAIN_ID))
     }
     if(!chainId && !name) return
-    console.log('chainId =', chainId, 'process.env.REACT_APP_CHAIN_ID =', process.env.REACT_APP_CHAIN_ID)
+    if(name) { message.info('loading', 0) }
     Promise.all([
       getInfo(name),
       getMinMarginAmount(library)
     ]).then((res: any) => {
+      message.destroy();
       if(name){
         //when project is edited, data can not be changed
         setTitle(res[0].title)
@@ -140,6 +141,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
         res[0].coinGecko && setCoinGecko(res[0].coinGecko)
       }
       setMinMargin(Number(res[1]))
+      setMargin(res[1])
     })
   }, [name, chainId])
 
@@ -232,7 +234,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const uploadImg = async (type: string, file: any, limit: {width: number, height: number}) => {
     let sizeResult = await limitUploadSize(file, limit.width, limit.height);
     let volumeResult = limitUploadVolume(type, file.size);
-    if(!sizeResult || !volumeResult) { message.error('unacceptable img size', 3); return };
+    // if(!sizeResult || !volumeResult) { message.error('unacceptable img size', 3); return };
     message.info('uploading', 0);
     const metadata = await client.storeBlob(new Blob([file] as any))
     console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
@@ -395,10 +397,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
             {...upLoadProps}
             onChange={async (e) => {
               uploadImg('banner', e.file, {width: 880, height: 400});
-              // const client = create(process.env.REACT_APP_IPFS_URL);
-              // client.add(e.file).then((res: any) => {
-              //   setBanner(res.path)
-              // })
             }}
           > 
             <Col>
@@ -411,8 +409,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
           <div style={{height: '36px'}}/>
           <InputItem 
             title={'Smart Contract Address'}
-            required={true}
-            disabled={name ? true : false}
+            required={checkContractAddress}
+            disabled={(name && contractAddresses) ? true : false}
             value={contractAddresses}
             placeholder={'Enter your Smart Contract Address'}
             onChange={e => {setContract(splitSpace(e.target.value))}}
@@ -507,7 +505,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
           <Button 
             style={{width: '100px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
-            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || !contractAddresses 
+            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || (!contractAddresses && checkContractAddress) 
             || !checkEmail || (!checkMargin && !name) || chainError}
             type="primary"
             onClick={() => onConfirm()}>Submit</Button>
