@@ -159,7 +159,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
             <LinkImg src={require('../../assets/images/Icons/logo.png').default}/>
             <Text color={theme.colors.primary} fontSize={'14px'}>{accountEllipsis}</Text>
             <LinkButtonLine />
-            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0]?.toSignificant(4) ?? 0} KCS</Text>
+            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0]?.toSignificant(2) ?? 0} KCS</Text>
           </ConnectButton>
         </Dropdown>
       ) : (

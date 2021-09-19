@@ -3,13 +3,15 @@ import styled, { useTheme } from 'styled-components'
 import { Container, Text } from '../../style'
 import Row, { RowBetween } from 'components/Row'
 import Col from 'components/Column'
-import { good, goodSec, bad, badSec, del } from '../../constants/imgs'
+import { good, goodSec, bad, badSec, del, logoDef } from '../../constants/imgs'
 import { hashSpilt } from '../../utils'
 import * as LocalStyle from '../../style/pages'
 import { Rate, message } from 'antd'
 import dayjs from 'dayjs'
 import { useWeb3React } from '@web3-react/core'
 import { useCommentLike, useCommentDelete } from '../../hooks/useDiscoverContract'
+import { Img } from '../ImgIpfs'
+
 
 const CommentWrapper = styled.div`
   width: 800px;
@@ -99,7 +101,11 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
       <CommentWrapper key={props.id} style={{width: '720px'}}>
         <RowBetween align="flex-start">
           <Row align="flex-start">
-            <LocalStyle.AccountImgDApp src={props.logo} alt="DApp logo" style={{marginTop: '5px'}}/>
+            <Img 
+              style={{width: '40px', height: '40px', marginRight: '18px', borderRadius: '8px', marginTop: '5px'}}
+              loader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
+              unloader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
+              src={[props.logo as string]}/>
             <Col>
               <RowBetween>
                 <Row mb="5px">

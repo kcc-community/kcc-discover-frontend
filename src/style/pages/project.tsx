@@ -114,6 +114,13 @@ export const ProjectDappLogo = styled.img`
   margin-right: 20px;
 `
 
+export const ProjectDetailLogo = styled.img`
+  height: 140px;
+  width: 140px;
+  border-radius: 8px;
+  margin-right: 34px;
+`
+
 export const ProjectTips = styled.div<{ grey: boolean }>`
   background: ${({ grey, theme }) => grey ? `linear-gradient(0deg, rgba(0, 20, 42, 0.04), rgba(0, 20, 42, 0.04)), #FFFFFF` : theme.colors.backgroundTip};
   color: ${({ grey, theme }) => grey ? theme.colors.text : theme.colors.primary};

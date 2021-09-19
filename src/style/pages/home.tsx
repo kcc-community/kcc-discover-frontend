@@ -111,7 +111,7 @@ export const SliderWrapper = styled.a`
 
 export const SliderCard = styled.img`
   width: 880px !important;
-  height: 390px;
+  height: 400px;
 `
 
 export const SliderBottom = styled(RowBetween)`
@@ -141,12 +141,15 @@ export const SliderRight = styled.div`
   top: 50%;
   transform: translate(0, -50%);
   position: absolute;
-  z-index: 1;
-  right: 24px;
+  z-index: 999;
+  right: 190px;
+  :active{
+    opacity: .7;
+  }
 `
 
 export const SliderLeft = styled(SliderRight)`
-  left: 24px;
+  left: 190px;
 `
 
 export const SliderImg = styled.img`
@@ -154,36 +157,16 @@ export const SliderImg = styled.img`
   height: 14px;
 `
 
-export const SliderLeftB = styled.div<{ url: string }>`
-  width: 55px;
-  height: 360px;
-  background: ${({ url }) => { return `url(${url}) left center no-repeat` }};
-  background-size: cover;
+export const SliderPointSec = styled.div`
+  width: 12px;
+  height: 12px;
+  border-radius: 24px;
+  background: #B8C6D8;
+  margin-right: 12px;
+  margin-top: 16px;
 `
 
-export const SliderLeftA = styled.div<{ url: string }>`
-  width: 61px;
-  height: 324px;
-  background: ${({ url }) => { return `url(${url}) left center no-repeat` }};
-  background-size: cover;
-  transform: rotateY(12deg);
-  -webkit-transform: rotateY(12deg);
+export const SliderPointNormal = styled(SliderPointSec)`
+  background: #B8C6D866;
 `
-
-export const SliderRightD = styled.div<{ url: string }>`
-  width: 55px;
-  height: 360px;
-  background: ${({ url }) => { return `url(${url}) right center no-repeat` }};
-  background-size: cover;
-`
-
-export const SliderRightE = styled.div<{ url: string }>`
-  width: 61px;
-  height: 324px;
-  background: ${({ url }) => { return `url(${url}) right center no-repeat` }};
-  background-size: cover;
-  transform: rotateY(12deg);
-  -webkit-transform: rotateY(12deg);
-`
-
 

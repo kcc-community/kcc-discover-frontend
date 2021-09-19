@@ -3,7 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
 import { Container, Text } from '../../style'
-import { eyeOpen, eyeClose, edit, copy } from '../../constants/imgs'
+import { eyeOpen, eyeClose, edit, copy, logoDef } from '../../constants/imgs'
 import { stateTipsColor } from '../../constants/home'
 import Row, { RowBetween } from 'components/Row'
 import Col from 'components/Column'
@@ -19,6 +19,7 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import Comment from '../../components/Comment'
 import Footer from '../../components/Footer'
 import { useKCSPrice } from '../../state/wallet/hooks'
+import { Img } from 'react-image'
 import { useProjectLoading, useTransactionLoading, useTransactionInfo, useProjectInfo } from '../../state/application/hooks'
 
 const AccountPage: React.FunctionComponent = (props) => {
@@ -39,10 +40,10 @@ const AccountPage: React.FunctionComponent = (props) => {
   const transactionInfo = useTransactionInfo();
 
   const hasProject = projectInfo.state === 'None' ? false : true
-  const totalValueKcs = balance[0]?.toSignificant(4) ?? '0.00'
-  const totalValueUsdt = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4)).multipliedBy(usdtPrice).toFixed(2) : '0.00'
-  const totalLockKcs = projectInfo?.info?.margin ? new BN(projectInfo?.info?.margin).toFixed(2) : '0.00'
-  const totalLockUsdt = projectInfo?.info?.margin ? new BN(projectInfo?.info?.margin).multipliedBy(usdtPrice).toFixed(2) : '0.00'
+  const totalValueKcs = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4) as string).toFixed(2, 1) : '0.00'
+  const totalValueUsdt = balance[0]?.toSignificant(2) ? new BN(balance[0]?.toSignificant(4)).multipliedBy(usdtPrice).toFixed(2,1) : '0.00'
+  const totalLockKcs = projectInfo?.info?.margin ? new BN(projectInfo?.info?.margin).toFixed(2, 1) : '0.00'
+  const totalLockUsdt = projectInfo?.info?.margin ? new BN(projectInfo?.info?.margin).multipliedBy(usdtPrice).toFixed(2, 1) : '0.00'
 
   const history = useHistory();
 
@@ -68,7 +69,7 @@ const AccountPage: React.FunctionComponent = (props) => {
     }
     return(
       <LocalStyle.AccountCard key={type}>
-        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2).toString() }`) : '--')}
+        {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2, 1).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2, 1).toString() }`) : '--')}
         <RowBetween>
           {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', '35px')}
           {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : `$${totalLockUsdt}`) : '--', '50%', '35px')}
@@ -138,12 +139,17 @@ const AccountPage: React.FunctionComponent = (props) => {
                 hasProject && !projectLoading ?
                 <>
                   <Row>
-                    <LocalStyle.AccountImgDApp src={projectInfo?.info?.logo} alt="DApp logo"/>
+                    <Img 
+                      style={{width: '40px', height: '40px', marginRight: '18px', borderRadius: '8px'}}
+                      loader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
+                      unloader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
+                      src={[projectInfo?.info?.logo]}/>
+                    {/* <LocalStyle.AccountImgDApp src={projectInfo?.info?.logo} alt="DApp logo"/> */}
                     <LocalStyle.ProjectText style={{fontSize: '20px'}}>{projectInfo?.info?.title}</LocalStyle.ProjectText>
                   </Row>
                   <Row mt="15px">
                     <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("KCS Margin")}</LocalStyle.ProjectTextSub>
-                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{show ? new BN(projectInfo?.info?.margin).toFixed(2).toString() : '--'} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
+                    <LocalStyle.ProjectText style={{fontSize: '24px'}}>{show ? new BN(projectInfo?.info?.margin).toFixed(2, 1).toString() : '--'} <span style={{fontSize: '14px'}}>KCS</span></LocalStyle.ProjectText>
                   </Row>
                   <Row mt="15px">
                     <LocalStyle.ProjectTextSub style={{fontSize: '14px', fontWeight: 'bold', width: '40%'}}>{t("State")}</LocalStyle.ProjectTextSub>

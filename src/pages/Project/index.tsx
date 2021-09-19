@@ -3,7 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
 import { Container, Text } from '../../style'
-import { sec, search, website, twitter, github, telegram } from '../../constants/imgs'
+import { sec, search, website, twitter, github, telegram, logoDef } from '../../constants/imgs'
 import Row, { RowBetween } from 'components/Row'
 import Col from 'components/Column'
 import Empty from 'components/Empty'
@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import { getUrlParam } from '../../utils'
 import { useCategorySubtle, useCategoryPrimary, useCategoryLoading } from '../../state/application/hooks'
 import Footer from '../../components/Footer'
+import { Img } from 'react-image'
 
 interface DappFilterParams {
   limit?: number
@@ -174,7 +175,12 @@ const ProjectPage: React.FunctionComponent = (props) => {
                       key={item.id}
                       onClick={() => history.push(`/project_detail?name=${item.name}`)}
                     >
-                      <LocalStyle.ProjectDappLogo src={item.logo} alt="DApp Logo" />
+                      <Img 
+                        style={{width: '80px', height: '80px', marginRight: '20px', borderRadius: '8px'}}
+                        loader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
+                        unloader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
+                        src={[item.logo]}
+                      />
                       <Col>
                         <Text fontSize="18px" fontWeight="bold" color={theme.colors.text}>
                           {item.title}

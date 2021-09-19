@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useState, useRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Container, Text } from '../../style'
 import * as LocalStyle from '../../style/pages'
@@ -11,20 +11,18 @@ import CountUp from 'react-countup'
 import { FadeInUp } from '../../utils/animation'
 import { gold, sliver, bronze, right, iconLeft, iconRight, websiteWhite, bannerDef, logoDef } from '../../constants/imgs'
 import { ApiService, useLoading } from '../../api'
+import { Img } from 'react-image'
+import VisibilitySensor from 'react-visibility-sensor'
 import { Skeleton } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
 import { useCategorySubtle } from '../../state/application/hooks'
 import usePriceInfo from '../../hooks/usePriceInfo'
-import loadIpfsImgs from '../../utils/loadIpfsImg'
-import $ from 'jquery'
+import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
 import dayjs from 'dayjs'
 import BN from 'bignumber.js'
 
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 
 interface PriceProps {
   addressCount: string
@@ -49,14 +47,16 @@ const HomePage: React.FunctionComponent = (props) => {
   const [priceLoading, getPriceInfo] = useLoading(ApiService.getHomePriceInfo);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([]);
-  const [topDappsLoad, setTopLoad] = useState([])
+  const [showTop, setShowTop] = useState(false)
   const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
-  const [sliderLoad, setSliderLoad] = useState([])
+  const [sliderDom, setSliderDom] = useState([{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},])
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
   const priceInfo: PriceProps = usePriceInfo();
-  const [active, setActive] = useState(2);
+  const [active, setActive] = useState(0);
   const categorySubtle = useCategorySubtle();
+  //@ts-ignore
+  const sliderRef = useRef<ResponsiveContainer>();
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -88,6 +88,7 @@ const HomePage: React.FunctionComponent = (props) => {
       })
   }
   
+
   React.useEffect((): void => {
       console.log("chart1", chart1);
       Promise.all([
@@ -98,8 +99,25 @@ const HomePage: React.FunctionComponent = (props) => {
         //deal slider info
         let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
         setSlider(slider as any)
-        loadIpfsImgs('banner', slider, (list: []) => setSliderLoad(list))
-        loadIpfsImgs('logo', res[0].list, (list: []) => setTopLoad(list))
+        let dom = [] as any
+        for(let i in slider){
+          dom.push(
+            {
+              title: slider[i].title,
+              website: slider[i].website,
+              cover: 
+              (
+                <Img 
+                    decode={true}
+                    style={{width: '880px !important, height: 400px'} }
+                    loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
+                    unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
+                    src={[slider[i].banner as string]}/>
+              )
+            }
+          )
+        }
+        setSliderDom(dom)
       })
       updateChart();
   }, [chart1]);
@@ -117,7 +135,14 @@ const HomePage: React.FunctionComponent = (props) => {
         </LocalStyle.RankImg>
         <RowBetween>
           <Row>
-            <LocalStyle.RankLogo src={topDappsLoad[index] ? data?.logo : logoDef} alt="DApp Logo"/>
+            <VisibilitySensor onChange={() => setShowTop(true)}>
+              <Img 
+                decode={true}
+                style={{width: '40px', height: '40px', marginRight: '12px', borderRadius: '4px'}}
+                loader={<LocalStyle.RankLogo src={logoDef} alt="DApp logo"/>}
+                unloader={<LocalStyle.RankLogo src={logoDef} alt="DApp logo"/>}
+                src={[data?.logo]}/>
+            </VisibilitySensor>
             <Col style={{width: '70%'}}>
               <LocalStyle.SecondText style={{fontSize: '14px'}}>{data?.title}</LocalStyle.SecondText>
               <Text ellipsis color="darkGrey" fontSize="12px">{data?.intro}</Text>
@@ -189,30 +214,35 @@ const HomePage: React.FunctionComponent = (props) => {
     )
   }
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    initialSlide: 2,
-    className: 'homeSlider',
-    nextArrow: <SliderCoin type="right" />,
-    prevArrow: <SliderCoin type="left"/>,
-    beforeChange: () => {
-      $('.home-slider').css('opacity', '0.75');
+  const Slide = React.memo(
+    function (props: StackedCarouselSlideProps) {
+        const { data, dataIndex } = props;
+        const { cover, title, website } = data[dataIndex];
+        return (
+            <LocalStyle.SliderWrapper target="_blank" href={website} className="homeBanner">
+              <Img 
+                decode={true}
+                style={{width: '880px !important', height: '400px'}}
+                loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
+                unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
+                src={[cover as string]}/>
+              <LocalStyle.SliderBottom>
+                <AutoRow>
+                  <LocalStyle.SliderBottomBall src={websiteWhite}/>
+                  <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
+                </AutoRow>
+                <AutoRow style={{width: '14%'}}>
+                  <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>Learn more</Text>
+                  <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
+                </AutoRow>
+              </LocalStyle.SliderBottom>
+            </LocalStyle.SliderWrapper>
+        );
     },
-    afterChange: (val) => {
-      $('.home-slider').css('opacity', '1');
-      $('.home-slider').css('transition', 'opacity .5s');
-      setActive(val);
+    function (prev: StackedCarouselSlideProps, next: StackedCarouselSlideProps) {
+      return prev.dataIndex === next.dataIndex;
     }
-  };
-
-  const sliderA = active - 2 >= 0 ?  active - 2 : 3 + active;
-  const sliderB = active - 1 >= 0 ?  active - 1 : 4 + active;
-  const sliderD = active + 1 > 4 ?  (active + 1) % 5 : active + 1;
-  const sliderE = active + 2 > 4 ?  (active + 2) % 5 : active + 2;
+  );
   
   return (
       <>
@@ -234,7 +264,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <FadeInUp>
               <LocalStyle.RankCard>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>
-                {dappLoading ? <Skeleton paragraph={{ rows: 5 }} /> : null}
+                {!showTop ? <Skeleton paragraph={{ rows: 5 }} /> : null}
                 {topDapps.length ? topDapps.map((item, index) => {if(index < 5) {return DappItem(item, index)} return null }) : null}
               </LocalStyle.RankCard>
             </FadeInUp>
@@ -249,37 +279,33 @@ const HomePage: React.FunctionComponent = (props) => {
               <LocalStyle.SecondText mb="60px" mt="158px">{t("Discover")}</LocalStyle.SecondText>
             </FadeInUp>
             <FadeInUp>
-              <AutoRow justify="center">
-                <LocalStyle.SliderLeftA url={sliderLoad[sliderA] ? sliderPics[sliderA].banner : bannerDef} className={'home-slider'}/>
-                <LocalStyle.SliderLeftB url={sliderLoad[sliderB] ? sliderPics[sliderB].banner : bannerDef} className={'home-slider'}/>
-                <Slider {...settings}>
-                  {/* @ts-ignore */}
+              <AutoRow justify="center" style={{position: 'relative'}}>
+                <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/>
+                <StackedCarousel
+                  ref={sliderRef}
+                  data={sliderDom}
+                  carouselWidth={1200}
+                  slideWidth={880}
+                  slideComponent={Slide}
+                  maxVisibleSlide={sliderDom.length === 5 ? 5 : 1}
+                  customTransition={'all 1000ms ease 0s'}
+                  onActiveSlideChange={v => setActive(v)}
+                  useGrabCursor={true}
+                />
+                <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>
+              </AutoRow>
+              <Col>
+                <Row style={{justifyContent: 'center'}}>
                   {
-                    sliderPics.map((item, index) => {
-                      if(item){
-                        return(
-                          <LocalStyle.SliderWrapper target="_blank" href={item.website} key={index} className="homeBanner">
-                            <LocalStyle.SliderCard src={sliderLoad[index] ? item.banner  : bannerDef}/>
-                            <LocalStyle.SliderBottom>
-                              <AutoRow>
-                                <LocalStyle.SliderBottomBall src={websiteWhite}/>
-                                <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{item.title}</Text>
-                              </AutoRow>
-                              <AutoRow style={{width: '14%'}}>
-                                <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>Learn more</Text>
-                                <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
-                              </AutoRow>
-                            </LocalStyle.SliderBottom>
-                          </LocalStyle.SliderWrapper>
-                        )
+                    sliderDom.map((item, index) => {
+                      if(index === active){
+                        return <LocalStyle.SliderPointSec/>
                       }
-                      return null
+                      return <LocalStyle.SliderPointNormal onClick={() => {sliderRef.current.swipeTo(1)}}/>
                     })
                   }
-                </Slider>
-                <LocalStyle.SliderRightD url={sliderLoad[sliderD] ? sliderPics[sliderD].banner : bannerDef} className={'home-slider'}/>
-                <LocalStyle.SliderRightE url={sliderLoad[sliderE] ? sliderPics[sliderE].banner : bannerDef} className={'home-slider'}/>
-              </AutoRow>
+                </Row>
+              </Col>
             </FadeInUp>
           </>
           <>

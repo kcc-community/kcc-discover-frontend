@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
 import { Container, Text } from '../../style'
-import { edit, send, website, twitter, github, telegram, down } from '../../constants/imgs'
+import { edit, send, website, twitter, github, telegram, down, logoDef } from '../../constants/imgs'
 import Row, { RowBetween, AutoRow } from 'components/Row'
 import Col from 'components/Column'
 import Empty from 'components/Empty'
@@ -17,6 +17,7 @@ import { useHistory } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import CommentModal from '../../components/CommentModal'
 import { useComment } from '../../hooks/useDiscoverContract'
+import { Img } from 'react-image'
 import $ from 'jquery'
 
 const ProjectDetailPage: React.FunctionComponent = (props) => {
@@ -166,7 +167,12 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
           <Col style={{width: '800px'}}>
             <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto', height: 'auto', marginBottom: '0'}}>
-              <LocalStyle.ProjectDappLogo src={detail.logo} alt="DApp Logo" style={{width: '140px', height: '140px', marginRight: '34px'}}/>
+              <Img 
+                style={{width: '140px', height: '140px', marginRight: '34px', borderRadius: '8px'}}
+                loader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
+                unloader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
+                src={[detail.logo as string]}
+              />
               <Col style={{width: '70%'}}>
                 <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
                 {
