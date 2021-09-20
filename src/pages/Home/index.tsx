@@ -192,7 +192,7 @@ const HomePage: React.FunctionComponent = (props) => {
     return(
       <FadeInUp delay={index * 100} key={index}>
         <LocalStyle.CateItem onClick={() => history.push('/project?sec=' + data.index)}>
-          <LocalStyle.CateLogo src={Categories[index - 1]}/>
+          <LocalStyle.CateLogo src={Categories[data.name]}/>
           <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>{data?.name}</LocalStyle.SecondText>
         </LocalStyle.CateItem>
       </FadeInUp>
@@ -321,10 +321,10 @@ const HomePage: React.FunctionComponent = (props) => {
               <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
             <RowBetween>
-              { categorySubtle.map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
+              { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
                 <LocalStyle.CateItem onClick={() => history.push('/project')}>
-                  <LocalStyle.CateLogo src={Categories[5]}/>
+                  <LocalStyle.CateLogo src={Categories['Others']}/>
                   <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
                 </LocalStyle.CateItem>
               </FadeInUp>

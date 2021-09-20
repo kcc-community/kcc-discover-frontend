@@ -115,7 +115,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
                 </Row>
               </RowBetween>
               <Row style={{position: 'relative'}}>
-                <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px'}}>
+                <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px', wordBreak: 'break-all'}}>
                   {splitComment(props.content)}
                 </Text>
                 {props.content.length > 210 && <Text onClick={() => setShow(!show)} color={theme.colors.primary} fontWeight="bold" style={{position: 'absolute', bottom: 0, right: 0, cursor: 'pointer', lineHeight: '16px'}}>{show ? 'Fold' : 'Unfold'}</Text>}
@@ -143,7 +143,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
         <Rate allowHalf disabled value={props.score / 10} />
       </Row>
       <Row style={{position: 'relative'}}>
-        <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px'}}>
+        <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px', wordBreak: 'break-all'}}>
           {splitComment(props.content)}
         </Text>
         {props.content.length > 210 && <Text onClick={() => setShow(!show)} color={theme.colors.primary} fontWeight="bold" style={{position: 'absolute', bottom: 0, right: 0, cursor: 'pointer', lineHeight: '16px'}}>{show ? 'Fold' : 'Unfold'}</Text>}
