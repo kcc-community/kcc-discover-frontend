@@ -252,7 +252,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
 
   const limitUploadVolume = (type: string, size: number) => {
     const limit = {logo: 512, banner: 2048}
-    return size <= limit[type]
+    return (Number(size) / 1024) <= limit[type]
   }
 
   const limitUploadSize = (file: any, standardWidth: number, standardHeight: number) => {

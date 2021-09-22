@@ -6,6 +6,9 @@ export const ChartData = {
     axisTick: {
       show: false,
     },
+    axisLabel: {
+      color: '#B8C6D899'
+    }
   },
   yAxis: {
     type: 'value',
@@ -42,7 +45,7 @@ export const ChartData = {
         show: false
       }
     },
-    formatter: "<span style={{color: 'red'}}>{b}</span><br/> $：{c}",
+    formatter: "<span style='color: red'>{b}</span><br/> $：{c}",
     extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
   },
   series: [{

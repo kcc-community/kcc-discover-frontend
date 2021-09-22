@@ -38,8 +38,8 @@ const ConnectButton = styled.div`
   justify-content: center;
   margin: 0px;
   margin-left: 18px;
-  min-width: 110px;
-  padding: 0 12px;
+  min-width: 120px;
+  padding: 0 24px;
   outline: none;
   white-space: nowrap;
   border: 1px solid ${({ theme }) => theme.colors.darkGrey};

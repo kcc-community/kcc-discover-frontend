@@ -50,6 +50,11 @@ const Inner = styled.div`
   max-width: 100%;
 `
 
+const ImgLogo = styled.img`
+  height: 22px;
+  cursor: pointer
+`
+
 interface MenuList {
   title: string
   route: string
@@ -126,9 +131,7 @@ const Menu: React.FunctionComponent = (props) => {
       <StyledNav>
         <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
           <RowFixed>
-            <div onClick={() => history.push('/')} style={{cursor: 'pointer'}} aria-label="KCC home page">
-              <Text color={theme.colors.primary} fontSize="24px" fontWeight="bold">DISCOVER KCC</Text>
-            </div>
+            <ImgLogo src={require('../../assets/images/home/logo.png').default} onClick={() => history.push('/')}/>
             { menuList.map((item, index) => renderMenu(item, index)) }
           </RowFixed>
           <RowFixed>

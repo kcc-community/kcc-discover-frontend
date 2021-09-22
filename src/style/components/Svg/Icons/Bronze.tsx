@@ -12,7 +12,7 @@ const Icon: React.FC<SvgProps> = (props) => {
       <path d="M6 21H22V35L14 31.255L6 35V21Z" fill="#29CD97"/>
       <rect x="11" y="19" width="6" height="16" fill="white"/>
       </g>
-      <circle cx="14" cy="14" r="14" fill="url(#paint0_linear)"/>
+      <circle cx="14" cy="14" r="14" fill="#EEA045"/>
       <circle cx="14" cy="14" r="10" stroke="#B76011" stroke-width="2"/>
       <circle cx="14" cy="14" r="9" fill="#EEA045"/>
       <path d="M14 9L15.7927 11.5325L18.7553 12.4549L16.9007 14.9425L16.9389 18.0451L14 17.05L11.0611 18.0451L11.0993 14.9425L9.24472 12.4549L12.2073 11.5325L14 9Z" fill="url(#paint1_linear)"/>
