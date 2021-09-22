@@ -11,20 +11,20 @@ import {
 import { connectorLocalStorageKey, ConnectorNames } from '../style'
 import { message } from 'antd'
 import { connectorsByName } from 'connectors'
+import { useTranslation } from 'react-i18next'
 
 const useAuth = () => {
   const { activate, deactivate } = useWeb3React()
-
+  const { t } = useTranslation()
   const login = useCallback((connectorID: ConnectorNames) => {
     const connector = connectorsByName[connectorID]
     if (connector) {
-      console.log('?????????')
       activate(connector, async (error: Error) => {
         window.localStorage.removeItem(connectorLocalStorageKey)
         if (error instanceof UnsupportedChainIdError) {
-          message.error('Unsupported Chain Id Unsupported Chain Id Error. Check your chain Id.')
+          message.error(t('Unsupported Chain Id Unsupported Chain Id Error. Check your chain Id.'))
         } else if (error instanceof NoEthereumProviderError) {
-          message.error('Provider Error No provider was found')
+          message.error(t('Provider Error No provider was found'))
         } else if (
           error instanceof UserRejectedRequestErrorInjected ||
           error instanceof UserRejectedRequestErrorWalletConnect
@@ -33,13 +33,13 @@ const useAuth = () => {
             const walletConnector = connector as WalletConnectConnector
             walletConnector.walletConnectProvider = null
           }
-          message.error('Authorization Error Please authorize to access your account')
+          message.error(t('Authorization Error Please authorize to access your account'))
         } else {
           message.error((error.name ?? '') + error.message)
         }
       })
     } else {
-      message.error("Can't find connector The connector config is wrong")
+      message.error(t("Can't find connector The connector config is wrong"))
     }
   }, [])
 

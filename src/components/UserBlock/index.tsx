@@ -115,16 +115,18 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
       <Row mb="10px" ml="12px" style={{paddingTop: '12px'}}>
         <Text fontSize={'14px'} fontWeight={'500'} color={theme.colors.text}>{t("My Wallet")}</Text>
       </Row>
-      <AccountWrapper onClick={() => {
-        Copy(account ?? '');
-        message.success('Copied');
-      }}>
-        <Col>
-          <Text fontSize={'14px'} color={theme.colors.text} fontWeight="bold">{t("Connected Metamask")}</Text>
-          <Text fontSize={'12px'} color={theme.colors.textSubtle}>{accountDropDownEllipsis}</Text>
-        </Col>
-        <CopyImg src={copy}/>
-      </AccountWrapper>
+      <Row style={{padding: '0 12px'}}>
+        <AccountWrapper onClick={() => {
+          Copy(account ?? '');
+          message.success('Copied');
+        }}>
+          <Col>
+            <Text fontSize={'14px'} color={theme.colors.text} fontWeight="bold">{t("Connected")}</Text>
+            <Text fontSize={'12px'} color={theme.colors.textSubtle}>{accountDropDownEllipsis}</Text>
+          </Col>
+          <CopyImg src={copy}/>
+        </AccountWrapper>
+      </Row>
       <Menu.Item key="account">
         <RowBetween onClick={() => history.push('/account')}>
           <Text fontSize={'14px'} fontWeight={'500'} color={theme.colors.text}>{t("My Project")}</Text>
@@ -133,7 +135,6 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
             <RightImg src={rightDark}/>
           </Row>
         </RowBetween>
-        
       </Menu.Item>
       <Menu.Item style={{width: '100%'}} key="comment">
         <RowBetween onClick={() => history.push('/account')}>

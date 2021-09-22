@@ -68,7 +68,7 @@ const AccountPage: React.FunctionComponent = (props) => {
       )
     }
     return(
-      <LocalStyle.AccountCard key={type}>
+      <LocalStyle.AccountCard key={type} style={{width: isBalance ? '584px' : '596px'}}>
         {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2, 1).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2, 1).toString() }`) : '--')}
         <RowBetween>
           {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', '35px')}
@@ -107,15 +107,19 @@ const AccountPage: React.FunctionComponent = (props) => {
             <LocalStyle.ProjectText style={{fontSize: '32px'}}>{t("My Account")}</LocalStyle.ProjectText>
             <LocalStyle.AccountEye src={show ? eyeOpen : eyeClose} onClick={() => setShow(!show)}/>
           </Row>
-          <Row 
-            style={{justifyContent: 'flex-end'}}
-            onClick={() => {
-              Copy(account ?? '');
-              message.success('Copied')
-            }}>
-            <LocalStyle.ProjectTextSub style={{fontSize: '14px'}}>{account}</LocalStyle.ProjectTextSub>
-            <LocalStyle.AccountImgCopy src={copy}/>
-          </Row>
+          {
+            account ? 
+            <Row 
+              style={{justifyContent: 'flex-end'}}
+              onClick={() => {
+                Copy(account ?? '');
+                message.success(t('Copied'))
+              }}>
+              <LocalStyle.ProjectTextSub style={{fontSize: '14px'}}>{account}</LocalStyle.ProjectTextSub>
+              <LocalStyle.AccountImgCopy src={copy}/>
+            </Row>
+            : null
+          }
         </RowBetween>
         <RowBetween>
           {TopCard('value')}

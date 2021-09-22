@@ -185,7 +185,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
                         <Text fontSize="18px" fontWeight="bold" color={theme.colors.text}>
                           {item.title}
                         </Text>
-                        <LocalStyle.ProjectTextSub>{item.intro}</LocalStyle.ProjectTextSub>
+                        <LocalStyle.ProjectTextSub style={{width: '300px'}}>{item.intro}</LocalStyle.ProjectTextSub>
                         <Row mt="6px">
                           <LocalStyle.ProjectTips grey={false}>
                             {new BN(item.margin).toFixed(2).toString()} KCS

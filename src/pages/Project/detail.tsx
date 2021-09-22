@@ -127,14 +127,14 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       projectAddress: detail.contract
     }
     if(!account || !chainId) {
-      message.error('Wallet not connected')
+      message.error(t('Wallet not connected'))
       return;
     };
     const { commentCallback } = useComment(params, library);
     commentCallback().then(res => {
       if(res){
         setModal(false)
-        message.success('Success');
+        message.success(t('Success'));
       }
     })
   }

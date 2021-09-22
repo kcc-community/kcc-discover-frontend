@@ -146,7 +146,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   }, [name, chainId])
 
   const onConfirm = () => {
-    if(!account || !chainId) { message.error('Please connect your wallet'); return; };
+    if(!account || !chainId) { message.error(t('Please connect your wallet')); return; };
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
       email, marginAmount, contractAddresses, 
@@ -234,12 +234,12 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const uploadImg = async (type: string, file: any, limit: {width: number, height: number}) => {
     let sizeResult = await limitUploadSize(file, limit.width, limit.height);
     let volumeResult = limitUploadVolume(type, file.size);
-    // if(!sizeResult || !volumeResult) { message.error('unacceptable img size', 3); return };
-    message.info('uploading', 0);
+    if(!sizeResult || !volumeResult) { message.error(t('Unacceptable img size'), 3); return };
+    message.info(t('Uploading'), 0);
     const metadata = await client.storeBlob(new Blob([file] as any))
     console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
     message.destroy();
-    message.success('upload success')
+    message.success(t('Upload success'))
     switch(type){
       case 'logo':
         setLogo(metadata);
@@ -282,25 +282,25 @@ const SubmitPage: React.FunctionComponent = (props) => {
     <>
       <Container style={{minHeight: '80vh', width: '536px'}}>
         <Col style={{marginTop: '40px', marginBottom: '50px'}}>
-          <LocalStyle.ProjectText style={{fontSize: '32px', marginBottom: '30px'}}>Submit a Project</LocalStyle.ProjectText>
+          <LocalStyle.ProjectText style={{fontSize: '32px', marginBottom: '30px'}}>{name ? t('Modify a project') : t('Submit a project')}</LocalStyle.ProjectText>
           <InputItem 
-            title={'Title'}
+            title={t('Title')}
             required={true}
             value={title}
             maxLength={30}
-            placeholder={'Enter the title'}
+            placeholder={t('Enter the title')}
             disabled={name ? true : false}
             onChange={e => {
               setTitle(splitSpace(e.target.value))
             }}
           />
           <Row mb="8px">
-            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Primary Category</Text>
+            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{t('Primary Category')}</Text>
             <RequiredPoint>*</RequiredPoint>
           </Row>
           <Select
             showSearch
-            placeholder="Choose"
+            placeholder={t("Choose")}
             optionFilterProp="children"
             style={{marginBottom: '36px'}}
             value={primaryCategoryIndex}
@@ -318,12 +318,12 @@ const SubmitPage: React.FunctionComponent = (props) => {
             }
           </Select>
           <Row mb="8px">
-            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Secondary Category</Text>
+            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{t("Secondary Category")}</Text>
             <RequiredPoint>*</RequiredPoint>
           </Row>
           <Select
             showSearch
-            placeholder="Choose"
+            placeholder={t("Choose")}
             optionFilterProp="children"
             value={secondaryCategoryIndex}
             style={{marginBottom: '36px'}}
@@ -341,26 +341,26 @@ const SubmitPage: React.FunctionComponent = (props) => {
             }
           </Select>
           <InputItem 
-            title={'Short Introduction'}
+            title={t('Short Introduction')}
             required={true}
             isTextArea={true}
             maxLength={50}
             value={shortIntroduction}
-            placeholder={'Enter some words'}
+            placeholder={t('Enter some words')}
             onChange={e => {setIntro(splitSpace(e.target.value))}}
           />
           <InputItem 
-            title={'Detail Description'}
+            title={t('Detail Description')}
             required={false}
             isTextArea={true}
             value={detailDescription}
-            placeholder={'Enter some words'}
+            placeholder={t('Enter some words')}
             onChange={e => {setDes(splitSpace(e.target.value))}}
           />
           <Row mb="8px">
-            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Logo</Text>
+            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{t("Logo")}</Text>
             <RequiredPoint>*</RequiredPoint>
-            <Text color={'#737E8D'} fontSize="14px" ml={'5px'}>Image Size: 288*288 px</Text>
+            <Text color={'#737E8D'} fontSize="14px" ml={'5px'}>{t('Image Size')}: 288*288 px</Text>
           </Row>
           <Upload
             name="avatar"
@@ -379,15 +379,15 @@ const SubmitPage: React.FunctionComponent = (props) => {
           > 
             <Col>
               <LocalStyle.ProjectImgCamera src={camera}/>
-              <Text fontSize="14px" color="#737E8D">Upload</Text>
+              <Text fontSize="14px" color="#737E8D">{t("Upload")}</Text>
             </Col>
           </Upload>
           <Input value={logoLink} disabled onChange={(e) => {setLogo(splitSpace(e.target.value))}} style={{marginTop: '15px'}}/>
           <div style={{height: '36px'}}/>
           <Row mb="8px">
-            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>Banner</Text>
+            <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{t("Banner")}</Text>
             <RequiredPoint>*</RequiredPoint>
-            <Text color={'#737E8D'} fontSize="14px" ml={'5px'}>Image Size: 880*400 px</Text>
+            <Text color={'#737E8D'} fontSize="14px" ml={'5px'}>{t("Image Size")}: 880*400 px</Text>
           </Row>
           <Upload
             name="avatar"
@@ -401,105 +401,105 @@ const SubmitPage: React.FunctionComponent = (props) => {
           > 
             <Col>
               <LocalStyle.ProjectImgCamera src={camera}/>
-              <Text fontSize="14px" color="#737E8D">Upload</Text>
+              <Text fontSize="14px" color="#737E8D">{t("Upload")}</Text>
             </Col>
           </Upload>
           <Input value={banner} disabled onChange={(e) => {setBanner(e.target.value)}} style={{marginTop: '15px'}}/>
           <img src="" id="test"/>
           <div style={{height: '36px'}}/>
           <InputItem 
-            title={'Smart Contract Address'}
+            title={t('Smart Contract Address')}
             required={checkContractAddress}
             disabled={(name && contractAddresses) ? true : false}
             value={contractAddresses}
-            placeholder={'Enter your Smart Contract Address'}
+            placeholder={t('Enter your Smart Contract Address')}
             onChange={e => {setContract(splitSpace(e.target.value))}}
           />
           <InputItem 
-            title={name ? 'The amount of KCS margin call' : 'Amount of KCS margin'}
+            title={name ? t('The amount of KCS margin call') : t('Amount of KCS margin')}
             required={name ? false : true}
             value={marginAmount}
-            placeholder={'Submit your KCS margin'}
+            placeholder={t('Submit your KCS margin')}
             titleInfo={true}
-            titleInfoContent={`The minimum margin is ${minMargin} KCS and will also be shown in the project details.  it will be refunded if the subsequent application is taken off the shelf.`}
-            error={(!checkMargin && !name)? `The minimum margin is ${minMargin} KCS` : ''}
+            titleInfoContent={t('Submit-1', {minMargin: minMargin})}
+            error={(!checkMargin && !name)? t('Submit-2', {minMargin: minMargin}) : ''}
             onChange={e => {
               setMargin(e.target.value)
               // if(/^\d*$/.test(e.target.value)) { setMargin(e.target.value) }
             }}
           />
           <InputItem 
-            title={'Your Mailbox (For information update)'}
+            title={t('Your Mailbox (For information update)')}
             required={true}
             value={email}
-            placeholder={'Enter your Mailbox'}
-            error={!checkEmail ? 'Please input correct email' : ''}
+            placeholder={t('Enter your Mailbox')}
+            error={!checkEmail ? t('Please input correct email') : ''}
             onChange={e => {setEmail(e.target.value.trim())}}
           />
           <InputItem 
-            title={'Token Symbol'}
+            title={t('Token Symbol')}
             required={false}
             value={tokenSymbol}
             disabled={!editSymbol ? true : false}
-            placeholder={'Enter your Token Symbol'}
+            placeholder={t('Enter your Token Symbol')}
             onChange={e => {setTokenSymbol(splitSpace(e.target.value))}}
           />
           <InputItem 
-            title={'Token Contract Address'}
+            title={t('Token Contract Address')}
             required={false}
             value={tokenContractAddress}
-            placeholder={'Enter your Token Contract Address'}
+            placeholder={t('Enter your Token Contract Address')}
             onChange={e => {setTokenContract(e.target.value.trim())}}
           />
           <InputItem 
-            title={'Tvl Interface (graphql)'}
+            title={t('Tvl Interface (graphql)')}
             required={false}
             value={tvlInterface}
-            placeholder={'Enter your Tvl Interface（graphql）'}
+            placeholder={t('Enter your Tvl Interface（graphql）')}
             titleInfo={true}
-            titleInfoContent={'If your project involves asset related, please submit your Tvl interface（graphql）'}
+            titleInfoContent={t('If your project involves asset related, please submit your Tvl interface（graphql）')}
             onChange={e => {setTvl(e.target.value.trim())}}
           />
           <InputItem 
-            title={'Website'}
+            title={t('Website')}
             required={true}
             value={websiteLink}
-            placeholder={'Enter your Website'}
+            placeholder={t('Enter your Website')}
             onChange={e => {setWebsite(e.target.value.trim())}}
           />
           <InputItem 
-            title={'Twitter'}
+            title={t('Twitter')}
             required={false}
             value={twitterLink}
-            placeholder={'Enter your Twitter'}
+            placeholder={t('Enter your Twitter')}
             onChange={e => {setTwitter(e.target.value.trim())}}
           />
           <InputItem 
             title={'Telegram'}
             required={false}
             value={telegramLink}
-            placeholder={'Enter your Telegram'}
+            placeholder={t('Enter your Telegram')}
             onChange={e => {setTelegram(e.target.value.trim())}}
           />
           <InputItem 
-            title={'Github'}
+            title={t('Github')}
             required={false}
             value={githubLink}
-            placeholder={'Enter your Github'}
+            placeholder={t('Enter your Github')}
             onChange={e => {setGithub(e.target.value.trim())}}
           />
           <InputItem 
-            title={'Coin Market Cap'}
+            title={t('Coin Market Cap')}
             required={false}
             value={coinmarketcapLink}
-            placeholder={'Enter your Coin Market Cap'}
+            placeholder={t('Enter your Coin Market Cap')}
             onChange={e => {setCoinMarket(splitSpace(e.target.value))}}
           />
           <InputItem 
-            title={'Coin Gecko'}
+            title={t('Coin Gecko')}
             required={false}
             value={coingeckoLink}
-            placeholder={'Enter your Coin Gecko'}
+            placeholder={t('Enter your Coin Gecko')}
             onChange={e => {setCoinGecko(splitSpace(e.target.value))}}
           />
           <Button 
@@ -508,7 +508,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || (!contractAddresses && checkContractAddress) 
             || !checkEmail || (!checkMargin && !name) || chainError}
             type="primary"
-            onClick={() => onConfirm()}>Submit</Button>
+            onClick={() => onConfirm()}>{t("Submit")}</Button>
         </Col>
       </Container>
       <Footer /> 

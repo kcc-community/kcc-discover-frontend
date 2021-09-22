@@ -1,4 +1,3 @@
-
 export const ChartData = {
   xAxis: {
     axisLine: {
@@ -73,19 +72,6 @@ export const ChartData = {
   }]
 };
 
-
-export const DiscoverReason = [
-  {
-    title: 'For Users',
-    content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
-    logo: require('../assets/images/home/user-1.png').default,
-  },
-  {
-    title: 'For Developer',
-    content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
-    logo: require('../assets/images/home/user-2.png').default,
-  }
-]
 
 export const Categories = {
   Exchange: require('../assets/images/home/exchange.png').default,

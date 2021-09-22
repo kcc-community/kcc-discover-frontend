@@ -2,14 +2,14 @@ import React, { FunctionComponent, useState, useRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Container, Text } from '../../style'
 import * as LocalStyle from '../../style/pages'
-import { ChartData, DiscoverReason, Categories } from '../../constants/home'
+import { ChartData, Categories } from '../../constants/home'
 import Chart from './Charts'
 import Row, { RowBetween, AutoRow } from 'components/Row'
 import Col from '../../components/Column'
 import Footer from '../../components/Footer'
 import CountUp from 'react-countup'
 import { FadeInUp } from '../../utils/animation'
-import { gold, sliver, bronze, right, iconLeft, iconRight, websiteWhite, bannerDef, logoDef } from '../../constants/imgs'
+import { right, iconLeft, iconRight, websiteWhite, bannerDef, logoDef } from '../../constants/imgs'
 import { ApiService, useLoading } from '../../api'
 import { Img } from 'react-image'
 import VisibilitySensor from 'react-visibility-sensor'
@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
 import { useCategorySubtle } from '../../state/application/hooks'
 import usePriceInfo from '../../hooks/usePriceInfo'
+import { GoldIcon, SliverIcon, BronzeIcon } from '../../style/components/Svg'
 import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
 import dayjs from 'dayjs'
 import BN from 'bignumber.js'
@@ -34,9 +35,8 @@ interface PriceProps {
 interface SliderProps {
   banner: string
   title: string 
-  website: string
+  name: string
 }
-
 
 const HomePage: React.FunctionComponent = (props) => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const [topDapps, setTopDapp] = useState([]);
   const [showTop, setShowTop] = useState(false)
   const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
-  const [sliderDom, setSliderDom] = useState([{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},{cover: bannerDef, title: '-'},])
+  const [sliderDom, setSliderDom] = useState([{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},])
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
   const priceInfo: PriceProps = usePriceInfo();
@@ -69,13 +69,13 @@ const HomePage: React.FunctionComponent = (props) => {
         let xAxisData = [], seriesData = [], max = 0;
         if(res.length) setChartData(res)
         if(res[res.length - 1] && res[res.length - 2]){
-          setDailyRate(new BN(res[res.length - 1].dailyVolumeETH).minus(res[res.length - 2].dailyVolumeETH).div(res[res.length - 1].dailyVolumeETH).multipliedBy(100).toFixed(2).toString())
+          setDailyRate(new BN(res[res.length - 1].dailyVolumeETH).minus(res[res.length - 2].dailyVolumeETH).div(res[res.length - 2].dailyVolumeETH).multipliedBy(100).toFixed(2).toString())
         }
         for(let i = 0; i < res.length; i++){
           //@ts-ignore
           xAxisData.push(dayjs(res[i].date * 1000).format('YYYY-MM-DD'))
           //@ts-ignore
-          seriesData.push(new BN(res[i].dailyVolumeETH).toFixed(2).toString())
+          seriesData.push(new BN(res[i].dailyVolumeETH).toFixed(2, 1).toString())
           max = Math.max(max, res[i].dailyVolumeETH)
         }
         //@ts-ignore
@@ -104,16 +104,8 @@ const HomePage: React.FunctionComponent = (props) => {
           dom.push(
             {
               title: slider[i].title,
-              website: slider[i].website,
-              cover: 
-              (
-                <Img 
-                    decode={true}
-                    style={{width: '880px !important, height: 400px'} }
-                    loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
-                    unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
-                    src={[slider[i].banner as string]}/>
-              )
+              name: slider[i].name,
+              cover: slider[i].banner
             }
           )
         }
@@ -123,12 +115,12 @@ const HomePage: React.FunctionComponent = (props) => {
   }, [chart1]);
 
   const DappItem = (data: any, index: number) => {
-    const rank = [gold, sliver, bronze]
+    const rank = [<GoldIcon width="28px" height="35px"/>, <SliverIcon width="28px" height="35px"/>, <BronzeIcon width="28px" height="35px"/>]
     return (
       <LocalStyle.RankItem onClick={() => history.push('/project_detail?name=' + data?.name)} key={index}>
         <LocalStyle.RankImg>
           { 
-            rank[index] ? <LocalStyle.RankDAppLogo src={rank[index]}/>
+            rank[index] ? rank[index]
             :
             <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'center', fontWeight: 'bold', marginRight: '5px'}}>{index + 1}th</LocalStyle.SecondText>
           }
@@ -217,9 +209,9 @@ const HomePage: React.FunctionComponent = (props) => {
   const Slide = React.memo(
     function (props: StackedCarouselSlideProps) {
         const { data, dataIndex } = props;
-        const { cover, title, website } = data[dataIndex];
+        const { cover, title, name } = data[dataIndex];
         return (
-            <LocalStyle.SliderWrapper target="_blank" href={website} className="homeBanner">
+            <LocalStyle.SliderWrapper onClick={() => history.push(`/project_detail?name=${name}`)} className="homeBanner">
               <Img 
                 decode={true}
                 style={{width: '880px !important', height: '400px'}}
@@ -232,7 +224,7 @@ const HomePage: React.FunctionComponent = (props) => {
                   <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
                 </AutoRow>
                 <AutoRow style={{width: '14%'}}>
-                  <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>Learn more</Text>
+                  <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
                   <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
                 </AutoRow>
               </LocalStyle.SliderBottom>
@@ -243,6 +235,19 @@ const HomePage: React.FunctionComponent = (props) => {
       return prev.dataIndex === next.dataIndex;
     }
   );
+
+  const DiscoverReason = [
+    {
+      title: t('For Users'),
+      content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
+      logo: require('../../assets/images/home/user-1.png').default,
+    },
+    {
+      title: 'For Developer',
+      content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
+      logo: require('../../assets/images/home/user-2.png').default,
+    }
+  ]
   
   return (
       <>
@@ -301,7 +306,7 @@ const HomePage: React.FunctionComponent = (props) => {
                       if(index === active){
                         return <LocalStyle.SliderPointSec/>
                       }
-                      return <LocalStyle.SliderPointNormal onClick={() => {sliderRef.current.swipeTo(1)}}/>
+                      return <LocalStyle.SliderPointNormal/>
                     })
                   }
                 </Row>

@@ -12,6 +12,7 @@ import { JsonRpcProvider } from '@ethersproject/providers'
 import discoverAbi from '../constants/abis/discover.json'
 import addresses from '../constants/contract'
 import { message } from 'antd';
+import { useTranslation } from 'react-i18next'
 
 export const getAddress = (address: any): string => {
   const mainNetChainId = 321
@@ -37,6 +38,7 @@ export function useComment(data: any , library?: any): {
   commentCallback: () => Promise<string>
 } {
   const distributorContract = getDiscoverContract(library)
+  const { t } = useTranslation()
   const commentCallback = async () => {
     if ( !library || !distributorContract) return
     const args = [data.projectAddress, JSBI.BigInt(new BN(data.score).multipliedBy(10)), data.title, data.review]
@@ -53,9 +55,9 @@ export function useComment(data: any , library?: any): {
       console.log(e)
       let error = e?.toString().split('code":')[1]?.split(',')
       if(error && error[0] === '-32603'){
-        message.error('You can only comment once per account')
+        message.error(t('You can only comment once per account'))
       } else {
-        message.error('Contract call error')
+        message.error(t('Contract call error'))
       }
     })
   }
@@ -115,6 +117,7 @@ export function useCommit(data: any , library?: any): {
   commitCallback: () => Promise<string>
 } {
   const distributorContract = getDiscoverContract(library)
+  const { t } = useTranslation()
   const commitCallback = async () => {
     if ( !library || !distributorContract) return
     const args = [
@@ -147,11 +150,11 @@ export function useCommit(data: any , library?: any): {
       console.log(e)
       let error = e?.toString().split('code":')[1]?.split(',')
       if(error && error[0] === '-32000'){
-        message.error('Insufficient balance')
+        message.error(t('Insufficient balance'))
       } else if(error && error[0] === '-32603'){
-        message.error('Only one submission is allowed for an account')
+        message.error(t('Only one submission is allowed for an account'))
       } else {
-        message.error('Contract call error')
+        message.error(t('Contract call error'))
       }
     })
   }
@@ -162,6 +165,7 @@ export function useUpdateCommit(data: any , library?: any): {
   updateCallback: () => Promise<string>
 } {
   const distributorContract = getDiscoverContract(library)
+  const { t } = useTranslation()
   const updateCallback = async () => {
     if ( !library || !distributorContract) return
     const args = [
@@ -196,11 +200,11 @@ export function useUpdateCommit(data: any , library?: any): {
       console.log(e)
       let error = e?.toString().split('code":')[1]?.split(',')
       if(error && error[0] === '-32000'){
-        message.error('Insufficient balance')
+        message.error(t('Insufficient balance'))
       } else if(error && error[0] === '-32603'){
-        message.error('Only one submission is allowed for an account')
+        message.error(t('Only one submission is allowed for an account'))
       } else {
-        message.error('Contract call error')
+        message.error(t('Contract call error'))
       }
     })
   }
