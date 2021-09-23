@@ -136,6 +136,13 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         setModal(false)
         message.success(t('Success'));
       }
+    }).catch(e => {
+      let error = e?.toString().split('code":')[1]?.split(',')
+      if(error && error[0] === '-32603'){
+        message.error(t('You can only comment once per account'))
+      } else {
+        message.error(t('Contract call error'))
+      }
     })
   }
 
@@ -226,7 +233,13 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         <div style={{maxWidth: '800px'}}>
           <RowBetween mb="40px">
             <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("Comments")}</LocalStyle.ProjectText>
-            <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => setModal(true)}>
+            <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => {
+              if(!account){
+                message.error(t('Wallet not connected'));
+                return;
+              }
+              setModal(true)
+            }}>
               <LocalStyle.ProjectImgEdit src={edit}/>
               <Text color={theme.colors.primary}>{t("Write a Comment")}</Text>
             </Row>

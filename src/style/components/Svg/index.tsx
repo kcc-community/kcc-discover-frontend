@@ -3,5 +3,18 @@ export { default as MetamaskIcon } from './Icons/Metamask'
 export { default as GoldIcon } from './Icons/Gold'
 export { default as SliverIcon } from './Icons/Sliver'
 export { default as BronzeIcon } from './Icons/Bronze'
+export { default as CommunityIcon } from './Icons/Community'
+export { default as DaoIcon } from './Icons/Dao'
+export { default as EarnIcon } from './Icons/Earn'
+export { default as ExchangeIcon } from './Icons/Exchange'
+export { default as GameIcon } from './Icons/Game'
+export { default as LaunchpadIcon } from './Icons/Launchpad'
+export { default as MoreIcon } from './Icons/More'
+export { default as NftIcon } from './Icons/Nft'
+export { default as ToolIcon } from './Icons/Tool'
+export { default as WalletIcon } from './Icons/Wallet'
+
+
+
 export { default as Svg } from './Svg'
 export type { SvgProps } from './types'

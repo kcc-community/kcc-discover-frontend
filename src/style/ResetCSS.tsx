@@ -20,7 +20,7 @@ const ResetCSS = createGlobalStyle`
     border: 0;
     font-size: 100%;
     vertical-align: baseline;
-    font-family: 'mojitofont';
+    font-family: 'kccfont';
   }
   /* HTML5 display-role reset for older browsers */
   /* prettier-ignore */
@@ -65,7 +65,7 @@ const ResetCSS = createGlobalStyle`
     box-sizing: border-box;
   }
   * {
-    font-family: 'mojitofont';
+    font-family: 'kccfont';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

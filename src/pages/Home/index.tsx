@@ -2,7 +2,12 @@ import React, { FunctionComponent, useState, useRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Container, Text } from '../../style'
 import * as LocalStyle from '../../style/pages'
-import { ChartData, Categories } from '../../constants/home'
+import { ChartData } from '../../constants/home'
+import { 
+  CommunityIcon, DaoIcon, EarnIcon,
+  ExchangeIcon, GameIcon, LaunchpadIcon,
+  MoreIcon, NftIcon, ToolIcon, WalletIcon
+} from '../../style/components/Svg'
 import Chart from './Charts'
 import Row, { RowBetween, AutoRow } from 'components/Row'
 import Col from '../../components/Column'
@@ -36,6 +41,19 @@ interface SliderProps {
   banner: string
   title: string 
   name: string
+}
+
+const Categories = {
+  Exchange: <ExchangeIcon height="60px" width="60px" />,
+  Lending: <LaunchpadIcon height="60px" width="60px" />,
+  Earn: <EarnIcon height="60px" width="60px" />,
+  Game: <GameIcon height="60px" width="60px" />,
+  Tools: <ToolIcon height="60px" width="60px" />,
+  Others: <MoreIcon height="60px" width="60px" />,
+  NFT: <NftIcon height="60px" width="60px" />,
+  Community: <CommunityIcon height="60px" width="60px" />,
+  DAO: <DaoIcon height="60px" width="60px" />,
+  Wallet: <WalletIcon height="60px" width="60px" />,
 }
 
 const HomePage: React.FunctionComponent = (props) => {
@@ -159,7 +177,7 @@ const HomePage: React.FunctionComponent = (props) => {
               duration={1.5} 
               separator=","/>
           </LocalStyle.SecondText>
-          <LocalStyle.SecondText style={{fontSize: '14px', color: theme.colors.darkGrey, fontWeight: 'normal'}}>{title}</LocalStyle.SecondText>
+          <LocalStyle.SecondText style={{fontSize: '14px', color: theme.colors.darkGrey, fontWeight: 500}}>{title}</LocalStyle.SecondText>
         </LocalStyle.InfoCard>
       </FadeInUp>
     )
@@ -184,7 +202,7 @@ const HomePage: React.FunctionComponent = (props) => {
     return(
       <FadeInUp delay={index * 100} key={index}>
         <LocalStyle.CateItem onClick={() => history.push('/project?sec=' + data.index)}>
-          <LocalStyle.CateLogo src={Categories[data.name]}/>
+          {Categories[data.name]}
           <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>{data?.name}</LocalStyle.SecondText>
         </LocalStyle.CateItem>
       </FadeInUp>
@@ -313,23 +331,23 @@ const HomePage: React.FunctionComponent = (props) => {
               </Col>
             </FadeInUp>
           </>
-          <>
+          <LocalStyle.UserCardContainer>
             <FadeInUp>
               <LocalStyle.SecondText mb="30px" mt="120px">{t("Why Discover KCC")}</LocalStyle.SecondText>
             </FadeInUp>
             <AutoRow justify="center">
               {DiscoverReason.map((item, key) => userInfo(item, key))}
             </AutoRow>
-          </>
+          </LocalStyle.UserCardContainer>
           <>
             <FadeInUp>
               <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
-            <RowBetween>
+            <RowBetween style={{position: 'relative'}}>
               { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
                 <LocalStyle.CateItem onClick={() => history.push('/project')}>
-                  <LocalStyle.CateLogo src={Categories['Others']}/>
+                  {Categories['Others']}
                   <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
                 </LocalStyle.CateItem>
               </FadeInUp>

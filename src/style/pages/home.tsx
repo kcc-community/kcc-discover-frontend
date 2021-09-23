@@ -57,6 +57,10 @@ export const InfoCard = styled(cardTransparent)`
   justify-content: center;
 `
 
+export const UserCardContainer = styled.div`
+  position: relative
+`
+
 export const UserCard = styled(Col)`
   width: 360px;
   height: 460px;
@@ -66,7 +70,11 @@ export const UserCard = styled(Col)`
   align-items: center;
   justify-content: center;
   padding: 0 40px;
+  top: 0;
+  transition: top .3s linear;
+  position: relative;
   :hover {
+    top: -10px;
     background: ${({ theme }) => `${theme.colors.backgroundAlt}`};
     color: ${({ theme }) => `${theme.colors.primary}`};
     #discover-line {
@@ -95,6 +103,12 @@ export const CateItem = styled(cardTransparent)`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: relative;
+  top: 0;
+  transition: top .2s linear;
+  // :hover{
+  //   top: -10px;
+  // }
 `
 
 export const CateLogo = styled.img`

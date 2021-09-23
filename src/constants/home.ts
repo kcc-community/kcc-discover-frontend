@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const ChartData = {
   xAxis: {
     axisLine: {
@@ -35,7 +37,7 @@ export const ChartData = {
   },
   tooltip: {
     show: true,
-    trigger: 'axis',
+    trigger: 'item',
     padding: [4, 12],
     backgroundColor: '#FFFFFF1A',
     borderRadius: 10,
@@ -45,7 +47,7 @@ export const ChartData = {
         show: false
       }
     },
-    formatter: "<span style='color: red'>{b}</span><br/> $：{c}",
+    formatter: "<div style='color: #B8C6D866; font-size: 14px; margin-bottom: -17px; padding-top: 5px'>{b}</div><br/> <div style='display: flex; align-items: center; padding-bottom: 5px'><div style='width: 10px; height: 10px; border: 2px solid #18BB97; border-radius: 8px; margin-right: 6px'></div> $: {c}</div> ",
     extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
   },
   series: [{
@@ -75,18 +77,6 @@ export const ChartData = {
   }]
 };
 
-
-export const Categories = {
-  Exchange: require('../assets/images/home/exchange.png').default,
-  Lending: require('../assets/images/home/launchpad.png').default,
-  Earn: require('../assets/images/home/earn.png').default,
-  Game: require('../assets/images/home/gaming.png').default,
-  Tools: require('../assets/images/home/tools.png').default,
-  Others: require('../assets/images/home/more.png').default,
-  NFT: require('../assets/images/home/nft.png').default,
-  Community: require('../assets/images/home/community.png').default,
-  DAO: require('../assets/images/home/dao.png').default,
-}
 
 export const media = [
   {

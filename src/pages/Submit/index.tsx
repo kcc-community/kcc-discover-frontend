@@ -189,13 +189,32 @@ const SubmitPage: React.FunctionComponent = (props) => {
           console.log(res)
           setModal(true);
         }
-      })  
+      }).catch(e => {
+
+        let error = e?.toString().split('code":')[1]?.split(',')
+        if(error && error[0] === '-32000'){
+          message.error(t('Insufficient balance'))
+        } else if(error && error[0] === '-32603'){
+          message.error(t('Only one submission is allowed for an account'))
+        } else {
+          message.error(t('Contract call error'))
+        }
+        })
     } else{
       const { commitCallback } = useCommit(params, library);
       commitCallback().then((res: any) => {
         if(res){
           console.log(res)
           setModal(true);
+        }
+      }).catch(e => {
+        let error = e?.toString().split('code":')[1]?.split(',')
+        if(error && error[0] === '-32000'){
+          message.error(t('Insufficient balance'))
+        } else if(error && error[0] === '-32603'){
+          message.error(t('Only one submission is allowed for an account'))
+        } else {
+          message.error(t('Contract call error'))
         }
       })
     }

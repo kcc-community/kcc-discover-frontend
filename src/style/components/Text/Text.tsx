@@ -18,9 +18,9 @@ const getFontSize = ({ fontSize, small }: TextProps) => {
 const Text = styled.div<TextProps>`
   color: ${getColor};
   font-size: 16px;
-  font-weight: ${({ bold }) => (bold ? 600 : 400)};
+  font-weight: ${({ bold }) => ((bold && typeof(bold) === "number") ? bold : (bold ? 600 : 400))};
   line-height: 1.5;
-  font-family: 'mojitofont';
+  font-family: 'kccfont';
   ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}
   ${({ ellipsis }) =>
     ellipsis &&
