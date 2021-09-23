@@ -37,6 +37,7 @@ interface CommentProps {
   score: number
   type?: string
   logo?: string
+  application?: any
 }
 
 const Comment: React.FunctionComponent<CommentProps> = (props) => {
@@ -105,7 +106,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
               style={{width: '40px', height: '40px', marginRight: '18px', borderRadius: '8px', marginTop: '5px'}}
               loader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
               unloader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
-              src={[props.logo as string]}/>
+              src={[props.application.logo as string]}/>
             <Col>
               <RowBetween>
                 <Row mb="5px">

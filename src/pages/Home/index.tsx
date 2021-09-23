@@ -336,7 +336,7 @@ const HomePage: React.FunctionComponent = (props) => {
                       if(index === active){
                         return <LocalStyle.SliderPointSec/>
                       }
-                      return <LocalStyle.SliderPointNormal/>
+                      return <LocalStyle.SliderPointNormal  />
                     })
                   }
                 </Row>
