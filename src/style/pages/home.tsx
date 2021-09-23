@@ -157,6 +157,7 @@ export const SliderRight = styled.div`
   position: absolute;
   z-index: 999;
   right: 190px;
+  cursor: pointer;
   :active{
     opacity: .7;
   }
@@ -182,5 +183,6 @@ export const SliderPointSec = styled.div`
 
 export const SliderPointNormal = styled(SliderPointSec)`
   background: #B8C6D866;
+  cursor: pointer;
 `
 
