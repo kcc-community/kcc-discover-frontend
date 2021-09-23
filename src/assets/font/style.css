@@ -62,3 +62,18 @@
   font-weight: normal;
   src: local('kccfont Black Italic'), url('SFPRODISPLAYBLACKITALIC.woff') format('woff');
 }
+
+@font-face {
+  font-family: 'kccfont Number Normal';
+  font-style: normal;
+  font-weight: normal;
+  src: local('kccfont Number Normal'), url('URWDIN-Regular.otf') format('otf');
+}
+
+@font-face {
+  font-family: 'kccfont Number Medium';
+  font-style: normal;
+  font-weight: normal;
+  src: local('kccfont Number Medium'), url('URWDIN-Medium.otf') format('otf');
+}
+

@@ -29,6 +29,7 @@ import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 
 import dayjs from 'dayjs'
 import BN from 'bignumber.js'
 
+BN.config({FORMAT: {groupSize: 3, groupSeparator: ','}})
 
 interface PriceProps {
   addressCount: string
@@ -168,7 +169,7 @@ const HomePage: React.FunctionComponent = (props) => {
     return (
       <FadeInUp delay={key * 100}>
         <LocalStyle.InfoCard>
-          <LocalStyle.SecondText style={{fontSize: '32px'}}>
+          <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
               start={0} 
@@ -274,8 +275,19 @@ const HomePage: React.FunctionComponent = (props) => {
             <Col>
               <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
               <Row align="flex-end">
-                <LocalStyle.SecondText style={{fontSize: '48px', lineHeight: '48px'}}>{t("$ " + chartData[0].totalLiquidityETH ? new BN(chartData[0].totalLiquidityETH).toFixed(2).toString() : '--')}</LocalStyle.SecondText>
-                <Text fontSize="24px" color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml="27px">{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>
+                <LocalStyle.SecondText style={{fontSize: '48px', lineHeight: '48px', fontFamily: 'kccfont Number Normal'}}>$
+                {
+                  chartData[0].totalLiquidityETH ?
+                  <CountUp 
+                    start={0} 
+                    end={Number(chartData[0].totalLiquidityETH)} 
+                    decimals={2}
+                    duration={1.5} 
+                    separator=","/>
+                  : '--'
+                }
+                </LocalStyle.SecondText>
+                <Text fontSize="24px" color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml="27px" style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>
               </Row>
               <Chart
                 key="chart1"

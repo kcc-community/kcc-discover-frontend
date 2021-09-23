@@ -10,7 +10,7 @@ import { Rate, message } from 'antd'
 import dayjs from 'dayjs'
 import { useWeb3React } from '@web3-react/core'
 import { useCommentLike, useCommentDelete } from '../../hooks/useDiscoverContract'
-import { Img } from '../ImgIpfs'
+import { Img } from 'react-image'
 
 
 const CommentWrapper = styled.div`
