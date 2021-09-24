@@ -1,4 +1,4 @@
-import { TokenAmount, ChainId, JSBI } from 'mojito-testnet-sdk'
+import { TokenAmount, ChainId, JSBI } from 'mojito-sdk'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from './index'

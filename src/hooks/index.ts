@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers'
-import { ChainId } from 'mojito-testnet-sdk'
+import { ChainId } from 'mojito-sdk'
 import { connectorLocalStorageKey } from '../style'
 import { useWeb3React as useWeb3ReactCore, UnsupportedChainIdError } from '@web3-react/core'
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'

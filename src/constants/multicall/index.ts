@@ -1,4 +1,4 @@
-import { ChainId } from 'mojito-testnet-sdk'
+import { ChainId } from 'mojito-sdk'
 import MULTICALL_ABI from './abi.json'
 
 const MULTICALL_ADDRESS: { [chainId in ChainId]: string } = {

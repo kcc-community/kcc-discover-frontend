@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from 'mojito-testnet-sdk'
+import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from 'mojito-sdk'
 import { useMemo } from 'react'
 import { isAddress } from '../../utils'
 import { useSelector } from 'react-redux'
