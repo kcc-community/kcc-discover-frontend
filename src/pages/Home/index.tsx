@@ -28,8 +28,6 @@ import { GoldIcon, SliverIcon, BronzeIcon } from '../../style/components/Svg'
 import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
 import dayjs from 'dayjs'
 import BN from 'bignumber.js'
-import Swiper from 'react-id-swiper';
-import 'swiper/css/swiper.css';
 
 BN.config({FORMAT: {groupSize: 3, groupSeparator: ','}})
 
@@ -302,27 +300,6 @@ const HomePage: React.FunctionComponent = (props) => {
       logo: require('../../assets/images/home/user-2.png').default,
     }
   ]
-
-  const params = {
-    effect: 'coverflow',
-    grabCursor: true,
-    loop: true,
-    initialSlide: 2,
-    slidesPerView: 'auto',
-    loopedSlides: 1,
-    centeredSlides: 3,
-    coverflowEffect: {
-      rotate: 50,
-      stretch: 100,
-      depth: 100,
-      modifier: 0.5,
-      slideShadows: true
-    },
-    pagination: {
-      el: '.swiper-pagination'
-    }
-  }
- 
   
   return (
       <>
@@ -371,8 +348,8 @@ const HomePage: React.FunctionComponent = (props) => {
             </FadeInUp>
             <FadeInUp>
               <AutoRow justify="center" style={{position: 'relative'}}>
-                {/* <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/> */}
-                {/* <StackedCarousel
+                <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/>
+                <StackedCarousel
                   ref={sliderRef}
                   data={sliderDom}
                   carouselWidth={1200}
@@ -382,30 +359,8 @@ const HomePage: React.FunctionComponent = (props) => {
                   customTransition={'all 1000ms ease 0s'}
                   onActiveSlideChange={v => { console.log('v =', v);setActive(v) }}
                   useGrabCursor={true}
-                /> */}
-                <Swiper {...params}>
-                  {sliderDom.map((item: any) => {return (
-                    <LocalStyle.SliderWrapper onClick={() => history.push(`/project_detail?name=${item.name}`)} className="homeBanner">
-                      <Img 
-                        decode={true}
-                        style={{width: '880px !important', height: '400px'}}
-                        loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
-                        unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
-                        src={[item.banner as string]}/>
-                      <LocalStyle.SliderBottom>
-                        <AutoRow>
-                          <LocalStyle.SliderBottomBall src={websiteWhite}/>
-                          <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{item.title}</Text>
-                        </AutoRow>
-                        <AutoRow style={{width: '14%'}}>
-                          <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
-                          <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
-                        </AutoRow>
-                      </LocalStyle.SliderBottom>
-                    </LocalStyle.SliderWrapper>
-                  )})}
-                </Swiper>
-                {/* <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/> */}
+                />
+                <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>
               </AutoRow>
               <Col>
                 <Row style={{justifyContent: 'center'}}>
