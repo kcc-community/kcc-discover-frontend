@@ -94,5 +94,7 @@
   "Contract call error": "Contract call error",
   "Insufficient balance": "Insufficient balance",
   "Only one submission is allowed for an account": "Only one submission is allowed for an account",
-  "Connected": "Connected"
+  "Connected": "Connected",
+  "Your KCS balance is insufficient": "Your KCS balance is insufficient",
+  "One address only can submit one project": "One address only can submit one project"
 }

@@ -203,9 +203,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
       }).catch(e => {
         let error = e?.toString().split('code":')[1]?.split(',')
         if(error && error[0] === '-32000'){
-          message.error(t('Insufficient balance'))
+          message.error(t('Your KCS balance is insufficient'))
         } else if(error && error[0] === '-32603'){
-          message.error(t('Only one submission is allowed for an account'))
+          message.error(t('One address only can submit one project'))
         } else {
           message.error(t('Contract call error'))
         }
@@ -246,7 +246,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const uploadImg = async (type: string, file: any, limit: {width: number, height: number}) => {
     let sizeResult = await limitUploadSize(file, limit.width, limit.height);
     let volumeResult = limitUploadVolume(type, file.size);
-    // if(!sizeResult || !volumeResult) { message.error(t('Unacceptable img size'), 3); return };
+    if(!sizeResult || !volumeResult) { message.error(t('Unacceptable img size'), 3); return };
     message.info(t('Uploading'), 0);
     const metadata = await client.storeBlob(new Blob([file] as any))
     console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
