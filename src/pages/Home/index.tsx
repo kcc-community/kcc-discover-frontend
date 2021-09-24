@@ -124,7 +124,9 @@ const HomePage: React.FunctionComponent = (props) => {
           )
         }
       }
-      setSliderDom(dom)
+      if(dom.length){
+        setSliderDom(dom)
+      }
       return
     })
     updateChart();
