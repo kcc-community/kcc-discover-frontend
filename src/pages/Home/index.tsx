@@ -114,13 +114,15 @@ const HomePage: React.FunctionComponent = (props) => {
       let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
       let dom = [] as any
       for(let i in slider){
-        dom.push(
-          {
-            title: slider[i].title,
-            name: slider[i].name,
-            cover: slider[i].banner
-          }
-        )
+        if(slider[i]){
+          dom.push(
+            {
+              title: slider[i].title,
+              name: slider[i].name,
+              cover: slider[i].banner
+            }
+          )
+        }
       }
       setSliderDom(dom)
       return
