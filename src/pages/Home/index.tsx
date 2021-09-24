@@ -38,12 +38,6 @@ interface PriceProps {
   priceUsd: string
 }
 
-interface SliderProps {
-  banner: string
-  title: string 
-  name: string
-}
-
 const Categories = {
   Exchange: <ExchangeIcon height="60px" width="60px" />,
   Lending: <LaunchpadIcon height="60px" width="60px" />,
@@ -63,11 +57,9 @@ const HomePage: React.FunctionComponent = (props) => {
   let [chart1Data, setChart1Data] = React.useState(null);
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
-  const [priceLoading, getPriceInfo] = useLoading(ApiService.getHomePriceInfo);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([]);
   const [showTop, setShowTop] = useState(false)
-  const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
   const [sliderDom, setSliderDom] = useState([{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},])
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
@@ -109,7 +101,6 @@ const HomePage: React.FunctionComponent = (props) => {
   
 
   React.useEffect((): void => {
-      console.log("chart1", chart1);
       Promise.all([
         getTopDapp(),
         getSliderInfo()
@@ -117,7 +108,6 @@ const HomePage: React.FunctionComponent = (props) => {
         setTopDapp(res[0].list)
         //deal slider info
         let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
-        setSlider(slider as any)
         let dom = [] as any
         for(let i in slider){
           dom.push(
@@ -229,14 +219,12 @@ const HomePage: React.FunctionComponent = (props) => {
     function (props: StackedCarouselSlideProps) {
         const { data, dataIndex, swipeTo, slideIndex, isCenterSlide } = props;
         const { cover, title, name } = data[dataIndex];
-        // console.log('dataIndex =', dataIndex, 'slideIndex =', slideIndex, active)
         return (
             <LocalStyle.SliderWrapper 
               onClick={() => {
                 if(isCenterSlide){
                   history.push(`/project_detail?name=${name}`)
                 } else {
-                  console.log('slideIndex =', slideIndex)
                   swipeTo(slideIndex)
                 }
               }} 
@@ -270,15 +258,11 @@ const HomePage: React.FunctionComponent = (props) => {
   );
 
   const sliderMove = (index: number) => {
-    let targetArr = [1, 2, -1, -2];
-    targetArr = resetSliderArr(targetArr, active)
-    if(active - 1 >= 0){
-      targetArr.splice(active - 1, 0, 1);
-    } else {
-      targetArr.unshift(1)
-    }
+    let targetArr = [1, 2, -2, -1];
+    targetArr = resetSliderArr(targetArr, active) 
+    targetArr.splice(active, 0, 99);
     sliderRef.current.swipeTo(targetArr[index])
-    setActive(index)
+    // setActive(index)
   }
 
   const resetSliderArr = (arr: any, n) => {

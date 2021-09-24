@@ -29,6 +29,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     intro: string
     margin: string | number
     contract: string
+    owner: string
     detail?: string
     rank?: string | number
     score?: string | number
@@ -46,6 +47,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     title: '-',
     intro: '-',
     margin: '0.00',
+    owner: '',
     contract: '',
     score: 0,
     rankPrimary: 999,
@@ -124,7 +126,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       title: data.title,
       review: data.content ?? '',
       score: data.rate,
-      projectAddress: detail.contract
+      projectAddress: detail.owner
     }
     if(!account || !chainId) {
       message.error(t('Wallet not connected'))

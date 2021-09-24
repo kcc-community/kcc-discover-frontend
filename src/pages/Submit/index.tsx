@@ -24,7 +24,6 @@ import { useDispatch } from 'react-redux'
 import { NFTStorage, File } from 'nft.storage'
 const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDVlOTc4MjdCZWREY0FGYTAyMWQ2NjRiMjE5QWE2MTM3MkY1MDBmZTIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMTg4NzM3MjUxMywibmFtZSI6ImRpc2NvdmVyIn0.G7Cl_zC4ADBEaDW-epPpon4vSC8XhWocETL-NX-7w8Q'
 const client = new NFTStorage({ token: apiKey })
-const { create } = require('ipfs-http-client')
 const { Option } = Select;
 
 interface SubmitProps {
@@ -55,11 +54,6 @@ const RequiredPoint = styled.div`
   font-size: 14px;
 `
 
-const ImgDown = styled.img`
-  width: 20px;
-  height: 20px;
-`
-
 //todo: reset margin limit
 const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
@@ -76,6 +70,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const [minMargin, setMinMargin] = useState(100)
   const [editSymbol, setEditSymbol] = useState(true)
   const chainError = useChainError();
+  const [state, setState] = useState('')
 
   const [title, setTitle] = useState('')
   const [shortIntroduction, setIntro] = useState('')
@@ -87,7 +82,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const [email, setEmail] = useState('')
   const [marginAmount, setMargin] = useState('')
   const [banner, setBanner] = useState('')
-
 
   const [tokenSymbol, setTokenSymbol] = useState('')
   const [detailDescription, setDes] = useState('')
@@ -120,6 +114,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
       message.destroy();
       if(name){
         //when project is edited, data can not be changed
+        setState(res[0].state)
         setTitle(res[0].info.title)
         setContract(res[0].info.contract)
         res[0].info.tokenSymbol && setTokenSymbol(res[0].info.tokenSymbol) && setEditSymbol(false)
@@ -179,7 +174,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(coinmarketcapLink) {params.coinmarketcapLink = coinmarketcapLink};
     if(coingeckoLink) {params.coingeckoLink = coingeckoLink};
     console.log('params =', params);
-    if(name) {
+    if(name && state === 'Displaying') {
       // edit project 
       params.projectAddress = account;
       const { updateCallback } = useUpdateCommit(params, library);
@@ -190,16 +185,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
           setModal(true);
         }
       }).catch(e => {
-
-        let error = e?.toString().split('code":')[1]?.split(',')
-        if(error && error[0] === '-32000'){
-          message.error(t('Insufficient balance'))
-        } else if(error && error[0] === '-32603'){
-          message.error(t('Only one submission is allowed for an account'))
-        } else {
-          message.error(t('Contract call error'))
-        }
-        })
+        message.error(t('Contract call error'))
+      })
     } else{
       const { commitCallback } = useCommit(params, library);
       commitCallback().then((res: any) => {

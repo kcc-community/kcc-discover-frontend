@@ -11,7 +11,6 @@ import { Contract } from 'ethers'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import discoverAbi from '../constants/abis/discover.json'
 import addresses from '../constants/contract'
-import { message } from 'antd';
 
 export const getAddress = (address: any): string => {
   const mainNetChainId = 321
@@ -50,6 +49,7 @@ export function useComment(data: any , library?: any): {
           return response.hash
         })
     }).catch(e => {
+      console.log('e =', e)
       throw Error(e)
     })
   }
