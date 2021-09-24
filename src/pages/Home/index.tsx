@@ -215,13 +215,13 @@ const HomePage: React.FunctionComponent = (props) => {
   const SliderCoin = (props) => {
     if(props.type === 'left'){
       return(
-        <LocalStyle.SliderLeft onClick={props.onClick}>
+        <LocalStyle.SliderLeft onMouseEnter={props.onClick} onClick={props.onClick}>
           <LocalStyle.SliderImg src={iconLeft}/>
         </LocalStyle.SliderLeft>
       )
     }
     return(
-      <LocalStyle.SliderRight onClick={props.onClick}>
+      <LocalStyle.SliderRight  onMouseEnter={props.onClick} onClick={props.onClick}>
         <LocalStyle.SliderImg src={iconRight}/>
       </LocalStyle.SliderRight>
     )
@@ -229,26 +229,40 @@ const HomePage: React.FunctionComponent = (props) => {
 
   const Slide = React.memo(
     function (props: StackedCarouselSlideProps) {
-        const { data, dataIndex } = props;
+        const { data, dataIndex, swipeTo, slideIndex, isCenterSlide } = props;
         const { cover, title, name } = data[dataIndex];
+        // console.log('dataIndex =', dataIndex, 'slideIndex =', slideIndex, active)
         return (
-            <LocalStyle.SliderWrapper onClick={() => history.push(`/project_detail?name=${name}`)} className="homeBanner">
+            <LocalStyle.SliderWrapper 
+              onClick={() => {
+                if(isCenterSlide){
+                  history.push(`/project_detail?name=${name}`)
+                } else {
+                  console.log('slideIndex =', slideIndex)
+                  swipeTo(slideIndex)
+                }
+              }} 
+              className="homeBanner">
               <Img 
                 decode={true}
                 style={{width: '880px !important', height: '400px'}}
                 loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 src={[cover as string]}/>
-              <LocalStyle.SliderBottom>
-                <AutoRow>
-                  <LocalStyle.SliderBottomBall src={websiteWhite}/>
-                  <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
-                </AutoRow>
-                <AutoRow style={{width: '14%'}}>
-                  <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
-                  <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
-                </AutoRow>
-              </LocalStyle.SliderBottom>
+              {
+                active === dataIndex ? 
+                <LocalStyle.SliderBottom>
+                  <AutoRow>
+                    <LocalStyle.SliderBottomBall src={websiteWhite}/>
+                    <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
+                  </AutoRow>
+                  <AutoRow style={{width: '14%'}}>
+                    <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
+                    <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
+                  </AutoRow>
+                </LocalStyle.SliderBottom>
+                : null
+              }
             </LocalStyle.SliderWrapper>
         );
     },
@@ -256,6 +270,25 @@ const HomePage: React.FunctionComponent = (props) => {
       return prev.dataIndex === next.dataIndex;
     }
   );
+
+  const sliderMove = (index: number) => {
+    let targetArr = [1, 2, -1, -2];
+    targetArr = resetSliderArr(targetArr, active)
+    if(active - 1 >= 0){
+      targetArr.splice(active - 1, 0, 1);
+    } else {
+      targetArr.unshift(1)
+    }
+    sliderRef.current.swipeTo(targetArr[index])
+    setActive(index)
+  }
+
+  const resetSliderArr = (arr: any, n) => {
+		n = n % arr.length;
+		var arrLeft = arr.slice(0,-n);
+		var arrRight = arr.slice(-n);
+		return (arrRight.concat(arrLeft));
+	}
 
   const DiscoverReason = [
     {
@@ -347,7 +380,7 @@ const HomePage: React.FunctionComponent = (props) => {
                   slideComponent={Slide}
                   maxVisibleSlide={sliderDom.length === 5 ? 5 : 1}
                   customTransition={'all 1000ms ease 0s'}
-                  onActiveSlideChange={v => setActive(v)}
+                  onActiveSlideChange={v => { console.log('v =', v);setActive(v) }}
                   useGrabCursor={true}
                 /> */}
                 <Swiper {...params}>
@@ -381,7 +414,7 @@ const HomePage: React.FunctionComponent = (props) => {
                       if(index === active){
                         return <LocalStyle.SliderPointSec/>
                       }
-                      return <LocalStyle.SliderPointNormal/>
+                      return <LocalStyle.SliderPointNormal  onClick={() => sliderMove(index)}/>
                     })
                   }
                 </Row>
