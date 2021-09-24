@@ -244,7 +244,7 @@ const HomePage: React.FunctionComponent = (props) => {
               className="homeBanner">
               <Img 
                 decode={true}
-                style={{width: '880px !important', height: '400px'}}
+                style={{width: '880px !important', height: '400px', borderRadius: '8px'}}
                 loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 src={[cover as string]}/>
