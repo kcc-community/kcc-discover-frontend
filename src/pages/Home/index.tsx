@@ -68,6 +68,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const categorySubtle = useCategorySubtle();
   //@ts-ignore
   const sliderRef = useRef<ResponsiveContainer>();
+  const mountedRef = useRef(true);
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -77,6 +78,7 @@ const HomePage: React.FunctionComponent = (props) => {
       let opts: null;
       opts = JSON.parse(JSON.stringify(ChartData));
       getChart().then((res: any) => {
+        if(!mountedRef.current) return null;
         let xAxisData = [], seriesData = [], max = 0;
         if(res.length) setChartData(res)
         if(res[res.length - 1] && res[res.length - 2]){
@@ -96,31 +98,38 @@ const HomePage: React.FunctionComponent = (props) => {
         //@ts-ignore
         opts.series[0].data = seriesData;
         setChart1Data(opts);
+        return
       })
   }
   
 
-  React.useEffect((): void => {
-      Promise.all([
-        getTopDapp(),
-        getSliderInfo()
-      ]).then((res: any) => {
-        setTopDapp(res[0].list)
-        //deal slider info
-        let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
-        let dom = [] as any
-        for(let i in slider){
-          dom.push(
-            {
-              title: slider[i].title,
-              name: slider[i].name,
-              cover: slider[i].banner
-            }
-          )
-        }
-        setSliderDom(dom)
-      })
-      updateChart();
+  React.useEffect(() => {
+    Promise.all([
+      getTopDapp(),
+      getSliderInfo()
+    ]).then((res: any) => {
+      if(!mountedRef.current) return null;
+      setTopDapp(res[0].list)
+      //deal slider info
+      let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
+      let dom = [] as any
+      for(let i in slider){
+        dom.push(
+          {
+            title: slider[i].title,
+            name: slider[i].name,
+            cover: slider[i].banner
+          }
+        )
+      }
+      setSliderDom(dom)
+      return
+    })
+    updateChart();
+    return () => {
+      mountedRef.current = false;
+      sliderRef.current = null;
+    }
   }, [chart1]);
 
   const DappItem = (data: any, index: number) => {
@@ -178,7 +187,7 @@ const HomePage: React.FunctionComponent = (props) => {
     const title = {fontSize: '24px', fontWeight: 700}
     const sub = {fontSize: '14px', lineHeight: '30px', color: theme.colors.secondary, textAlign: 'center' as const}
     return (
-      <FadeInUp delay={index * 100}>
+      <FadeInUp delay={index * 100} key={index}>
         <LocalStyle.UserCard key={index} style={{marginRight: index ? '0' : '80px'}}>
           <LocalStyle.UserLogo src={item?.logo}/>
           <div style={title}>{item.title}</div>
@@ -284,7 +293,6 @@ const HomePage: React.FunctionComponent = (props) => {
       logo: require('../../assets/images/home/user-2.png').default,
     }
   ]
-  
   return (
       <>
         <Container>
@@ -341,7 +349,7 @@ const HomePage: React.FunctionComponent = (props) => {
                   slideComponent={Slide}
                   maxVisibleSlide={sliderDom.length === 5 ? 5 : 1}
                   customTransition={'all 1000ms ease 0s'}
-                  onActiveSlideChange={v => { console.log('v =', v);setActive(v) }}
+                  onActiveSlideChange={v => { setActive(v) }}
                   useGrabCursor={true}
                 />
                 <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>
@@ -351,9 +359,9 @@ const HomePage: React.FunctionComponent = (props) => {
                   {
                     sliderDom.map((item, index) => {
                       if(index === active){
-                        return <LocalStyle.SliderPointSec/>
+                        return <LocalStyle.SliderPointSec key={index}/>
                       }
-                      return <LocalStyle.SliderPointNormal  onClick={() => sliderMove(index)}/>
+                      return <LocalStyle.SliderPointNormal key={index} onClick={() => sliderMove(index)}/>
                     })
                   }
                 </Row>

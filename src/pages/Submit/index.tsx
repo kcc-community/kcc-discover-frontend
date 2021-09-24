@@ -3,8 +3,9 @@ import styled, { useTheme } from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
+import { ETHER } from 'mojito-testnet-sdk'
 import { Container, Text } from '../../style'
-import { camera } from '../../constants/imgs'
+import { camera, Ipfs } from '../../constants/imgs'
 import Row from 'components/Row'
 import Col from 'components/Column'
 import BN from 'bignumber.js'
@@ -16,14 +17,16 @@ import Footer from '../../components/Footer'
 import SuccessModal from '../../components/SuccessModal'
 import { useCommit, getMinMarginAmount, useUpdateCommit } from '../../hooks/useDiscoverContract'
 import InputItem from 'components/InputItem'
-import { switchNetwork } from '../../utils/wallet'
+import StringCrypto from 'string-crypto';
 import { useCategoryPrimary, useCategorySubtle } from '../../state/application/hooks'
-import { useChainError } from 'state/wallet/hooks'
+import { useChainError, useCurrencyBalances } from 'state/wallet/hooks'
 import { updateChainError } from '../../state/wallet/actions'
 import { useDispatch } from 'react-redux'
 import { NFTStorage, File } from 'nft.storage'
-const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDVlOTc4MjdCZWREY0FGYTAyMWQ2NjRiMjE5QWE2MTM3MkY1MDBmZTIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMTg4NzM3MjUxMywibmFtZSI6ImRpc2NvdmVyIn0.G7Cl_zC4ADBEaDW-epPpon4vSC8XhWocETL-NX-7w8Q'
-const client = new NFTStorage({ token: apiKey })
+import { isAddress } from 'ethers/lib/utils'
+
+const { decryptString, } = new StringCrypto();
+const client = new NFTStorage({ token: decryptString(Ipfs, 'KCC_DISCOVER') })
 const { Option } = Select;
 
 interface SubmitProps {
@@ -59,6 +62,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
+  const balance = useCurrencyBalances(account ?? undefined, [ETHER])
   const dispatch = useDispatch()
   const [detailLoading, getInfo] = useLoading(ApiService.getAccountProject)
   const primaryList = useCategoryPrimary()
@@ -97,7 +101,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
   const checkContractAddress = ['Wallet', 'Community', 'Others'].includes(secondaryCategoryIndex ?? '') ? false : true
-
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
       dispatch(updateChainError({chainError: 'Unsupported Network'}))
@@ -142,6 +145,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
 
   const onConfirm = () => {
     if(!account || !chainId) { message.error(t('Please connect your wallet')); return; };
+    if(balance[0] && (new BN(marginAmount)).isGreaterThan(new BN(balance[0]?.toSignificant(18)))) { message.error(t('Your KCS balance is insufficient')); return; }
+    if(state && state !== 'None' && state !== 'Refused') { message.error(t('One address only can submit one project')); return; }
+    
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
       email, marginAmount, contractAddresses, 
@@ -240,7 +246,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const uploadImg = async (type: string, file: any, limit: {width: number, height: number}) => {
     let sizeResult = await limitUploadSize(file, limit.width, limit.height);
     let volumeResult = limitUploadVolume(type, file.size);
-    if(!sizeResult || !volumeResult) { message.error(t('Unacceptable img size'), 3); return };
+    // if(!sizeResult || !volumeResult) { message.error(t('Unacceptable img size'), 3); return };
     message.info(t('Uploading'), 0);
     const metadata = await client.storeBlob(new Blob([file] as any))
     console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
@@ -420,6 +426,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             value={contractAddresses}
             placeholder={t('Enter your Smart Contract Address')}
             onChange={e => {setContract(splitSpace(e.target.value))}}
+            error={contractAddresses && !isAddress(contractAddresses) ? 'Error contract address' : ''}
           />
           <InputItem 
             title={name ? t('The amount of KCS margin call') : t('Amount of KCS margin')}
@@ -511,7 +518,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
           <Button 
             style={{width: '100px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
-            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || (!contractAddresses && checkContractAddress) 
+            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
             || !checkEmail || (!checkMargin && !name) || chainError}
             type="primary"
             onClick={() => onConfirm()}>{t("Submit")}</Button>

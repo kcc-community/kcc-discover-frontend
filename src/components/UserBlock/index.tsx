@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useChainError } from '../../state/wallet/hooks'
 import { switchNetwork } from '../../utils/wallet'
 import useAccountInfo from '../../hooks/useAccount'
+import BN from 'bignumber.js'
 
 export type Login = (connectorId: ConnectorNames) => void
 
@@ -160,7 +161,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
             <LinkImg src={require('../../assets/images/Icons/logo.png').default}/>
             <Text color={theme.colors.primary} fontSize={'14px'}>{accountEllipsis}</Text>
             <LinkButtonLine />
-            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0]?.toSignificant(2) ?? 0} KCS</Text>
+            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0] ? new BN(balance[0]?.toSignificant(18)).toFixed(2, 1) : 0} KCS</Text>
           </ConnectButton>
         </Dropdown>
       ) : (

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import Web3ReactManager from '../components/Web3ReactManager'
 import { usePriceInfo } from '../hooks/usePriceInfo'
 import { useCategory } from '../hooks/useCategory'
+import ComingSoon from './ComingSoon'
+import { useResponsive } from 'utils/responsive'
 
 import Home from './Home'
 import Project from './Project'
@@ -31,6 +33,11 @@ export default function App() {
   // init common data
   const priceInfo = usePriceInfo();
   const categoryInfo = useCategory();
+  const { isMobile } = useResponsive();
+
+  if(isMobile){
+    return <ComingSoon />
+  }
 
   return (
     <Suspense fallback={null}>
