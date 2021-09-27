@@ -126,6 +126,7 @@ export const SliderWrapper = styled.a`
 export const SliderCard = styled.img`
   width: 880px !important;
   height: 400px;
+  border-radius: 8px;
 `
 
 export const SliderBottom = styled(RowBetween)`
@@ -147,7 +148,7 @@ export const SliderBottomBall = styled.img`
 export const SliderRight = styled.div`
   width: 40px;
   height: 40px;
-  background: #FFFFFF66;
+  background: #C6C6C666;
   border-radius: 40px;
   display: flex;
   justify-content: center;
