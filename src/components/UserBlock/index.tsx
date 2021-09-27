@@ -43,6 +43,8 @@ const ConnectButton = styled.div`
   padding: 0 24px;
   outline: none;
   white-space: nowrap;
+  position: relative;
+  z-index: 1;
   border: 1px solid ${({ theme }) => theme.colors.darkGrey};
   :hover{
     border: 1px solid ${({ theme }) => theme.colors.primary};

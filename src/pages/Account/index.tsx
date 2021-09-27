@@ -103,7 +103,7 @@ const AccountPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{minHeight: '80vh'}} width={isTablet ? '769px' : '1200px'}>
+      <Container style={{minHeight: '80vh'}} width={isTablet ? '768px' : '1200px'}>
         <RowBetween style={{marginTop: '40px', alignItems: 'center', marginBottom: '25px'}}>
           <Row>
             <LocalStyle.ProjectText style={{fontSize: '32px'}}>{t("My Account")}</LocalStyle.ProjectText>

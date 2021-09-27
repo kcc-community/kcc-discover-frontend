@@ -290,18 +290,18 @@ const HomePage: React.FunctionComponent = (props) => {
   const DiscoverReason = [
     {
       title: t('For Users'),
-      content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
+      content: t("User-explain"),
       logo: require('../../assets/images/home/user-1.png').default,
     },
     {
-      title: 'For Developer',
-      content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
+      title: t('For Developers'),
+      content: t('Develop-explain'),
       logo: require('../../assets/images/home/user-2.png').default,
     }
   ]
   return (
       <>
-        <Container width={isTablet ? '769px' : '1200px'}>
+        <Container width={isTablet ? '768px' : '1200px'}>
           <RowBetween style={{marginTop: '60px'}}>
             <Col>
               <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>

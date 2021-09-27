@@ -153,7 +153,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{ minHeight: '80vh' }} width={isTablet ? '769px' : '1200px'}>
+      <Container style={{ minHeight: '80vh' }} width={isTablet ? '768px' : '1200px'}>
         <RowBetween style={{ marginTop: '40px', alignItems: 'flex-start' }}>
           <LocalStyle.ProjectMenu>
             <LocalStyle.ProjectText ml="21px" mb="17px">{t("Categories")}</LocalStyle.ProjectText>

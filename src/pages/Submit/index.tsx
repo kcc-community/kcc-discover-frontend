@@ -71,7 +71,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const history = useHistory();
   const name = getUrlParam('name')
   const [fileList, setFile] = useState([])
-  const [minMargin, setMinMargin] = useState(100)
+  const [minMargin, setMinMargin] = useState(10)
   const [editSymbol, setEditSymbol] = useState(true)
   const chainError = useChainError();
   const [state, setState] = useState('')
