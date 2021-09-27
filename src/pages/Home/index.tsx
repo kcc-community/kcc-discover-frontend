@@ -36,6 +36,7 @@ interface PriceProps {
   addressCount: string
   avgGasPrice: string 
   txCount: number | string 
+  txCount24H: number | string 
   priceUsd: string
 }
 
@@ -338,7 +339,7 @@ const HomePage: React.FunctionComponent = (props) => {
           <RowBetween style={{marginTop: '116px'}}>
               {InfoData('Avg Gas Fee', new BN(priceInfo.avgGasPrice).div(10 ** 18).times(priceInfo.priceUsd).toNumber(), 0)}
               {InfoData('Total Address', new BN(priceInfo.addressCount).toNumber(), 1)}
-              {InfoData('24H Txn', priceInfo.txCount as number, 2)}
+              {InfoData('24H Txn', priceInfo.txCount24H as number, 2)}
           </RowBetween>
           <>
             <FadeInUp>
