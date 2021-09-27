@@ -95,7 +95,7 @@
   "scripts": {
     "start": "craco start",
     "start-main": "env-cmd -f ./.env.production craco start",
-    "build": "craco craco build",
+    "build": "env-cmd -f ./.env.production craco build",
     "build-testnet": "env-cmd -f ./.env.testnet.production  craco build",
     "build-preview": "env-cmd -f ./.env.preview.production  craco build",
     "test": "react-scripts test --env=jsdom",
