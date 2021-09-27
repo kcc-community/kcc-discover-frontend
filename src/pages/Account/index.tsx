@@ -21,6 +21,7 @@ import Footer from '../../components/Footer'
 import { useKCSPrice } from '../../state/wallet/hooks'
 import { Img } from 'react-image'
 import { useProjectLoading, useTransactionLoading, useTransactionInfo, useProjectInfo } from '../../state/application/hooks'
+import { useResponsive } from 'utils/responsive'
 
 const AccountPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
@@ -38,6 +39,7 @@ const AccountPage: React.FunctionComponent = (props) => {
   const transactionLoading = useTransactionLoading();
   const projectInfo = useProjectInfo();
   const transactionInfo = useTransactionInfo();
+  const { isTablet } = useResponsive()
 
   const hasProject = projectInfo.state === 'None' ? false : true
   const totalValueKcs = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4) as string).toFixed(2, 1) : '0.00'
@@ -68,7 +70,7 @@ const AccountPage: React.FunctionComponent = (props) => {
       )
     }
     return(
-      <LocalStyle.AccountCard key={type} style={{width: isBalance ? '584px' : '596px'}}>
+      <LocalStyle.AccountCard key={type} style={{width: isBalance ? '584px' : '596px', marginBottom: isTablet ? '20px': '0'}}>
         {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2, 1).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2, 1).toString() }`) : '--')}
         <RowBetween>
           {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', '35px')}
@@ -101,7 +103,7 @@ const AccountPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{minHeight: '80vh'}}>
+      <Container style={{minHeight: '80vh'}} width={isTablet ? '769px' : '1200px'}>
         <RowBetween style={{marginTop: '40px', alignItems: 'center', marginBottom: '25px'}}>
           <Row>
             <LocalStyle.ProjectText style={{fontSize: '32px'}}>{t("My Account")}</LocalStyle.ProjectText>
@@ -202,7 +204,7 @@ const AccountPage: React.FunctionComponent = (props) => {
               }
             </LocalStyle.AccountCard>   
           </Col>
-          <LocalStyle.AccountCard width="793px" height="597px">
+          <LocalStyle.AccountCard width="793px" height="597px" style={{marginTop: isTablet ? '20px': '0'}}>
             {renderTitle('My Review')}
             <LocalStyle.AccountReviewContent>
               {

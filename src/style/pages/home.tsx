@@ -105,6 +105,7 @@ export const CateItem = styled(cardTransparent)`
   cursor: pointer;
   position: relative;
   top: 0;
+  margin-right: 36px;
   transition: top .2s linear;
   // :hover{
   //   top: -10px;

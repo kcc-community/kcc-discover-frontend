@@ -90,7 +90,7 @@ const Menu: React.FunctionComponent = (props) => {
     if(chainId || ethereum){
       let netID = ethereum?.networkVersion || ''
       console.log('chainId =', chainId, netID )
-      if(chainId === Number(process.env.REACT_APP_CHAIN_ID) || (Number(netID) === Number(process.env.REACT_APP_CHAIN_ID))){
+      if(chainId === Number(process.env.REACT_APP_CHAIN_ID) || (Number(netID) === Number(process.env.REACT_APP_CHAIN_ID)) || (Number(netID) === 1)){
         dispatch(updateChainError({chainError: ''}))
       } else {
         dispatch(updateChainError({chainError: 'Unsupported Network'}))

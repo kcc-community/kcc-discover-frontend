@@ -17,8 +17,12 @@ interface ChartProps {
     key: string;
     option: object | null;
     style: {
-        width: string;
-        height: string;
+        width?: string;
+        height?: string;
+        maxWidth?: string;
+        maxHeight?: string;
+        minWidth?: string;
+        minHeight?: string;
     };
     className?: string;
 

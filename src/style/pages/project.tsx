@@ -69,6 +69,7 @@ export const ProjectInputWrapper = styled(Row)`
   border-radius: 8px;
   border: 1px solid #00142A1F;
   padding: 8px;
+  flex-wrap: nowrap;
 `
 
 export const ProjectImgSearch = styled.img`

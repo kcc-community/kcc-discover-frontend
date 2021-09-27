@@ -13,7 +13,8 @@ import Row, { RowBetween, AutoRow } from 'components/Row'
 import Col from '../../components/Column'
 import Footer from '../../components/Footer'
 import CountUp from 'react-countup'
-import { FadeInUp } from '../../utils/animation'
+import { FadeInUp } from 'utils/animation'
+import { useResponsive } from 'utils/responsive'
 import { right, iconLeft, iconRight, websiteWhite, bannerDef, logoDef } from '../../constants/imgs'
 import { ApiService, useLoading } from '../../api'
 import { Img } from 'react-image'
@@ -55,6 +56,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   let [chart1Data, setChart1Data] = React.useState(null);
+  const { isTablet } = useResponsive();
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
@@ -147,7 +149,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'center', fontWeight: 'bold', marginRight: '5px'}}>{index + 1}th</LocalStyle.SecondText>
           }
         </LocalStyle.RankImg>
-        <RowBetween>
+        <RowBetween style={{flexWrap: 'nowrap'}}>
           <Row>
             <VisibilitySensor onChange={() => setShowTop(true)}>
               <Img 
@@ -171,7 +173,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const InfoData = (title: string, num: number, key: number) => {
     return (
       <FadeInUp delay={key * 100}>
-        <LocalStyle.InfoCard>
+        <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0'}}>
           <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
@@ -192,7 +194,7 @@ const HomePage: React.FunctionComponent = (props) => {
     const sub = {fontSize: '14px', lineHeight: '30px', color: theme.colors.secondary, textAlign: 'center' as const}
     return (
       <FadeInUp delay={index * 100} key={index}>
-        <LocalStyle.UserCard key={index} style={{marginRight: index ? '0' : '80px'}}>
+        <LocalStyle.UserCard key={index} style={isTablet ? {marginRight: 0} : {marginRight: index ? '0' : '80px'}}>
           <LocalStyle.UserLogo src={item?.logo}/>
           <div style={title}>{item.title}</div>
           <LocalStyle.UserLine id="discover-line"/>
@@ -299,7 +301,7 @@ const HomePage: React.FunctionComponent = (props) => {
   ]
   return (
       <>
-        <Container>
+        <Container width={isTablet ? '769px' : '1200px'}>
           <RowBetween style={{marginTop: '60px'}}>
             <Col>
               <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
@@ -323,10 +325,10 @@ const HomePage: React.FunctionComponent = (props) => {
                 className="chart1"
                 option={chart1Data}
                 onRender={(e): void => chart1 = e}
-                style={{width: "807px", height: "279px"}}/>
+                style={{width: "807px", height: "279px", minWidth: '500px', minHeight: '173'}}/>
             </Col>
             <FadeInUp>
-              <LocalStyle.RankCard>
+              <LocalStyle.RankCard style={{marginTop: isTablet ? '20px': '0'}}>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>
                 {!showTop ? <Skeleton paragraph={{ rows: 5 }} /> : null}
                 {topDapps.length ? topDapps.map((item, index) => {if(index < 5) {return DappItem(item, index)} return null }) : null}
@@ -384,15 +386,15 @@ const HomePage: React.FunctionComponent = (props) => {
             <FadeInUp>
               <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
-            <RowBetween style={{position: 'relative'}}>
+            <Row style={{position: 'relative'}}>
               { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
-                <LocalStyle.CateItem onClick={() => history.push('/project')}>
+                <LocalStyle.CateItem style={{marginRight: 0}} onClick={() => history.push('/project')}>
                   {Categories['Others']}
                   <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
                 </LocalStyle.CateItem>
               </FadeInUp>
-            </RowBetween>
+            </Row>
           </>
         </Container>
         <Footer transparent={true}/>

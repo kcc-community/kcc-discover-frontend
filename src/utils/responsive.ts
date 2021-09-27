@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 export function useResponsive() {
-  const MobileWidth = 1200
+  const MobileWidth = 768
   const TabletWidth = 1200
   const [isMobile, setIsModile] = React.useState(false)
   const [isTablet, setIsTablet] = React.useState(false)

@@ -12,6 +12,7 @@ import { Skeleton } from 'antd'
 import * as LocalStyle from '../../style/pages'
 import { useHistory } from 'react-router-dom'
 import { getUrlParam } from '../../utils'
+import { useResponsive } from 'utils/responsive'
 import { useCategorySubtle, useCategoryPrimary, useCategoryLoading } from '../../state/application/hooks'
 import Footer from '../../components/Footer'
 import { Img } from 'react-image'
@@ -45,6 +46,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
   const history = useHistory()
   const urlSec = getUrlParam('sec');
   const filterFirstUpdate = useRef(true)
+  const { isTablet } = useResponsive()
 
   useEffect(() => {
     if(subList.length){
@@ -151,7 +153,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{ minHeight: '80vh' }}>
+      <Container style={{ minHeight: '80vh' }} width={isTablet ? '769px' : '1200px'}>
         <RowBetween style={{ marginTop: '40px', alignItems: 'flex-start' }}>
           <LocalStyle.ProjectMenu>
             <LocalStyle.ProjectText ml="21px" mb="17px">{t("Categories")}</LocalStyle.ProjectText>
