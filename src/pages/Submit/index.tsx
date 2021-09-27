@@ -3,8 +3,9 @@ import styled, { useTheme } from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'react-i18next'
 import { ApiService, useLoading } from '../../api'
+import { ETHER } from 'mojito-sdk'
 import { Container, Text } from '../../style'
-import { camera } from '../../constants/imgs'
+import { camera, Ipfs } from '../../constants/imgs'
 import Row from 'components/Row'
 import Col from 'components/Column'
 import BN from 'bignumber.js'
@@ -16,15 +17,16 @@ import Footer from '../../components/Footer'
 import SuccessModal from '../../components/SuccessModal'
 import { useCommit, getMinMarginAmount, useUpdateCommit } from '../../hooks/useDiscoverContract'
 import InputItem from 'components/InputItem'
-import { switchNetwork } from '../../utils/wallet'
+import StringCrypto from 'string-crypto';
 import { useCategoryPrimary, useCategorySubtle } from '../../state/application/hooks'
-import { useChainError } from 'state/wallet/hooks'
+import { useChainError, useCurrencyBalances } from 'state/wallet/hooks'
 import { updateChainError } from '../../state/wallet/actions'
 import { useDispatch } from 'react-redux'
 import { NFTStorage, File } from 'nft.storage'
-const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDVlOTc4MjdCZWREY0FGYTAyMWQ2NjRiMjE5QWE2MTM3MkY1MDBmZTIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMTg4NzM3MjUxMywibmFtZSI6ImRpc2NvdmVyIn0.G7Cl_zC4ADBEaDW-epPpon4vSC8XhWocETL-NX-7w8Q'
-const client = new NFTStorage({ token: apiKey })
-const { create } = require('ipfs-http-client')
+import { isAddress } from 'ethers/lib/utils'
+
+const { decryptString, } = new StringCrypto();
+const client = new NFTStorage({ token: decryptString(Ipfs, 'KCC_DISCOVER') })
 const { Option } = Select;
 
 interface SubmitProps {
@@ -55,16 +57,12 @@ const RequiredPoint = styled.div`
   font-size: 14px;
 `
 
-const ImgDown = styled.img`
-  width: 20px;
-  height: 20px;
-`
-
 //todo: reset margin limit
 const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
+  const balance = useCurrencyBalances(account ?? undefined, [ETHER])
   const dispatch = useDispatch()
   const [detailLoading, getInfo] = useLoading(ApiService.getAccountProject)
   const primaryList = useCategoryPrimary()
@@ -73,9 +71,10 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const history = useHistory();
   const name = getUrlParam('name')
   const [fileList, setFile] = useState([])
-  const [minMargin, setMinMargin] = useState(100)
+  const [minMargin, setMinMargin] = useState(10)
   const [editSymbol, setEditSymbol] = useState(true)
   const chainError = useChainError();
+  const [state, setState] = useState('')
 
   const [title, setTitle] = useState('')
   const [shortIntroduction, setIntro] = useState('')
@@ -87,7 +86,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const [email, setEmail] = useState('')
   const [marginAmount, setMargin] = useState('')
   const [banner, setBanner] = useState('')
-
 
   const [tokenSymbol, setTokenSymbol] = useState('')
   const [detailDescription, setDes] = useState('')
@@ -103,7 +101,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
   const checkContractAddress = ['Wallet', 'Community', 'Others'].includes(secondaryCategoryIndex ?? '') ? false : true
-
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
       dispatch(updateChainError({chainError: 'Unsupported Network'}))
@@ -120,6 +117,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
       message.destroy();
       if(name){
         //when project is edited, data can not be changed
+        setState(res[0].state)
         setTitle(res[0].info.title)
         setContract(res[0].info.contract)
         res[0].info.tokenSymbol && setTokenSymbol(res[0].info.tokenSymbol) && setEditSymbol(false)
@@ -147,6 +145,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
 
   const onConfirm = () => {
     if(!account || !chainId) { message.error(t('Please connect your wallet')); return; };
+    if(balance[0] && (new BN(marginAmount)).isGreaterThan(new BN(balance[0]?.toSignificant(18)))) { message.error(t('Your KCS balance is insufficient')); return; }
+    if(state && state !== 'None' && state !== 'Refused') { message.error(t('One address only can submit one project')); return; }
+    
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
       email, marginAmount, contractAddresses, 
@@ -179,7 +180,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(coinmarketcapLink) {params.coinmarketcapLink = coinmarketcapLink};
     if(coingeckoLink) {params.coingeckoLink = coingeckoLink};
     console.log('params =', params);
-    if(name) {
+    if(name && state === 'Displaying') {
       // edit project 
       params.projectAddress = account;
       const { updateCallback } = useUpdateCommit(params, library);
@@ -190,16 +191,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
           setModal(true);
         }
       }).catch(e => {
-
-        let error = e?.toString().split('code":')[1]?.split(',')
-        if(error && error[0] === '-32000'){
-          message.error(t('Insufficient balance'))
-        } else if(error && error[0] === '-32603'){
-          message.error(t('Only one submission is allowed for an account'))
-        } else {
-          message.error(t('Contract call error'))
-        }
-        })
+        message.error(t('Contract call error'))
+      })
     } else{
       const { commitCallback } = useCommit(params, library);
       commitCallback().then((res: any) => {
@@ -210,9 +203,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
       }).catch(e => {
         let error = e?.toString().split('code":')[1]?.split(',')
         if(error && error[0] === '-32000'){
-          message.error(t('Insufficient balance'))
+          message.error(t('Your KCS balance is insufficient'))
         } else if(error && error[0] === '-32603'){
-          message.error(t('Only one submission is allowed for an account'))
+          message.error(t('One address only can submit one project'))
         } else {
           message.error(t('Contract call error'))
         }
@@ -433,6 +426,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             value={contractAddresses}
             placeholder={t('Enter your Smart Contract Address')}
             onChange={e => {setContract(splitSpace(e.target.value))}}
+            error={contractAddresses && !isAddress(contractAddresses) ? 'Error contract address' : ''}
           />
           <InputItem 
             title={name ? t('The amount of KCS margin call') : t('Amount of KCS margin')}
@@ -524,7 +518,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
           <Button 
             style={{width: '100px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
-            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || (!contractAddresses && checkContractAddress) 
+            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
             || !checkEmail || (!checkMargin && !name) || chainError}
             type="primary"
             onClick={() => onConfirm()}>{t("Submit")}</Button>

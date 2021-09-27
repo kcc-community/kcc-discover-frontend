@@ -13,7 +13,8 @@ import Row, { RowBetween, AutoRow } from 'components/Row'
 import Col from '../../components/Column'
 import Footer from '../../components/Footer'
 import CountUp from 'react-countup'
-import { FadeInUp } from '../../utils/animation'
+import { FadeInUp } from 'utils/animation'
+import { useResponsive } from 'utils/responsive'
 import { right, iconLeft, iconRight, websiteWhite, bannerDef, logoDef } from '../../constants/imgs'
 import { ApiService, useLoading } from '../../api'
 import { Img } from 'react-image'
@@ -38,12 +39,6 @@ interface PriceProps {
   priceUsd: string
 }
 
-interface SliderProps {
-  banner: string
-  title: string 
-  name: string
-}
-
 const Categories = {
   Exchange: <ExchangeIcon height="60px" width="60px" />,
   Lending: <LaunchpadIcon height="60px" width="60px" />,
@@ -61,13 +56,12 @@ const HomePage: React.FunctionComponent = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   let [chart1Data, setChart1Data] = React.useState(null);
+  const { isTablet } = useResponsive();
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
-  const [priceLoading, getPriceInfo] = useLoading(ApiService.getHomePriceInfo);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([]);
   const [showTop, setShowTop] = useState(false)
-  const [sliderPics, setSlider] = useState<Array<SliderProps>>([])
   const [sliderDom, setSliderDom] = useState([{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},])
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
@@ -76,6 +70,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const categorySubtle = useCategorySubtle();
   //@ts-ignore
   const sliderRef = useRef<ResponsiveContainer>();
+  const mountedRef = useRef(true);
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -85,6 +80,7 @@ const HomePage: React.FunctionComponent = (props) => {
       let opts: null;
       opts = JSON.parse(JSON.stringify(ChartData));
       getChart().then((res: any) => {
+        if(!mountedRef.current) return null;
         let xAxisData = [], seriesData = [], max = 0;
         if(res.length) setChartData(res)
         if(res[res.length - 1] && res[res.length - 2]){
@@ -104,22 +100,23 @@ const HomePage: React.FunctionComponent = (props) => {
         //@ts-ignore
         opts.series[0].data = seriesData;
         setChart1Data(opts);
+        return
       })
   }
   
 
-  React.useEffect((): void => {
-      console.log("chart1", chart1);
-      Promise.all([
-        getTopDapp(),
-        getSliderInfo()
-      ]).then((res: any) => {
-        setTopDapp(res[0].list)
-        //deal slider info
-        let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
-        setSlider(slider as any)
-        let dom = [] as any
-        for(let i in slider){
+  React.useEffect(() => {
+    Promise.all([
+      getTopDapp(),
+      getSliderInfo()
+    ]).then((res: any) => {
+      if(!mountedRef.current) return null;
+      setTopDapp(res[0].list)
+      //deal slider info
+      let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
+      let dom = [] as any
+      for(let i in slider){
+        if(slider[i]){
           dom.push(
             {
               title: slider[i].title,
@@ -128,9 +125,17 @@ const HomePage: React.FunctionComponent = (props) => {
             }
           )
         }
+      }
+      if(dom.length){
         setSliderDom(dom)
-      })
-      updateChart();
+      }
+      return
+    })
+    updateChart();
+    return () => {
+      mountedRef.current = false;
+      sliderRef.current = null;
+    }
   }, [chart1]);
 
   const DappItem = (data: any, index: number) => {
@@ -144,7 +149,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'center', fontWeight: 'bold', marginRight: '5px'}}>{index + 1}th</LocalStyle.SecondText>
           }
         </LocalStyle.RankImg>
-        <RowBetween>
+        <RowBetween style={{flexWrap: 'nowrap'}}>
           <Row>
             <VisibilitySensor onChange={() => setShowTop(true)}>
               <Img 
@@ -168,7 +173,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const InfoData = (title: string, num: number, key: number) => {
     return (
       <FadeInUp delay={key * 100}>
-        <LocalStyle.InfoCard>
+        <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0'}}>
           <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
@@ -188,8 +193,8 @@ const HomePage: React.FunctionComponent = (props) => {
     const title = {fontSize: '24px', fontWeight: 700}
     const sub = {fontSize: '14px', lineHeight: '30px', color: theme.colors.secondary, textAlign: 'center' as const}
     return (
-      <FadeInUp delay={index * 100}>
-        <LocalStyle.UserCard key={index} style={{marginRight: index ? '0' : '80px'}}>
+      <FadeInUp delay={index * 100} key={index}>
+        <LocalStyle.UserCard key={index} style={isTablet ? {marginRight: 0} : {marginRight: index ? '0' : '80px'}}>
           <LocalStyle.UserLogo src={item?.logo}/>
           <div style={title}>{item.title}</div>
           <LocalStyle.UserLine id="discover-line"/>
@@ -229,21 +234,19 @@ const HomePage: React.FunctionComponent = (props) => {
     function (props: StackedCarouselSlideProps) {
         const { data, dataIndex, swipeTo, slideIndex, isCenterSlide } = props;
         const { cover, title, name } = data[dataIndex];
-        // console.log('dataIndex =', dataIndex, 'slideIndex =', slideIndex, active)
         return (
             <LocalStyle.SliderWrapper 
               onClick={() => {
                 if(isCenterSlide){
                   history.push(`/project_detail?name=${name}`)
                 } else {
-                  console.log('slideIndex =', slideIndex)
                   swipeTo(slideIndex)
                 }
               }} 
               className="homeBanner">
               <Img 
                 decode={true}
-                style={{width: '880px !important', height: '400px'}}
+                style={{width: '880px !important', height: '400px', borderRadius: '8px'}}
                 loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 src={[cover as string]}/>
@@ -270,15 +273,11 @@ const HomePage: React.FunctionComponent = (props) => {
   );
 
   const sliderMove = (index: number) => {
-    let targetArr = [1, 2, -1, -2];
-    targetArr = resetSliderArr(targetArr, active)
-    if(active - 1 >= 0){
-      targetArr.splice(active - 1, 0, 1);
-    } else {
-      targetArr.unshift(1)
-    }
+    let targetArr = [1, 2, -2, -1];
+    targetArr = resetSliderArr(targetArr, active) 
+    targetArr.splice(active, 0, 99);
     sliderRef.current.swipeTo(targetArr[index])
-    setActive(index)
+    // setActive(index)
   }
 
   const resetSliderArr = (arr: any, n) => {
@@ -291,19 +290,18 @@ const HomePage: React.FunctionComponent = (props) => {
   const DiscoverReason = [
     {
       title: t('For Users'),
-      content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
+      content: t("User-explain"),
       logo: require('../../assets/images/home/user-1.png').default,
     },
     {
-      title: 'For Developer',
-      content: 'People can easily access all kinds of heterogeneous and autonomous information resource through Internet. ',
+      title: t('For Developers'),
+      content: t('Develop-explain'),
       logo: require('../../assets/images/home/user-2.png').default,
     }
   ]
-  
   return (
       <>
-        <Container>
+        <Container width={isTablet ? '768px' : '1200px'}>
           <RowBetween style={{marginTop: '60px'}}>
             <Col>
               <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
@@ -327,10 +325,10 @@ const HomePage: React.FunctionComponent = (props) => {
                 className="chart1"
                 option={chart1Data}
                 onRender={(e): void => chart1 = e}
-                style={{width: "807px", height: "279px"}}/>
+                style={{width: "807px", height: "279px", minWidth: '500px', minHeight: '173'}}/>
             </Col>
             <FadeInUp>
-              <LocalStyle.RankCard>
+              <LocalStyle.RankCard style={{marginTop: isTablet ? '20px': '0'}}>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>
                 {!showTop ? <Skeleton paragraph={{ rows: 5 }} /> : null}
                 {topDapps.length ? topDapps.map((item, index) => {if(index < 5) {return DappItem(item, index)} return null }) : null}
@@ -357,7 +355,7 @@ const HomePage: React.FunctionComponent = (props) => {
                   slideComponent={Slide}
                   maxVisibleSlide={sliderDom.length === 5 ? 5 : 1}
                   customTransition={'all 1000ms ease 0s'}
-                  onActiveSlideChange={v => { console.log('v =', v);setActive(v) }}
+                  onActiveSlideChange={v => { setActive(v) }}
                   useGrabCursor={true}
                 />
                 <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>
@@ -367,9 +365,9 @@ const HomePage: React.FunctionComponent = (props) => {
                   {
                     sliderDom.map((item, index) => {
                       if(index === active){
-                        return <LocalStyle.SliderPointSec/>
+                        return <LocalStyle.SliderPointSec key={index}/>
                       }
-                      return <LocalStyle.SliderPointNormal  onClick={() => sliderMove(index)}/>
+                      return <LocalStyle.SliderPointNormal key={index} onClick={() => sliderMove(index)}/>
                     })
                   }
                 </Row>
@@ -388,15 +386,15 @@ const HomePage: React.FunctionComponent = (props) => {
             <FadeInUp>
               <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
-            <RowBetween style={{position: 'relative'}}>
+            <Row style={{position: 'relative'}}>
               { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
-                <LocalStyle.CateItem onClick={() => history.push('/project')}>
+                <LocalStyle.CateItem style={{marginRight: 0}} onClick={() => history.push('/project')}>
                   {Categories['Others']}
                   <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
                 </LocalStyle.CateItem>
               </FadeInUp>
-            </RowBetween>
+            </Row>
           </>
         </Container>
         <Footer transparent={true}/>

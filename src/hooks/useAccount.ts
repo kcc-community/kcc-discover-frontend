@@ -37,11 +37,11 @@ export function useAccountInfo(account?: string | undefined | null, chainId?: nu
   useEffect(() => {
     if (filterFirstUpdate.current) { filterFirstUpdate.current = false; return; }
     if(account) getAccountInfo(true);
-    // const timer = setInterval(() => {
-    //   if(account) getAccountInfo(false);
-    // }, 45000)
+    const timer = setInterval(() => {
+      if(account) getAccountInfo(false);
+    }, 60000)
     return(() => {
-      // clearInterval(timer);
+      clearInterval(timer);
     })
   }, [account, chainId])
 

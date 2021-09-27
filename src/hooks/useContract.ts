@@ -1,5 +1,5 @@
 import { Contract } from '@ethersproject/contracts'
-import { ChainId, WETH } from 'mojito-testnet-sdk'
+import { ChainId, WETH } from 'mojito-sdk'
 import { useMemo } from 'react'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
 import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'

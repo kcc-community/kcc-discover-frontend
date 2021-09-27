@@ -1,4 +1,4 @@
-import { TokenAmount, ChainId, JSBI } from 'mojito-testnet-sdk'
+import { TokenAmount, ChainId, JSBI } from 'mojito-sdk'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from './index'
@@ -11,7 +11,6 @@ import { Contract } from 'ethers'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import discoverAbi from '../constants/abis/discover.json'
 import addresses from '../constants/contract'
-import { message } from 'antd';
 
 export const getAddress = (address: any): string => {
   const mainNetChainId = 321
@@ -50,6 +49,7 @@ export function useComment(data: any , library?: any): {
           return response.hash
         })
     }).catch(e => {
+      console.log('e =', e)
       throw Error(e)
     })
   }

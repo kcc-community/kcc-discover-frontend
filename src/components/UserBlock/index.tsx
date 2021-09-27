@@ -4,7 +4,7 @@ import { ConnectorNames } from '../../constants/wallet'
 import ConnectModal from './ConnectModal'
 import AccountModal from './AccountModal'
 import { Text } from '../../style'
-import { ETHER } from 'mojito-testnet-sdk'
+import { ETHER } from 'mojito-sdk'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { Dropdown, Menu, message } from 'antd'
@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useChainError } from '../../state/wallet/hooks'
 import { switchNetwork } from '../../utils/wallet'
 import useAccountInfo from '../../hooks/useAccount'
+import BN from 'bignumber.js'
 
 export type Login = (connectorId: ConnectorNames) => void
 
@@ -42,6 +43,8 @@ const ConnectButton = styled.div`
   padding: 0 24px;
   outline: none;
   white-space: nowrap;
+  position: relative;
+  z-index: 1;
   border: 1px solid ${({ theme }) => theme.colors.darkGrey};
   :hover{
     border: 1px solid ${({ theme }) => theme.colors.primary};
@@ -160,7 +163,7 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
             <LinkImg src={require('../../assets/images/Icons/logo.png').default}/>
             <Text color={theme.colors.primary} fontSize={'14px'}>{accountEllipsis}</Text>
             <LinkButtonLine />
-            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0]?.toSignificant(2) ?? 0} KCS</Text>
+            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0] ? new BN(balance[0]?.toSignificant(18)).toFixed(2, 1) : 0} KCS</Text>
           </ConnectButton>
         </Dropdown>
       ) : (

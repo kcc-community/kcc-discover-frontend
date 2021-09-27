@@ -15,6 +15,7 @@ import { getUrlParam } from '../../utils'
 import * as LocalStyle from '../../style/pages'
 import { useHistory } from 'react-router-dom'
 import Footer from '../../components/Footer'
+import { useResponsive } from 'utils/responsive'
 import CommentModal from '../../components/CommentModal'
 import { useComment } from '../../hooks/useDiscoverContract'
 import { Img } from 'react-image'
@@ -24,11 +25,13 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
+  const { isTablet } = useResponsive()
   const [detail, setDetail] = useState<{
     title: string
     intro: string
     margin: string | number
     contract: string
+    owner: string
     detail?: string
     rank?: string | number
     score?: string | number
@@ -46,6 +49,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     title: '-',
     intro: '-',
     margin: '0.00',
+    owner: '',
     contract: '',
     score: 0,
     rankPrimary: 999,
@@ -124,7 +128,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       title: data.title,
       review: data.content ?? '',
       score: data.rate,
-      projectAddress: detail.contract
+      projectAddress: detail.owner
     }
     if(!account || !chainId) {
       message.error(t('Wallet not connected'))
@@ -170,7 +174,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   }
   return (
     <>
-      <Container style={{minHeight: '80vh'}}>
+      <Container style={{minHeight: '80vh'}} width={isTablet ? '768px' : '1200px'}>
         <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
           <Col style={{width: '800px'}}>
             <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto', height: 'auto', marginBottom: '0'}}>
@@ -209,7 +213,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
               </Col>
             </LocalStyle.ProjectDappWrapper>
           </Col>
-          <LocalStyle.ProjectRate>
+          <LocalStyle.ProjectRate style={{marginTop: isTablet ? '40px': '0'}}>
             <Col style={{width: '49%', alignItems: 'center'}}>
               <LocalStyle.ProjectText style={{fontSize: '40px'}}>{Number(detail.score)}</LocalStyle.ProjectText>
               <Rate allowHalf disabled value={Number(detail.score)} />
