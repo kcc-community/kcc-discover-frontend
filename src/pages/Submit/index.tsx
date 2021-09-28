@@ -137,16 +137,18 @@ const SubmitPage: React.FunctionComponent = (props) => {
         res[0].info.github && setGithub(res[0].info.github)
         res[0].info.coinMarketCap && setCoinMarket(res[0].info.coinMarketCap)
         res[0].info.coinGecko && setCoinGecko(res[0].info.coinGecko)
+        setMargin('0')
+      } else {
+        setMargin(res[1])
       }
       setMinMargin(Number(res[1]))
-      setMargin(res[1])
     })
   }, [name, chainId])
 
   const onConfirm = () => {
     if(!account || !chainId) { message.error(t('Please connect your wallet')); return; };
     if(balance[0] && (new BN(marginAmount)).isGreaterThan(new BN(balance[0]?.toSignificant(18)))) { message.error(t('Your KCS balance is insufficient')); return; }
-    if(state && state !== 'None' && state !== 'Refused') { message.error(t('One address only can submit one project')); return; }
+    if(state && state !== 'None' && state !== 'Refused' && !name) { message.error(t('One address only can submit one project')); return; }
     
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
