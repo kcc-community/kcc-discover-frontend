@@ -137,6 +137,7 @@ export const SliderBottom = styled(RowBetween)`
   height: 60px;
   background: #00000099;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   padding: 0 25px;
 `
