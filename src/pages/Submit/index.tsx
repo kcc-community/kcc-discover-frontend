@@ -475,6 +475,13 @@ const SubmitPage: React.FunctionComponent = (props) => {
             onChange={e => {setTvl(e.target.value.trim())}}
           />
           <InputItem 
+            title={t('Github')}
+            required={false}
+            value={githubLink}
+            placeholder={t('Enter your Github')}
+            onChange={e => {setGithub(e.target.value.trim())}}
+          />
+          <InputItem 
             title={t('Website')}
             required={true}
             value={websiteLink}
@@ -494,13 +501,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
             value={telegramLink}
             placeholder={t('Enter your Telegram')}
             onChange={e => {setTelegram(e.target.value.trim())}}
-          />
-          <InputItem 
-            title={t('Github')}
-            required={false}
-            value={githubLink}
-            placeholder={t('Enter your Github')}
-            onChange={e => {setGithub(e.target.value.trim())}}
           />
           <InputItem 
             title={t('Coin Market Cap')}
