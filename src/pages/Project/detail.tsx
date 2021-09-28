@@ -117,7 +117,6 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   useEffect(() => {
     if(detail.detail){
       const height = $('#projectDetail').height() ?? 0
-      console.log('?????????', height)
       if(height >= 48){
         setShow(true)
       }
