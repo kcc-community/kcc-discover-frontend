@@ -117,11 +117,12 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   useEffect(() => {
     if(detail.detail){
       const height = $('#projectDetail').height() ?? 0
-      if(height > 48){
+      console.log('?????????', height)
+      if(height >= 48){
         setShow(true)
       }
     }
-  }, [detail])
+  }, [detail.detail])
 
   const confirmComment = (data) => {
     let params = {
