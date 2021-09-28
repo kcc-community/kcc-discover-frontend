@@ -102,8 +102,8 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
   if(props.type === 'mine'){
     return(
       <CommentWrapper key={props.id} style={{width: '720px'}}>
-        <RowBetween align="flex-start">
-          <Row align="flex-start">
+        <RowBetween align="flex-start" style={{flexWrap: 'nowrap'}}>
+          <Row align="flex-start" style={{flexWrap: 'nowrap'}}>
             <Img 
               style={{width: '40px', height: '40px', marginRight: '18px', borderRadius: '8px', marginTop: '5px'}}
               loader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
@@ -145,7 +145,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
         <Text fontWeight="bold" color={theme.colors.text} mr="20px">{props.title}</Text>
         <Rate allowHalf disabled value={props.score / 10} />
       </Row>
-      <Row style={{position: 'relative'}}>
+      <Row style={{position: 'relative', flexWrap: 'nowrap'}}>
         <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px', wordBreak: 'break-all'}}>
           {splitComment(props.content)}
         </Text>
