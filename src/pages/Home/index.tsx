@@ -91,8 +91,8 @@ const HomePage: React.FunctionComponent = (props) => {
           //@ts-ignore
           xAxisData.push(dayjs(res[i].date * 1000).format('YYYY-MM-DD'))
           //@ts-ignore
-          seriesData.push(new BN(res[i].dailyVolumeETH).toFixed(2, 1).toString())
-          max = Math.max(max, res[i].dailyVolumeETH)
+          seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
+          max = Math.max(max, res[i].totalLiquidityUSD)
         }
         //@ts-ignore
         opts.xAxis.data = xAxisData;
