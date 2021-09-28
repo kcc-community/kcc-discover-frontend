@@ -61,6 +61,8 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
     const { commentLikeCallback } = useCommentLike(params, library);
     commentLikeCallback().then(res => {
       console.log('comment action: ', res);
+    }).catch(e => {
+      message.error('Contract call error')
     })
   }
 

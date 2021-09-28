@@ -201,10 +201,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
           setModal(true);
         }
       }).catch(e => {
-        let error = e?.toString().split('code":')[1]?.split(',')
-        if(error && error[0] === '-32000'){
+        if(e && e.code === -32000){
           message.error(t('Your KCS balance is insufficient'))
-        } else if(error && error[0] === '-32603'){
+        } else if(e && e.code === -32603){
           message.error(t('One address only can submit one project'))
         } else {
           message.error(t('Contract call error'))

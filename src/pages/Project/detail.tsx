@@ -141,8 +141,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         message.success(t('Success'));
       }
     }).catch(e => {
-      let error = e?.toString().split('code":')[1]?.split(',')
-      if(error && error[0] === '-32603'){
+      if(e && e.code === -32603){
         message.error(t('You can only comment once per account'))
       } else {
         message.error(t('Contract call error'))
