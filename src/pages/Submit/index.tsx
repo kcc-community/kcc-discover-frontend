@@ -155,10 +155,10 @@ const SubmitPage: React.FunctionComponent = (props) => {
       websiteLink: checkHttps(websiteLink)
     }
     if(!logoLink.includes('https') && !logoLink.includes('ipfs')){
-      params.logoLink = process.env.REACT_APP_IPFS_IMG_URL + logoLink
+      params.logoLink = 'https://' + logoLink + process.env.REACT_APP_IPFS_IMG_URL
     }
     if(!banner.includes('https') && !logoLink.includes('ipfs')){
-      params.banner = process.env.REACT_APP_IPFS_IMG_URL + banner
+      params.banner = 'https://' + banner + process.env.REACT_APP_IPFS_IMG_URL
     }
     for(let item of primaryList){
       if(item.name === primaryCategoryIndex){
