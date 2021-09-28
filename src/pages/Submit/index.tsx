@@ -97,7 +97,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const [coinmarketcapLink, setCoinMarket] = useState('')
   const [coingeckoLink, setCoinGecko] = useState('')
 
-  const checkEmail = email && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(email) ? false : true
+  const checkEmail = email && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,6})+|\.([a-zA-Z]{2,6})$/.test(email) ? false : true
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
   const checkContractAddress = ['Wallet', 'Community', 'Others'].includes(secondaryCategoryIndex ?? '') ? false : true
