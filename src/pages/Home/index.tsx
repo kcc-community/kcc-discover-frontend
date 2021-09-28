@@ -64,7 +64,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const [topDapps, setTopDapp] = useState([]);
   const [showTop, setShowTop] = useState(false)
   const [sliderDom, setSliderDom] = useState([{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},])
-  const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
+  const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0', totalLiquidityUSD: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
   const priceInfo: PriceProps = usePriceInfo();
   const [active, setActive] = useState(0);
@@ -97,7 +97,7 @@ const HomePage: React.FunctionComponent = (props) => {
         //@ts-ignore
         opts.xAxis.data = xAxisData;
         //@ts-ignore
-        opts.yAxis.max = max + 500000;
+        opts.yAxis.max = max + parseInt(max / 3);
         //@ts-ignore
         opts.series[0].data = seriesData;
         setChart1Data(opts);
@@ -309,10 +309,10 @@ const HomePage: React.FunctionComponent = (props) => {
               <Row align="flex-end">
                 <LocalStyle.SecondText style={{fontSize: '48px', lineHeight: '48px', fontFamily: 'kccfont Number Normal'}}>$
                 {
-                  chartData[0].totalLiquidityETH ?
+                  chartData.length > 1 ?
                   <CountUp 
                     start={0} 
-                    end={Number(chartData[0].totalLiquidityETH)} 
+                    end={Number(chartData[chartData.length -1].totalLiquidityUSD)} 
                     decimals={2}
                     duration={1.5} 
                     separator=","/>
