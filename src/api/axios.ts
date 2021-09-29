@@ -115,9 +115,9 @@ service.interceptors.response.use(
     }
     // timeout
     if (__emsg?.indexOf('timeout') >= 0) {
-      __emsg = 'timeout'
+      __emsg = ''
     }
-    message.error(i18next.t(__emsg))
+    __emsg && message.error(i18next.t(__emsg))
     return Promise.reject(new Error(__emsg))
   }
 )
