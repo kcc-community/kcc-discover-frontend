@@ -104,8 +104,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const checkLink = (url: string) => {
     if(url.includes('/ipfs')){
       return url.split('ipfs/')[1]
-    } else if(url.includes('.dweb.link')){
-      return url.split('.dweb.link')[0].split('https://')[1];
+    } else if(url.includes('.ipfs.dweb.link')){
+      return url.split('.ipfs.dweb.link')[0].split('https://')[1];
     }
     return url
   }
