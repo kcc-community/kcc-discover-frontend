@@ -85,14 +85,14 @@ const HomePage: React.FunctionComponent = (props) => {
         let xAxisData = [], seriesData = [], max = 0;
         if(res.length) setChartData(res)
         if(res[res.length - 1] && res[res.length - 2]){
-          setDailyRate(new BN(res[res.length - 1].dailyVolumeETH).minus(res[res.length - 2].dailyVolumeETH).div(res[res.length - 2].dailyVolumeETH).multipliedBy(100).toFixed(2).toString())
+          setDailyRate(new BN(res[res.length - 1].totalLiquidityUSD).minus(res[res.length - 2].totalLiquidityUSD).div(res[res.length - 2].totalLiquidityUSD).multipliedBy(100).toFixed(2).toString())
         }
         for(let i = 0; i < res.length; i++){
           //@ts-ignore
           xAxisData.push(dayjs(res[i].date * 1000).format('YYYY-MM-DD'))
           //@ts-ignore
-          seriesData.push(new BN(res[i].dailyVolumeETH).toFixed(2, 1).toString())
-          max = Math.max(max, res[i].dailyVolumeETH)
+          seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
+          max = Math.max(max, res[i].totalLiquidityUSD)
         }
         //@ts-ignore
         opts.xAxis.data = xAxisData;
