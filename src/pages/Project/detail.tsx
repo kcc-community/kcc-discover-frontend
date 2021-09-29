@@ -199,9 +199,9 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
                   showTips ? 
                   <LocalStyle.ProjectDetailText>{detail.detail}</LocalStyle.ProjectDetailText>
                   :
-                  <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 160)}...</LocalStyle.ProjectTextSubTwo>
+                  <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 155)}{detail.detail && detail.detail.length > 155 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
                 }
-                {detail.detail && detail.detail.length > 160 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
+                {detail.detail && detail.detail.length > 155 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
                 </Row>
                 <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
                 <Row mt="10px">
