@@ -33,13 +33,13 @@ interface SubmitProps {
   title: string
   shortIntroduction: string
   logoLink: string
-  banner: string
   websiteLink: string
   contractAddresses: string
   email: string
   primaryCategoryIndex: string | number | undefined
   secondaryCategoryIndex: string | number | undefined
   marginAmount: string | number | undefined
+  banner?: string
   tokenSymbol?: string
   detailDescription?: string
   tokenContractAddress?: string
@@ -153,14 +153,16 @@ const SubmitPage: React.FunctionComponent = (props) => {
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
       email, marginAmount, contractAddresses, 
-      secondaryCategoryIndex, primaryCategoryIndex, banner,
+      secondaryCategoryIndex, primaryCategoryIndex,
       websiteLink: checkHttps(websiteLink)
     }
     if(!logoLink.includes('https') && !logoLink.includes('ipfs')){
       params.logoLink = 'https://' + logoLink + process.env.REACT_APP_IPFS_IMG_URL
     }
-    if(!banner.includes('https') && !logoLink.includes('ipfs')){
+    if(banner && !banner.includes('https') && !banner.includes('ipfs')){
       params.banner = 'https://' + banner + process.env.REACT_APP_IPFS_IMG_URL
+    } else if(banner){
+      params.banner = banner;
     }
     for(let item of primaryList){
       if(item.name === primaryCategoryIndex){
@@ -181,13 +183,11 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(githubLink) {params.githubLink = checkHttps(githubLink)};
     if(coinmarketcapLink) {params.coinmarketcapLink = coinmarketcapLink};
     if(coingeckoLink) {params.coingeckoLink = coingeckoLink};
-    console.log('params =', params);
     if(name && state === 'Displaying') {
       // edit project 
       params.projectAddress = account;
       const { updateCallback } = useUpdateCommit(params, library);
       updateCallback().then((res: any) => {
-        console.log('result =', res);
         if(res){
           console.log(res)
           setModal(true);
@@ -399,7 +399,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
           <div style={{height: '36px'}}/>
           <Row mb="8px">
             <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{t("Banner")}</Text>
-            <RequiredPoint>*</RequiredPoint>
+            {/* <RequiredPoint>*</RequiredPoint> */}
             <Text color={'#737E8D'} fontSize="14px" ml={'5px'}>{t("Image Size")}: 880*400 px</Text>
           </Row>
           <Upload

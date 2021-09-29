@@ -45,8 +45,8 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
   const { account, library, chainId } = useWeb3React()
   const [show, setShow] = useState(false)
   const splitComment = (content) => {
-    if(content.length > 210 && !show){
-      return content.substr(0, 210) + '...'
+    if(content.length > 160 && !show){
+      return content.substr(0, 160) + '...'
     }
     return content
   }
@@ -121,7 +121,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
                 <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px', wordBreak: 'break-all'}}>
                   {splitComment(props.content)}
                 </Text>
-                {props.content.length > 210 && <Text onClick={() => setShow(!show)} color={theme.colors.primary} fontWeight="bold" style={{position: 'absolute', bottom: 0, right: 0, cursor: 'pointer', lineHeight: '16px'}}>{show ? 'Fold' : 'Unfold'}</Text>}
+                {props.content.length > 160 && <Text onClick={() => setShow(!show)} color={theme.colors.primary} fontWeight="bold" style={{position: 'absolute', bottom: 0, right: 0, cursor: 'pointer', lineHeight: '16px'}}>{show ? 'Fold' : 'Unfold'}</Text>}
               </Row>
               <Row mt="15px">
                 {renderHand('good')}

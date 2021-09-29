@@ -69,7 +69,7 @@ const InputItem: React.FunctionComponent<InputItemProps> = (props) => {
           value={props.value ?? ''}
           onChange={props.onChange}
           disabled={props.disabled ?? false}
-          maxLength={props.maxLength ?? 4000}
+          maxLength={props.maxLength ?? 500}
         />
         :
         <Input 
