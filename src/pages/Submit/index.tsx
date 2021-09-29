@@ -104,8 +104,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const checkLink = (url: string) => {
     if(url.includes('/ipfs')){
       return url.split('ipfs/')[1]
-    } else if(url.includes('.dweb.link')){
-      return url.split('.dweb.link')[0].split('https://')[1];
+    } else if(url.includes('.ipfs.dweb.link')){
+      return url.split('.ipfs.dweb.link')[0].split('https://')[1];
     }
     return url
   }
@@ -167,6 +167,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(!logoLink.includes('https') && !logoLink.includes('ipfs')){
       params.logoLink = 'https://' + logoLink + process.env.REACT_APP_IPFS_IMG_URL
     }
+
     if(banner && !banner.includes('https') && !banner.includes('ipfs')){
       params.banner = 'https://' + banner + process.env.REACT_APP_IPFS_IMG_URL
     } else if(banner){

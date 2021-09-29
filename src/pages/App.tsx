@@ -12,6 +12,7 @@ import Project from './Project'
 import ProjectDetail from './Project/detail'
 import Submit from './Submit'
 import Account from './Account'
+import Checker from './Checker'
 
 import Menu from '../components/Menu'
 
@@ -52,6 +53,7 @@ export default function App() {
                   <Route exact path="/project_detail" component={ProjectDetail} />
                   <Route exact path="/submit" component={Submit} />
                   <Route exact path="/account" component={Account} />
+                  <Route exact path="/checker" component={Checker} />
                   <Route path="*" component={Home} />
                 </Switch>
               </Web3ReactManager>
