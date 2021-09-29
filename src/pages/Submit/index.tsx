@@ -101,6 +101,14 @@ const SubmitPage: React.FunctionComponent = (props) => {
   //@ts-ignore
   const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
   const checkContractAddress = ['Wallet', 'Community', 'Others'].includes(secondaryCategoryIndex ?? '') ? false : true
+  const checkLink = (url: string) => {
+    if(url.includes('/ipfs')){
+      return url.split('ipfs/')[1]
+    } else if(url.includes('.dweb.link')){
+      return url.split('.dweb.link')[0].split('https://')[1];
+    }
+    return url
+  }
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
       dispatch(updateChainError({chainError: 'Unsupported Network'}))
@@ -125,10 +133,10 @@ const SubmitPage: React.FunctionComponent = (props) => {
         setPrimary(res[0].info.priCategory.name)
         setSecondary(res[0].info.secCategory.name)
         setIntro(res[0].info.intro)
-        setLogo(res[0].info.logo.includes('ipfs/') ? res[0].info.logo.split('ipfs/')[1] : res[0].info.logo)
-        setBanner(res[0].info.banner.includes('ipfs/') ? res[0].info.banner.split('ipfs/')[1] : res[0].info.banner)
+        setLogo(checkLink(res[0].info.logo))
         setWebsite(res[0].info.website)
         setEmail(res[0].info.contact)
+        res[0].info.banner && setBanner(checkLink(res[0].info.banner))
         res[0].info.detail && setDes(res[0].info.detail)
         res[0].info.tokenContract && setTokenContract(res[0].info.tokenContract)
         res[0].info.graphUrl && setTvl(res[0].info.graphUrl)
