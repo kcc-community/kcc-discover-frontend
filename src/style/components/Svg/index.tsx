@@ -14,7 +14,5 @@ export { default as NftIcon } from './Icons/Nft'
 export { default as ToolIcon } from './Icons/Tool'
 export { default as WalletIcon } from './Icons/Wallet'
 
-
-
 export { default as Svg } from './Svg'
 export type { SvgProps } from './types'
