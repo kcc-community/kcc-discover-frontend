@@ -6,7 +6,7 @@ import { ChartData } from '../../constants/home'
 import { 
   CommunityIcon, DaoIcon, EarnIcon,
   ExchangeIcon, GameIcon, LaunchpadIcon,
-  MoreIcon, NftIcon, ToolIcon, WalletIcon
+  MoreIcon, NftIcon, ToolIcon, WalletIcon,
 } from '../../style/components/Svg'
 import Chart from './Charts'
 import Row, { RowBetween, AutoRow } from 'components/Row'
@@ -63,7 +63,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([]);
   const [showTop, setShowTop] = useState(false)
-  const [sliderDom, setSliderDom] = useState([{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},])
+  const [sliderDom, setSliderDom] = useState([{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},])
   const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0', totalLiquidityUSD: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
   const priceInfo: PriceProps = usePriceInfo();
@@ -122,7 +122,8 @@ const HomePage: React.FunctionComponent = (props) => {
             {
               title: slider[i].title,
               name: slider[i].name,
-              cover: slider[i].banner
+              cover: slider[i].banner,
+              logo: slider[i].logo,
             }
           )
         }
@@ -147,7 +148,7 @@ const HomePage: React.FunctionComponent = (props) => {
           { 
             rank[index] ? rank[index]
             :
-            <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'center', fontWeight: 'bold', marginRight: '5px'}}>{index + 1}th</LocalStyle.SecondText>
+            <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'left', fontWeight: 'bold', margin: '0 5px'}}>{index + 1}th</LocalStyle.SecondText>
           }
         </LocalStyle.RankImg>
         <RowBetween style={{flexWrap: 'nowrap'}}>
@@ -210,7 +211,7 @@ const HomePage: React.FunctionComponent = (props) => {
       <FadeInUp delay={index * 100} key={index}>
         <LocalStyle.CateItem onClick={() => history.push('/project?sec=' + data.index)}>
           {Categories[data.name]}
-          <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>{data?.name}</LocalStyle.SecondText>
+          <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}} mt="12px">{data?.name}</LocalStyle.SecondText>
         </LocalStyle.CateItem>
       </FadeInUp>
     )
@@ -234,7 +235,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const Slide = React.memo(
     function (props: StackedCarouselSlideProps) {
         const { data, dataIndex, swipeTo, slideIndex, isCenterSlide } = props;
-        const { cover, title, name } = data[dataIndex];
+        const { cover, title, name, logo } = data[dataIndex];
         return (
             <LocalStyle.SliderWrapper 
               onClick={() => {
@@ -255,7 +256,13 @@ const HomePage: React.FunctionComponent = (props) => {
                 active === dataIndex ? 
                 <LocalStyle.SliderBottom>
                   <AutoRow>
-                    <LocalStyle.SliderBottomBall src={websiteWhite}/>
+                  <Img 
+                    decode={true}
+                    style={{width: '30px', height: '30px', borderRadius: '15px'}}
+                    loader={<LocalStyle.SliderBottomBall src={logoDef} alt="Home Logo"/>}
+                    unloader={<LocalStyle.SliderBottomBall src={logoDef} alt="Home Logo"/>}
+                    src={[logo as string]}/>
+                    {/* <LocalStyle.SliderBottomBall src={websiteWhite}/> */}
                     <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
                   </AutoRow>
                   <AutoRow style={{width: '14%'}}>
@@ -292,12 +299,13 @@ const HomePage: React.FunctionComponent = (props) => {
     {
       title: t('For Users'),
       content: t("User-explain"),
-      logo: require('../../assets/images/home/user-1.png').default,
+      logo: require('../../assets/images/home/user-1.svg').default,
+
     },
     {
       title: t('For Developers'),
       content: t('Develop-explain'),
-      logo: require('../../assets/images/home/user-2.png').default,
+      logo: require('../../assets/images/home/user-2.svg').default,
     }
   ]
   return (
@@ -392,7 +400,7 @@ const HomePage: React.FunctionComponent = (props) => {
               <FadeInUp delay={700} >
                 <LocalStyle.CateItem style={{marginRight: 0}} onClick={() => history.push('/project')}>
                   {Categories['Others']}
-                  <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
+                  <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}} mt="12px">More</LocalStyle.SecondText>
                 </LocalStyle.CateItem>
               </FadeInUp>
             </Row>

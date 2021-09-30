@@ -145,6 +145,7 @@ export const SliderBottom = styled(RowBetween)`
 export const SliderBottomBall = styled.img`
   width: 30px;
   height: 30px;
+  border-radius: 15px;
 `
 
 export const SliderRight = styled.div`
@@ -176,11 +177,11 @@ export const SliderImg = styled.img`
 `
 
 export const SliderPointSec = styled.div`
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 24px;
   background: #B8C6D8;
-  margin-right: 12px;
+  margin-right: 16px;
   margin-top: 16px;
 `
 
