@@ -51,7 +51,7 @@ export const ChartData = {
     extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
   },
   series: [{
-    name: '销量',
+    name: 'Lines',
     type: 'line',
     animation: true,
     symbolSize: 5,

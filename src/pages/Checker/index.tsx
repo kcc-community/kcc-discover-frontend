@@ -1,22 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core'
-import { Button, Row, Descriptions, Input, Divider, message } from 'antd'
+import { Button, Row, Descriptions, Divider, message, Table, Input, Modal } from 'antd'
 import useAuth from '../../hooks/useAuth'
+import { ApiService, useLoading } from '../../api'
 import { ConnectorNames } from '../../constants/wallet'
 import { Container, Text } from '../../style'
 import { useSubmitFirst, useRole, useRefuse, useCancel, useRefuseFirst, useSubmit } from '../../hooks/useDiscoverChecker'
-import { isAddress } from 'ethers/lib/utils'
+import { useHistory } from 'react-router-dom'
+import md5 from 'md5'
+
+
+interface detailData {
+  title: string
+  intro: string 
+  owner: string 
+  logo: string 
+  banner: string
+  margin: string | number
+  website: string
+  contact: string 
+  contract: string
+  detail?: string
+  github?: string
+  twitter?: string 
+  graphUrl?: string 
+  telegram?: string
+  coinGecko?: string 
+  tokenSymbol?: string
+  coinMarketCap?: string 
+  tokenContract?: string
+  appStatus?: number | null | string
+}
 
 const CheckerPage: React.FunctionComponent = () => {
   const { account, library, chainId } = useWeb3React()
+  
   const { login } = useAuth();
-  const [firstInputVal, setFirst] = useState('');
-  const [updateInputVal, setUpdate] = useState('');
-  const [cancelInputVal, setCancel] = useState('');
   const [isRole, setRole] = useState(false);
+  const [dappLoading, getDappList] = useLoading(ApiService.getDappList)
+  const [submitListLoading, getSubmitList] = useLoading(ApiService.getAudit)
+  const [dappList, setDapp] = useState([])
+  const [submitList, setSubmit] = useState([])
+  const history = useHistory()
+  const [isLogin, setLogin] = useState(false)
+  const [user, setUser] = useState('')
+  const [password, setPwd] = useState('')
+  const [showProject, setShow] = useState(false) 
+  const [detail, setDetail] = useState<detailData>({title: '', intro: '', detail: '', margin: '', logo: '', banner: '', website: '', contact: '', contract: '', owner:''})
 
   useEffect(() => {
     getRole();
+    getDappList({limit: 100}).then((res: any) => {
+      setDapp(res.list)
+    })
+    getSubmitList().then((res: any) => {
+      setSubmit(res.list)
+    })
+    let key = localStorage.getItem("KCCDISCOVER_LOGIN");
+    if(key) setLogin(true);
   }, [account, chainId])
 
   const getRole = () => {
@@ -26,79 +67,125 @@ const CheckerPage: React.FunctionComponent = () => {
     }
   }
 
-  const onClickSubmitFirst = (type: boolean) => {   // type: true -> pass; false -> refuse
-    if(!isAddress(firstInputVal)){
-      message.error('Please check the contract address!');
-      return;
-    }
+  const onClickSubmitFirst = (address: string, type: boolean) => {   // type: true -> pass; false -> refuse
     if(!isRole){
       message.error('You are not a verifier!');
       return;
     }
     if(type){
-      const { firstSubmitCallback } = useSubmitFirst(firstInputVal, library)
+      const { firstSubmitCallback } = useSubmitFirst(address, library)
       firstSubmitCallback().then(res => {
-        message.success('Success to confirm');
-        setFirst('');
+        message.success('Success to confirm, check data later');
       }).catch(e => {
         message.error(e.message)
       })
     } else {
-      const { refuseFirstCallback } = useRefuseFirst(firstInputVal, library);
+      const { refuseFirstCallback } = useRefuseFirst(address, library);
       refuseFirstCallback().then(res => {
-        message.success('Success to refuse');
-        setFirst('');
+        message.success('Success to refuse, check data later');
       }).catch(e => {
         message.error(e.message)
       })
     }
   }
 
-  const onClickSubmit = (type: boolean) => {   // type: true -> pass; false -> refuse
-    if(!isAddress(updateInputVal)){
-      message.error('Please check the contract address!');
-      return;
-    }
+  const onClickSubmit = (address: string, type: boolean) => {   // type: true -> pass; false -> refuse
     if(!isRole){
       message.error('You are not a verifier!');
       return;
     }
     if(type){
-      const { submitCallback } = useSubmit(updateInputVal, library)
+      const { submitCallback } = useSubmit(address, library)
       submitCallback().then(res => {
-        message.success('Success to confirm');
-        setUpdate('');
+        message.success('Success to confirm, check data later');
       }).catch(e => {
         message.error(e.message)
       })
     } else {
-      const { refuseCallback } = useRefuse(updateInputVal, library);
+      const { refuseCallback } = useRefuse(address, library);
       refuseCallback().then(res => {
-        message.success('Success to refuse');
-        setUpdate('');
+        message.success('Success to refuse, check data later');
       }).catch(e => {
         message.error(e.message)
       })
     }
   }
 
-  const onClickCancel = () => {
-    if(!isAddress(cancelInputVal)){
-      message.error('Please check the contract address!');
-      return;
-    }
+  const onClickCancel = (address: string) => {
     if(!isRole){
       message.error('You are not a verifier!');
       return;
     }
-    const { cancelCallback } = useCancel(cancelInputVal, library)
+    const { cancelCallback } = useCancel(address, library)
     cancelCallback().then(res => {
-      message.success('Success to cancel');
-      setCancel('');
+      message.success('Success to cancel, check data later');
     }).catch(e => {
       message.error(e.message)
     })
   }
+
+  const loginUser = () => {
+    if(user === 'DiscoverKCC' && md5(password) === '76e39c6b183dc5a65aa00b5416f02788'){
+      localStorage.setItem("KCCDISCOVER_LOGIN", 'DiscoverLoginSuccess');
+      setLogin(true)
+    } else {
+      message.error('Login Fail!')
+    }
+  }
+
+  const columns = (type) => {
+    let col = [
+      {
+        title: 'Address',
+        key: '1',
+        width: 400,
+        dataIndex: 'owner'
+      },
+      {
+        title: 'Action',
+        key: '2',
+        width: 200,
+        render: (row) => (
+          type === 'off' ? 
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <Button type="primary" onClick={() => {onClickCancel(row.owner)}}>Off Shelf</Button>
+            <Divider type="vertical"/>
+            <Button onClick={() => history.push(`/project_detail?name=${row.name}`)}>Detail</Button>
+          </div>
+          :
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <Button type="primary" onClick={() => {
+              if(row.appStatus !== 0){ onClickSubmitFirst(row.owner, true) }
+              else { onClickSubmit(row.owner, true) }
+            }}>Submit</Button>
+            <Divider type="vertical"/>
+            <Button type="ghost" onClick={() => {
+              if(row.appStatus !== 0){ onClickSubmitFirst(row.owner, false) }
+              else { onClickSubmit(row.owner, false) }
+            }}>Refuse</Button>
+            <Divider type="vertical"/>
+            <Button onClick={() => {setDetail({...row.data, appStatus: row.appStatus}); setShow(true)}}>Detail</Button>
+          </div>
+        )
+      }
+    ]
+    return col;
+  };
+
+  if(!isLogin) {
+    return(
+      <Container width={'600px'} style={{marginTop: '50px'}}>
+        <Row gutter={16}>
+          <Input placeholder="Input Account" onChange={e => setUser(e.target.value)}/>
+          <Divider />
+          <Input type="password" placeholder="Input Password" onChange={e => setPwd(e.target.value)}/>
+          <Divider />
+          <Button type="primary" onClick={() => loginUser()}>Login</Button>
+        </Row>
+      </Container>
+    )
+  }
+
   return (
     <Container width={'600px'} style={{marginTop: '50px'}}>
       <Row gutter={16}>
@@ -115,49 +202,60 @@ const CheckerPage: React.FunctionComponent = () => {
       </Row>
       <Divider />
       <Row gutter={16}>
-        <Descriptions title="Wait To First Commit Project List" column={1}>
-          <Descriptions.Item>0x94ABA9bb383a64C68a37941cDe25184Dc51a62d9</Descriptions.Item>
+        <Descriptions title="Wait To Commit Project List" column={1} />
+        <Table columns={columns('commit')} dataSource={submitList}/>
+      </Row>
+      <Divider />
+      <Row gutter={16}>
+        
+      </Row>
+      <Divider />
+      <Row gutter={16}>
+        <Descriptions title="Can Off Shelf Project List" column={1} />
+        <Table columns={columns('off')} dataSource={dappList} pagination={{ pageSize: 50 }}/>
+      </Row>
+      <Divider />
+      <Modal 
+        visible={showProject}
+        onCancel={() => setShow(false)}
+        footer={[
+          <Button type="ghost" onClick={() => {
+            if(detail.appStatus === 0){
+              onClickSubmit(detail.owner, false)
+            } else {
+              onClickSubmitFirst(detail.owner, false)
+            }
+          }}>Refuse</Button>,
+          <Button type="primary" onClick={() => {
+            console.log('detail =', detail);
+            if(detail.appStatus === 0){
+              onClickSubmit(detail.owner, true)
+            } else {
+              onClickSubmitFirst(detail.owner, true)
+            }
+          }}>Submit</Button>,
+        ]}
+      >
+        <Descriptions title="Project Detail" bordered column={1}>
+          <Descriptions.Item label="Title">{detail?.title}</Descriptions.Item>
+          <Descriptions.Item label="Intro">{detail?.intro || '-'}</Descriptions.Item>
+          <Descriptions.Item label="Detail">{detail?.detail || '-'}</Descriptions.Item>
+          <Descriptions.Item label="Logo"><img src={detail.logo} style={{width: '40px'}}/></Descriptions.Item>
+          <Descriptions.Item label="Banner"><img src={detail.banner} style={{width: '100px'}}/></Descriptions.Item>
+          <Descriptions.Item label="Margin">{detail?.margin}KCS</Descriptions.Item>
+          <Descriptions.Item label="Website">{detail?.website}</Descriptions.Item>
+          <Descriptions.Item label="Email">{detail?.contact}</Descriptions.Item>
+          <Descriptions.Item label="Contract">{detail?.contract}</Descriptions.Item>
+          {detail.github && <Descriptions.Item label="Github">{detail?.github}</Descriptions.Item>}
+          {detail.twitter && <Descriptions.Item label="Github">{detail?.twitter}</Descriptions.Item>}
+          {detail.graphUrl && <Descriptions.Item label="Github">{detail?.graphUrl}</Descriptions.Item>}
+          {detail.telegram && <Descriptions.Item label="Github">{detail?.telegram}</Descriptions.Item>}
+          {detail.coinGecko && <Descriptions.Item label="Github">{detail?.coinGecko}</Descriptions.Item>}
+          {detail.tokenSymbol && <Descriptions.Item label="Github">{detail?.tokenSymbol}</Descriptions.Item>}
+          {detail.coinMarketCap && <Descriptions.Item label="Github">{detail?.coinMarketCap}</Descriptions.Item>}
+          {detail.tokenContract && <Descriptions.Item label="Github">{detail?.tokenContract}</Descriptions.Item>}
         </Descriptions>
-      </Row>
-      <Divider />
-      <Row gutter={16}>
-        <Descriptions title="Wait To Update Commit Project List" column={1}>
-          <Descriptions.Item>0x94ABA9bb383a64C68a37941cDe25184Dc51a62d9</Descriptions.Item>
-        </Descriptions>
-      </Row>
-      <Divider />
-      <Row gutter={16}>
-        <Descriptions title="Can Off Shelf Project List" column={1}>
-          <Descriptions.Item>0x94ABA9bb383a64C68a37941cDe25184Dc51a62d9</Descriptions.Item>
-        </Descriptions>
-      </Row>
-      <Divider />
-      <Row gutter={16}>
-        <div>First Commit：</div>
-        <Input value={firstInputVal} onChange={e => setFirst(e.target.value)} style={{margin: '20px 0'}}/>
-        <>
-          <Button type="primary" style={{marginRight: '20px'}} onClick={() => onClickSubmitFirst(true)}>Submit</Button> 
-          <Button type="ghost" onClick={() => onClickSubmitFirst(false)}>Refuse</Button>
-        </>
-      </Row>
-      <Divider />
-      <Row gutter={16}>
-        <div>Update Commit：</div>
-        <Input value={updateInputVal} onChange={e => setUpdate(e.target.value)} style={{margin: '20px 0'}}/>
-        <>
-          <Button type="primary" style={{marginRight: '20px'}} onClick={() => onClickSubmit(true)}>Submit</Button> 
-          <Button type="ghost" onClick={() => onClickSubmit(false)}>Refuse</Button>
-        </>
-      </Row>
-      <Divider />
-      <Row gutter={16}>
-        <div>Off Shelf The Project：</div>
-        <Input value={cancelInputVal} onChange={e => setCancel(e.target.value)} style={{margin: '20px 0'}}/>
-        <>
-          <Button type="primary" style={{marginRight: '20px'}} onClick={onClickCancel}>Off Shelf</Button> 
-        </>
-      </Row>
-      <Divider />
+      </Modal>
     </Container>
   );
 }
