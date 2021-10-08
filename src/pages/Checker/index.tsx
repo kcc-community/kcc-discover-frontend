@@ -107,7 +107,7 @@ const CheckerPage: React.FunctionComponent = () => {
           <Descriptions title="DISCOVER KCC PROJECT CHECKER" bordered column={1}>
             <Descriptions.Item label="Your Account">{account}</Descriptions.Item>
             <Descriptions.Item label="Has Authority">{isRole ? 'True' : 'False'}</Descriptions.Item>
-            <Descriptions.Item label="Environment Checker">{chainId === Number(process.env.REACT_APP_CHAIN_ID) ? 'True' : 'False'}</Descriptions.Item>
+            <Descriptions.Item label="Support Network">{chainId === Number(process.env.REACT_APP_CHAIN_ID) ? 'True' : 'False'}</Descriptions.Item>
           </Descriptions>
           :
           <Button type="primary" onClick={() => login(ConnectorNames['Injected'])}>连接钱包</Button>
