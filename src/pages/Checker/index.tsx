@@ -201,7 +201,7 @@ const CheckerPage: React.FunctionComponent = () => {
             <Descriptions.Item label="Support Network">{chainId === Number(process.env.REACT_APP_CHAIN_ID) ? 'True' : 'False'}</Descriptions.Item>
           </Descriptions>
           :
-          <Button type="primary" onClick={() => login(ConnectorNames['Injected'])}>连接钱包</Button>
+          <Button type="primary" onClick={() => login(ConnectorNames['Injected'])}>Connect Wallet</Button>
         }
       </Row>
       <Divider />
@@ -251,13 +251,13 @@ const CheckerPage: React.FunctionComponent = () => {
           <Descriptions.Item label="Email">{detail?.contact}</Descriptions.Item>
           <Descriptions.Item label="Contract">{detail?.contract}</Descriptions.Item>
           {detail.github && <Descriptions.Item label="Github">{detail?.github}</Descriptions.Item>}
-          {detail.twitter && <Descriptions.Item label="Github">{detail?.twitter}</Descriptions.Item>}
-          {detail.graphUrl && <Descriptions.Item label="Github">{detail?.graphUrl}</Descriptions.Item>}
-          {detail.telegram && <Descriptions.Item label="Github">{detail?.telegram}</Descriptions.Item>}
-          {detail.coinGecko && <Descriptions.Item label="Github">{detail?.coinGecko}</Descriptions.Item>}
-          {detail.tokenSymbol && <Descriptions.Item label="Github">{detail?.tokenSymbol}</Descriptions.Item>}
-          {detail.coinMarketCap && <Descriptions.Item label="Github">{detail?.coinMarketCap}</Descriptions.Item>}
-          {detail.tokenContract && <Descriptions.Item label="Github">{detail?.tokenContract}</Descriptions.Item>}
+          {detail.twitter && <Descriptions.Item label="Twitter">{detail?.twitter}</Descriptions.Item>}
+          {detail.graphUrl && <Descriptions.Item label="GraphUrl">{detail?.graphUrl}</Descriptions.Item>}
+          {detail.telegram && <Descriptions.Item label="Telegram">{detail?.telegram}</Descriptions.Item>}
+          {detail.coinGecko && <Descriptions.Item label="CoinGecko">{detail?.coinGecko}</Descriptions.Item>}
+          {detail.tokenSymbol && <Descriptions.Item label="TokenSymbol">{detail?.tokenSymbol}</Descriptions.Item>}
+          {detail.coinMarketCap && <Descriptions.Item label="CoinMarketCap">{detail?.coinMarketCap}</Descriptions.Item>}
+          {detail.tokenContract && <Descriptions.Item label="TokenContract">{detail?.tokenContract}</Descriptions.Item>}
         </Descriptions>
       </Modal>
     </Container>
