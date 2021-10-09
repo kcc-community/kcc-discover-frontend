@@ -43,6 +43,8 @@ const CheckerPage: React.FunctionComponent = () => {
   const [submitList, setSubmit] = useState([])
   const history = useHistory()
   const [isLogin, setLogin] = useState(false)
+  const [offTotal, setOffTotal] = useState(0)
+  const [submitTotal, setSubmitTotal] = useState(0)
   const [user, setUser] = useState('')
   const [password, setPwd] = useState('')
   const [showProject, setShow] = useState(false) 
@@ -52,9 +54,11 @@ const CheckerPage: React.FunctionComponent = () => {
     getRole();
     getDappList({limit: 100}).then((res: any) => {
       setDapp(res.list)
+      setOffTotal(res.total)
     })
     getSubmitList().then((res: any) => {
       setSubmit(res.list)
+      setSubmitTotal(res.total)
     })
     let key = localStorage.getItem("KCCDISCOVER_LOGIN");
     if(key) setLogin(true);
@@ -203,7 +207,7 @@ const CheckerPage: React.FunctionComponent = () => {
       <Divider />
       <Row gutter={16}>
         <Descriptions title="Wait To Commit Project List" column={1} />
-        <Table columns={columns('commit')} dataSource={submitList}/>
+        <Table columns={columns('commit')} dataSource={submitList} pagination={{ pageSize: 10, total: submitTotal }}/>
       </Row>
       <Divider />
       <Row gutter={16}>
@@ -212,7 +216,7 @@ const CheckerPage: React.FunctionComponent = () => {
       <Divider />
       <Row gutter={16}>
         <Descriptions title="Can Off Shelf Project List" column={1} />
-        <Table columns={columns('off')} dataSource={dappList} pagination={{ pageSize: 50 }}/>
+        <Table columns={columns('off')} dataSource={dappList} pagination={{ pageSize: 10, total: offTotal }}/>
       </Row>
       <Divider />
       <Modal 
