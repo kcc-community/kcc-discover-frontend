@@ -99,7 +99,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
 
   const checkEmail = email && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,6})+|\.([a-zA-Z]{2,6})$/.test(email) ? false : true
   //@ts-ignore
-  const checkMargin = (marginAmount && marginAmount < minMargin && !name) ? false : true
+  const checkMargin = (marginAmount && marginAmount < minMargin && (!name  || state === 'Refused')) ? false : true
   const checkContractAddress = ['Wallet', 'Community', 'Others'].includes(secondaryCategoryIndex ?? '') ? false : true
   const checkLink = (url: string) => {
     if(url.includes('/ipfs')){
@@ -145,7 +145,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
         res[0].info.github && setGithub(res[0].info.github)
         res[0].info.coinMarketCap && setCoinMarket(res[0].info.coinMarketCap)
         res[0].info.coinGecko && setCoinGecko(res[0].info.coinGecko)
-        setMargin('0')
+        if(res[0].state !== 'Refused') { setMargin('0') } else { setMargin(res[1]) }
       } else {
         setMargin(res[1])
       }
@@ -438,14 +438,15 @@ const SubmitPage: React.FunctionComponent = (props) => {
             onChange={e => {setContract(splitSpace(e.target.value))}}
             error={contractAddresses && !isAddress(contractAddresses) ? 'Error contract address' : ''}
           />
+          {console.log('stat =', state)}
           <InputItem 
-            title={name ? t('The amount of KCS margin call') : t('Amount of KCS margin')}
-            required={name ? false : true}
+            title={name && state !== 'Refused' ? t('The amount of KCS margin call') : t('Amount of KCS margin')}
+            required={name && state !== 'Refused' ? false : true}
             value={marginAmount}
             placeholder={t('Submit your KCS margin')}
             titleInfo={true}
             titleInfoContent={t('Submit-1', {minMargin: minMargin})}
-            error={(!checkMargin && !name)? t('Submit-2', {minMargin: minMargin}) : ''}
+            error={(!checkMargin && (!name || state === 'Refused'))? t('Submit-2', {minMargin: minMargin}) : ''}
             onChange={e => {
               setMargin(e.target.value)
               // if(/^\d*$/.test(e.target.value)) { setMargin(e.target.value) }
@@ -528,8 +529,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
           <Button 
             style={{width: '100px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
-            || !logoLink || !websiteLink || (!marginAmount && !name)|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
-            || !checkEmail || (!checkMargin && !name) || chainError}
+            || !logoLink || !websiteLink || (!marginAmount && (!name || state === 'Refused'))|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
+            || !checkEmail || (!checkMargin && (!name || state === 'Refused')) || chainError}
             type="primary"
             onClick={() => onConfirm()}>{t("Submit")}</Button>
         </Col>

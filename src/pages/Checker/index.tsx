@@ -39,7 +39,7 @@ const CheckerPage: React.FunctionComponent = () => {
   const [isRole, setRole] = useState(false);
   const [dappLoading, getDappList] = useLoading(ApiService.getDappList)
   const [submitListLoading, getSubmitList] = useLoading(ApiService.getAudit)
-  const [dappList, setDapp] = useState([])
+  const [dappList, setDapp] = useState<{owner: string, title: string, contact: string, contract: string, margin: string | number}[]>([])
   const [submitList, setSubmit] = useState([])
   const history = useHistory()
   const [isLogin, setLogin] = useState(false)
@@ -52,13 +52,14 @@ const CheckerPage: React.FunctionComponent = () => {
 
   useEffect(() => {
     getRole();
-    getDappList({limit: 100}).then((res: any) => {
-      setDapp(res.list)
-      setOffTotal(res.total)
-    })
-    getSubmitList().then((res: any) => {
-      setSubmit(res.list)
-      setSubmitTotal(res.total)
+    Promise.all([
+      getDappList({limit: 100}),
+      getSubmitList()
+    ]).then((res: any) => {
+      setDapp(res[0].list)
+      setOffTotal(res[0].total)
+      setSubmit(res[1].list)
+      setSubmitTotal(res[1].total)
     })
     let key = localStorage.getItem("KCCDISCOVER_LOGIN");
     if(key) setLogin(true);
@@ -137,6 +138,20 @@ const CheckerPage: React.FunctionComponent = () => {
     }
   }
 
+  const openModal = (data) => {
+    let row = {...data.data, appStatus: data.appStatus};
+    for(let i in dappList){
+      if(dappList[i].owner === row.owner){
+        if(!row.title) row.title = dappList[i].title;
+        if(!row.contact) row.contact = dappList[i].contact;
+        if(!row.contract) row.contract = dappList[i].contract;
+        if(!row.margin) row.margin = Number(dappList[i].margin) + Number(row.addMargin);
+      }
+    }
+    setDetail(row); 
+    setShow(true);
+  }
+
   const columns = (type) => {
     let col = [
       {
@@ -168,7 +183,7 @@ const CheckerPage: React.FunctionComponent = () => {
               else { onClickSubmit(row.owner, false) }
             }}>Refuse</Button>
             <Divider type="vertical"/>
-            <Button onClick={() => {setDetail({...row.data, appStatus: row.appStatus}); setShow(true)}}>Detail</Button>
+            <Button onClick={() => { openModal(row) }}>Detail</Button>
           </div>
         )
       }
@@ -243,9 +258,9 @@ const CheckerPage: React.FunctionComponent = () => {
         <Descriptions title="Project Detail" bordered column={1}>
           <Descriptions.Item label="Title">{detail?.title}</Descriptions.Item>
           <Descriptions.Item label="Intro">{detail?.intro || '-'}</Descriptions.Item>
-          <Descriptions.Item label="Detail">{detail?.detail || '-'}</Descriptions.Item>
+          {detail.detail && <Descriptions.Item label="Detail">{detail?.detail || '-'}</Descriptions.Item>}
           <Descriptions.Item label="Logo"><img src={detail.logo} style={{width: '40px'}}/></Descriptions.Item>
-          <Descriptions.Item label="Banner"><img src={detail.banner} style={{width: '100px'}}/></Descriptions.Item>
+          {detail.banner && <Descriptions.Item label="Banner"><img src={detail.banner} style={{width: '100px'}}/></Descriptions.Item>}
           <Descriptions.Item label="Margin">{detail?.margin}KCS</Descriptions.Item>
           <Descriptions.Item label="Website">{detail?.website}</Descriptions.Item>
           <Descriptions.Item label="Email">{detail?.contact}</Descriptions.Item>
