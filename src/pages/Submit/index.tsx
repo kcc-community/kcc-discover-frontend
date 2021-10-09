@@ -456,6 +456,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             title={t('Your Mailbox (For information update)')}
             required={true}
             value={email}
+            disabled={name ? true : false}
             placeholder={t('Enter your Mailbox')}
             error={!checkEmail ? t('Please input correct email') : ''}
             onChange={e => {setEmail(e.target.value.trim())}}
