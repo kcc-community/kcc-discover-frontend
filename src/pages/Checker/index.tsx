@@ -80,6 +80,7 @@ const CheckerPage: React.FunctionComponent = () => {
     if(type){
       const { firstSubmitCallback } = useSubmitFirst(address, library)
       firstSubmitCallback().then(res => {
+        setShow(false);
         message.success('Success to confirm, check data later');
       }).catch(e => {
         message.error(e.message)
@@ -87,6 +88,7 @@ const CheckerPage: React.FunctionComponent = () => {
     } else {
       const { refuseFirstCallback } = useRefuseFirst(address, library);
       refuseFirstCallback().then(res => {
+        setShow(false);
         message.success('Success to refuse, check data later');
       }).catch(e => {
         message.error(e.message)
