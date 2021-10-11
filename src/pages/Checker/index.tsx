@@ -102,6 +102,7 @@ const CheckerPage: React.FunctionComponent = () => {
     if(type){
       const { submitCallback } = useSubmit(address, library)
       submitCallback().then(res => {
+        setShow(false);
         message.success('Success to confirm, check data later');
       }).catch(e => {
         message.error(e.message)
@@ -109,6 +110,7 @@ const CheckerPage: React.FunctionComponent = () => {
     } else {
       const { refuseCallback } = useRefuse(address, library);
       refuseCallback().then(res => {
+        setShow(false);
         message.success('Success to refuse, check data later');
       }).catch(e => {
         message.error(e.message)
@@ -123,6 +125,7 @@ const CheckerPage: React.FunctionComponent = () => {
     }
     const { cancelCallback } = useCancel(address, library)
     cancelCallback().then(res => {
+      setShow(false);
       message.success('Success to cancel, check data later');
     }).catch(e => {
       message.error(e.message)
@@ -240,7 +243,7 @@ const CheckerPage: React.FunctionComponent = () => {
         footer={[
           <Button type="ghost" onClick={() => {
             if(detail.appStatus === 0){
-              onClickSubmit(detail.owner, false)
+              onClickSubmit(detail.owner, false);
             } else {
               onClickSubmitFirst(detail.owner, false)
             }
