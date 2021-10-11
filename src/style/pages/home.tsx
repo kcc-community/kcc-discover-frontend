@@ -17,6 +17,8 @@ export const RankCard = styled(cardTransparent)`
 
 export const RankImg = styled.div`
   width: 55px;
+  display: flex;
+  align-items: center;
 `
 
 export const RankLogo = styled.img`
