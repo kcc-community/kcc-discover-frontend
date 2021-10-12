@@ -34,7 +34,10 @@ const useAuth = () => {
             walletConnector.walletConnectProvider = null
           }
           message.error(t('Authorization Error Please authorize to access your account'))
-        } else {
+        } else if(error.message === "Request of type 'wallet_requestPermissions' already pending for origin http://localhost:3000. Please wait."){
+          message.error('You have another unauthorized operation, please try again later.')
+        }
+         else {
           message.error((error.name ?? '') + error.message)
         }
       })
