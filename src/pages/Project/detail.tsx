@@ -19,6 +19,7 @@ import { useResponsive } from 'utils/responsive'
 import CommentModal from '../../components/CommentModal'
 import { useComment } from '../../hooks/useDiscoverContract'
 import { Img } from 'react-image'
+import { useChainError } from 'state/wallet/hooks'
 import $ from 'jquery'
 
 const ProjectDetailPage: React.FunctionComponent = (props) => {
@@ -57,6 +58,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   })
   const [detailLoading, getInfo] = useLoading(ApiService.getDappInfo)
   const [commentLoading, getComment] = useLoading(ApiService.getDappComment)
+  const chainError = useChainError();
   const [loaded, setLoad] = useState(false)
   const [page, setPage] = useState(1)
   const [showTips, setShow] = useState(false)
@@ -249,6 +251,10 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => {
               if(!account){
                 message.error(t('Wallet not connected'));
+                return;
+              }
+              if(chainError){
+                message.error(chainError);
                 return;
               }
               setModal(true)
