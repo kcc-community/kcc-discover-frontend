@@ -157,7 +157,8 @@ const SubmitPage: React.FunctionComponent = (props) => {
     if(!account || !chainId) { message.error(t('Please connect your wallet')); return; };
     if(balance[0] && (new BN(marginAmount)).isGreaterThan(new BN(balance[0]?.toSignificant(18)))) { message.error(t('Your KCS balance is insufficient')); return; }
     if(state && state !== 'None' && state !== 'Refused' && !name) { message.error(t('One address only can submit one project')); return; }
-    
+    if(tokenContractAddress && !isAddress(tokenContractAddress)) { message.error(t('Please check your token contract ')); return; }
+
     let params:SubmitProps = {
       title, shortIntroduction, logoLink, 
       email, marginAmount, contractAddresses, 
@@ -475,6 +476,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             value={tokenContractAddress}
             placeholder={t('Enter your Token Contract Address')}
             onChange={e => {setTokenContract(e.target.value.trim())}}
+            error={tokenContractAddress && !isAddress(tokenContractAddress) ? 'Error contract address' : ''}
           />
           <InputItem 
             title={t('Tvl Interface (graphql)')}
@@ -531,7 +533,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             style={{width: '100px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
             || !logoLink || !websiteLink || (!marginAmount && (!name || state === 'Refused'))|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
-            || !checkEmail || (!checkMargin && (!name || state === 'Refused')) || chainError}
+            || !checkEmail || (!checkMargin && (!name || state === 'Refused')) || chainError || (tokenContractAddress && !isAddress(tokenContractAddress))}
             type="primary"
             onClick={() => onConfirm()}>{t("Submit")}</Button>
         </Col>
