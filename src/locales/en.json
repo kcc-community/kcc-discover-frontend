@@ -9,7 +9,7 @@
   "Total Value Locked in KCC": "Total Value Locked in KCC",
   "Top 5 Ranking": "Top 5",
   "Discover": "Discover",
-  "Why Discover KCC": "Why Discover KCC",
+  "Why Discover": "Why Discover",
   "Popular Categories": "Popular Categories",
   "Exchange": "Exchange",
   "LaunchPad": "LaunchPad",
@@ -98,7 +98,7 @@
   "Your KCS balance is insufficient": "Your KCS balance is insufficient",
   "One address only can submit one project": "Each address can only have one project.",
   "For Developers": "For Developers",
-  "User-explain": "For KCC users, you can easily find the projects and services you want here. Discover KCC will be the start of your KCC journey.",
+  "User-explain": "For KCC users, you can easily find the projects and services you want here. Discover will be the start of your KCC journey.",
   "Develop-explain": "For KCC developers, you can find the quality projects and development-related tutorials here. Just do it!",
   "Visit Web": "For better experience, please visit via PC"
 }

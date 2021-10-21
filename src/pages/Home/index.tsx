@@ -385,7 +385,7 @@ const HomePage: React.FunctionComponent = (props) => {
           </>
           <LocalStyle.UserCardContainer>
             <FadeInUp>
-              <LocalStyle.SecondText mb="30px" mt="120px">{t("Why Discover KCC")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb="30px" mt="120px">{t("Why Discover")}</LocalStyle.SecondText>
             </FadeInUp>
             <AutoRow justify="center">
               {DiscoverReason.map((item, key) => userInfo(item, key))}

@@ -54,6 +54,18 @@ const ImgLogo = styled.img`
   height: 22px;
   cursor: pointer
 `
+const ImgKccLogo = styled.img`
+  height: 33px;
+  cursor: pointer;
+  margin-top: 2px;
+`
+
+const ImgLines = styled.div`
+  background: #596171;
+  width: 2px;
+  height: 19px;
+  margin: 0 12px;
+`
 
 interface MenuList {
   title: string
@@ -132,6 +144,10 @@ const Menu: React.FunctionComponent = (props) => {
       <StyledNav>
         <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
           <RowFixed>
+            <a href="https://www.kcc.io/#/" target="_blank">
+              <ImgKccLogo src={require('../../assets/images/home/kcc.png').default}/>
+            </a>
+            <ImgLines />
             <ImgLogo src={require('../../assets/images/home/logo.png').default} onClick={() => history.push('/')}/>
             { menuList.map((item, index) => renderMenu(item, index)) }
           </RowFixed>

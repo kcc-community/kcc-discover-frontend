@@ -55,7 +55,7 @@ const Footer: React.FunctionComponent<FooterProps> = (props) => {
     <FooterWrap transparent={props?.transparent}>
       <Container>
         <RowBetween>
-          <Text color={'#FFFFFFCC'}>© 2021 Discover KCC All rights reserved</Text>
+          <Text color={'#FFFFFFCC'}>© 2021 Discover All rights reserved</Text>
           <Row style={{width: 'auto'}}>
             {media.map((item, index) => renderMedia(item, index))}
           </Row>
