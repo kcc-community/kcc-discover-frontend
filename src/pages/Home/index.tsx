@@ -57,7 +57,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   let [chart1Data, setChart1Data] = React.useState(null);
-  const { isTablet } = useResponsive();
+  const { isTablet, isMobile } = useResponsive();
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
@@ -74,6 +74,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const mountedRef = useRef(true);
   const theme = useTheme();
   const { t } = useTranslation();
+  const containerWidth = isTablet ? '768px' : isMobile ? '100vw' : '1200px';
 
   let [chart1] = [null];
   
@@ -175,7 +176,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const InfoData = (title: string, num: number, key: number) => {
     return (
       <FadeInUp delay={key * 100}>
-        <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0'}}>
+        <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0', marginTop: isMobile ? '15px' : '0'}}>
           <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
@@ -196,7 +197,7 @@ const HomePage: React.FunctionComponent = (props) => {
     const sub = {fontSize: '14px', lineHeight: '30px', color: theme.colors.secondary, textAlign: 'center' as const}
     return (
       <FadeInUp delay={index * 100} key={index}>
-        <LocalStyle.UserCard key={index} style={isTablet ? {marginRight: 0} : {marginRight: index ? '0' : '80px'}}>
+        <LocalStyle.UserCard key={index} style={isTablet ? {marginRight: 0} : {marginRight: !index && !isMobile ? '80px' : '0', marginTop: isMobile ? '16px': '0'}}>
           <LocalStyle.UserLogo src={item?.logo}/>
           <div style={title}>{item.title}</div>
           <LocalStyle.UserLine id="discover-line"/>
@@ -248,7 +249,7 @@ const HomePage: React.FunctionComponent = (props) => {
               className="homeBanner">
               <Img 
                 decode={true}
-                style={{width: '880px !important', height: '400px', borderRadius: '8px'}}
+                style={{width: isMobile ? '343px' : '880px !important', height: isMobile ? '156px' : '400px', borderRadius: '8px'}}
                 loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 src={[cover as string]}/>
@@ -258,16 +259,16 @@ const HomePage: React.FunctionComponent = (props) => {
                   <AutoRow>
                   <Img 
                     decode={true}
-                    style={{width: '30px', height: '30px', borderRadius: '15px'}}
+                    style={{width: isMobile ? '12.5px' : '30px', height: isMobile ? '12.5px' : '30px', borderRadius: '15px'}}
                     loader={<LocalStyle.SliderBottomBall src={logoDef} alt="Home Logo"/>}
                     unloader={<LocalStyle.SliderBottomBall src={logoDef} alt="Home Logo"/>}
                     src={[logo as string]}/>
                     {/* <LocalStyle.SliderBottomBall src={websiteWhite}/> */}
-                    <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
+                    <Text ml="10px" fontSize={isMobile ? "12px" : "18px"} color={theme.colors.invertedContrast}>{title}</Text>
                   </AutoRow>
-                  <AutoRow style={{width: '14%'}}>
-                    <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
-                    <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
+                  <AutoRow style={{width: isMobile ? '40%' : '14%'}}>
+                    <Text mr="10px" fontSize={isMobile ? "10px" : "14px"} color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
+                    <LocalStyle.SliderImg src={iconRight} style={{width: isMobile ? '4px' : '6px', height: 'auto'}}/>
                   </AutoRow>
                 </LocalStyle.SliderBottom>
                 : null
@@ -310,12 +311,12 @@ const HomePage: React.FunctionComponent = (props) => {
   ]
   return (
       <>
-        <Container width={isTablet ? '768px' : '1200px'}>
-          <RowBetween style={{marginTop: '60px'}}>
+        <Container width={containerWidth}>
+          <RowBetween style={{marginTop: isMobile ? '20px' : '60px', justifyContent: isMobile ? 'center' : 'space-between'}}>
             <Col>
-              <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb="15px" style={{fontSize: isMobile ? '16px' : '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
               <Row align="flex-end">
-                <LocalStyle.SecondText style={{fontSize: '48px', lineHeight: '48px', fontFamily: 'kccfont Number Normal'}}>$
+                <LocalStyle.SecondText style={{fontSize: isMobile ? '36px' : '48px', lineHeight: '48px', fontFamily: 'kccfont Number Normal'}}>$
                 {
                   chartData.length > 1 ?
                   <CountUp 
@@ -327,47 +328,48 @@ const HomePage: React.FunctionComponent = (props) => {
                   : '--'
                 }
                 </LocalStyle.SecondText>
-                <Text fontSize="24px" color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml="27px" style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>
+                { !isMobile && <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text> }
               </Row>
+              <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>
               <Chart
                 key="chart1"
                 className="chart1"
                 option={chart1Data}
                 onRender={(e): void => chart1 = e}
-                style={{width: "807px", height: "279px", minWidth: '500px', minHeight: '173'}}/>
+                style={{width: isMobile ? '351px' : "807px", height: isMobile ? '200px' : "209px", minWidth: isMobile ? '350px' : '500px', minHeight: '173px'}}/>
             </Col>
             <FadeInUp>
-              <LocalStyle.RankCard style={{marginTop: isTablet ? '20px': '0'}}>
+              <LocalStyle.RankCard style={{margin: isTablet ? '20px 0 0 0': (isMobile ? '40px auto 0 auto' : '0')}}>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>
                 {!showTop ? <Skeleton paragraph={{ rows: 5 }} /> : null}
                 {topDapps.length ? topDapps.map((item, index) => {if(index < 5) {return DappItem(item, index)} return null }) : null}
               </LocalStyle.RankCard>
             </FadeInUp>
           </RowBetween>
-          <RowBetween style={{marginTop: '116px'}}>
+          <RowBetween style={{marginTop: isMobile ? '17px' : '116px', justifyContent: isMobile ? 'center' : 'space-between'}}>
               {InfoData('Avg Gas Fee', new BN(priceInfo.avgGasPrice).div(10 ** 18).times(priceInfo.priceUsd).toNumber(), 0)}
               {InfoData('Total Address', new BN(priceInfo.addressCount).toNumber(), 1)}
               {InfoData('24H Txn', priceInfo.txCount24H as number, 2)}
           </RowBetween>
           <>
             <FadeInUp>
-              <LocalStyle.SecondText mb="60px" mt="158px">{t("Discover")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb={isMobile ? "32px" : "60px"} mt={isMobile ? "60px" : "158px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Discover")}</LocalStyle.SecondText>
             </FadeInUp>
             <FadeInUp>
               <AutoRow justify="center" style={{position: 'relative'}}>
-                <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/>
+                {!isMobile && <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/>}
                 <StackedCarousel
                   ref={sliderRef}
                   data={sliderDom}
-                  carouselWidth={1200}
-                  slideWidth={880}
+                  carouselWidth={isMobile ? 343 : 1200}
+                  slideWidth={isMobile ? 343 : 880}
                   slideComponent={Slide}
                   maxVisibleSlide={sliderDom.length === 5 ? 5 : 1}
                   customTransition={'all 1000ms ease 0s'}
                   onActiveSlideChange={v => { setActive(v) }}
                   useGrabCursor={true}
                 />
-                <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>
+                {!isMobile && <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>}
               </AutoRow>
               <Col>
                 <Row style={{justifyContent: 'center'}}>
@@ -385,17 +387,24 @@ const HomePage: React.FunctionComponent = (props) => {
           </>
           <LocalStyle.UserCardContainer>
             <FadeInUp>
-              <LocalStyle.SecondText mb="30px" mt="120px">{t("Why Discover")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb={isMobile ? "18px" : "30px"} mt={isMobile ? "72px" : "120px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Why Discover")}</LocalStyle.SecondText>
             </FadeInUp>
-            <AutoRow justify="center">
-              {DiscoverReason.map((item, key) => userInfo(item, key))}
-            </AutoRow>
+            {
+              isMobile ? 
+              <Col style={{alignItems: 'center'}}>
+                {DiscoverReason.map((item, key) => userInfo(item, key))}
+              </Col>
+              :
+              <AutoRow justify="center">
+                {DiscoverReason.map((item, key) => userInfo(item, key))}
+              </AutoRow>
+            }
           </LocalStyle.UserCardContainer>
           <>
             <FadeInUp>
-              <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb="30px" mt={isMobile ? "70px" : "120px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
-            <Row style={{position: 'relative'}}>
+            <Row style={{position: 'relative', justifyContent: isMobile ? 'center' : 'flex-start'}}>
               { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
                 <LocalStyle.CateItem style={{marginRight: 0}} onClick={() => history.push('/project')}>

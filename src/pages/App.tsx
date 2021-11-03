@@ -36,9 +36,9 @@ export default function App() {
   const categoryInfo = useCategory();
   const { isMobile } = useResponsive();
 
-  if(isMobile){
-    return <ComingSoon />
-  }
+  // if(isMobile){
+  //   return <ComingSoon />
+  // }
 
   return (
     <Suspense fallback={null}>
