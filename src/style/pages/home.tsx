@@ -17,6 +17,8 @@ export const RankCard = styled(cardTransparent)`
 
 export const RankImg = styled.div`
   width: 55px;
+  display: flex;
+  align-items: center;
 `
 
 export const RankLogo = styled.img`
@@ -66,13 +68,17 @@ export const UserCard = styled(Col)`
   height: 460px;
   border-radius: 8px;
   cursor: pointer;
-  color: ${({ theme }) => `${theme.colors.secondary}`};
+  background: ${({ theme }) => `${theme.colors.backgroundAlt}`};
+  color: ${({ theme }) => `${theme.colors.primary}`};
   align-items: center;
   justify-content: center;
   padding: 0 40px;
   top: 0;
   transition: top .3s linear;
   position: relative;
+  #discover-line {
+    background: ${({ theme }) => `${theme.colors.primary}`};
+  }
   :hover {
     top: -10px;
     background: ${({ theme }) => `${theme.colors.backgroundAlt}`};
@@ -81,12 +87,20 @@ export const UserCard = styled(Col)`
       background: ${({ theme }) => `${theme.colors.primary}`};
     }
   }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-top: 120px;
+    background: transparent;
+    color: ${({ theme }) => `${theme.colors.secondary}`};
+    #discover-line {
+      background: transparent;
+    }
+  }
 `
 export const UserLine = styled.div`
   margin: 19px 0 13px 0;
   width: 32px;
   height: 4px;
-  background: ${({ theme }) => `${theme.colors.secondary}`};
+  background: transparent;
 `
 
 export const UserLogo = styled.img`
@@ -97,7 +111,6 @@ export const UserLogo = styled.img`
 export const CateItem = styled(cardTransparent)`
   width: 170px;
   height: 170px;
-  margin-bottom: 148px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,11 +118,14 @@ export const CateItem = styled(cardTransparent)`
   cursor: pointer;
   position: relative;
   top: 0;
-  margin-right: 36px;
+  margin: 0 8px 16px 8px;
   transition: top .2s linear;
   // :hover{
   //   top: -10px;
   // }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin: 0 36px 148px 0;
+  }
 `
 
 export const CateLogo = styled.img`
@@ -126,24 +142,38 @@ export const SliderWrapper = styled.a`
 
 export const SliderCard = styled.img`
   width: 880px !important;
-  height: 400px;
+  height: 156px;
   border-radius: 8px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 400px;
+  }
 `
 
 export const SliderBottom = styled(RowBetween)`
   position: absolute;
   bottom: 0;
-  width: 880px;
-  height: 60px;
+  width: 343px;
+  height: 23px;
   background: #00000099;
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  padding: 0 25px;
+  padding: 0 10px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 880px;
+    height: 60px;
+    padding: 0 25px;
+  }
 `
 
 export const SliderBottomBall = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 15px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 30px;
+    height: 30px;
+  }
 `
 
 export const SliderRight = styled.div`
@@ -175,11 +205,11 @@ export const SliderImg = styled.img`
 `
 
 export const SliderPointSec = styled.div`
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 24px;
   background: #B8C6D8;
-  margin-right: 12px;
+  margin-right: 16px;
   margin-top: 16px;
 `
 

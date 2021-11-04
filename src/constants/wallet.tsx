@@ -14,4 +14,4 @@ export const WalletList: any[] = [
   },
 ]
 
-export const supportedChainIds = [4, 321, 322];
+export const supportedChainIds = process.env.NODE_ENV === 'development' ? [4] : [321]

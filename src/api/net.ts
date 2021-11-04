@@ -43,3 +43,7 @@ export function getAccountTransaction(data): Object{
 export function getAccountProject(data): Object{
   return get('/api/v1/my/project?app=' + data)
 }
+
+export function getAudit(){
+  return get('/api/v1/audit/app')
+}

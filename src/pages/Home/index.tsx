@@ -6,7 +6,7 @@ import { ChartData } from '../../constants/home'
 import { 
   CommunityIcon, DaoIcon, EarnIcon,
   ExchangeIcon, GameIcon, LaunchpadIcon,
-  MoreIcon, NftIcon, ToolIcon, WalletIcon
+  MoreIcon, NftIcon, ToolIcon, WalletIcon,
 } from '../../style/components/Svg'
 import Chart from './Charts'
 import Row, { RowBetween, AutoRow } from 'components/Row'
@@ -36,6 +36,7 @@ interface PriceProps {
   addressCount: string
   avgGasPrice: string 
   txCount: number | string 
+  txCount24H: number | string 
   priceUsd: string
 }
 
@@ -56,14 +57,14 @@ const HomePage: React.FunctionComponent = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   let [chart1Data, setChart1Data] = React.useState(null);
-  const { isTablet } = useResponsive();
+  const { isTablet, isMobile } = useResponsive();
   const [chartLoading, getChart] = useLoading(ApiService.getGlobalChart);
   const [dappLoading, getTopDapp] = useLoading(ApiService.getTopDappRank);
   const [sliderLoading, getSliderInfo] = useLoading(ApiService.getHomeDiscover);
   const [topDapps, setTopDapp] = useState([]);
   const [showTop, setShowTop] = useState(false)
-  const [sliderDom, setSliderDom] = useState([{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},{cover: '', title: '-'},])
-  const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0' }]);
+  const [sliderDom, setSliderDom] = useState([{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},{cover: '', title: '-', logo: ''},])
+  const [chartData, setChartData] = useState([{ dailyVolumeETH: '0', totalLiquidityETH: '0', totalLiquidityUSD: '0' }]);
   const [dailyVolumeRate, setDailyRate] = useState('0.00');
   const priceInfo: PriceProps = usePriceInfo();
   const [active, setActive] = useState(0);
@@ -73,6 +74,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const mountedRef = useRef(true);
   const theme = useTheme();
   const { t } = useTranslation();
+  const containerWidth = isTablet ? '768px' : isMobile ? '100vw' : '1200px';
 
   let [chart1] = [null];
   
@@ -83,20 +85,21 @@ const HomePage: React.FunctionComponent = (props) => {
         if(!mountedRef.current) return null;
         let xAxisData = [], seriesData = [], max = 0;
         if(res.length) setChartData(res)
-        if(res[res.length - 1] && res[res.length - 2]){
-          setDailyRate(new BN(res[res.length - 1].dailyVolumeETH).minus(res[res.length - 2].dailyVolumeETH).div(res[res.length - 2].dailyVolumeETH).multipliedBy(100).toFixed(2).toString())
+        if(res[res.length - 2] && res[res.length - 3]){
+          setDailyRate(new BN(res[res.length - 2].totalLiquidityUSD).minus(res[res.length - 3].totalLiquidityUSD).div(res[res.length - 3].totalLiquidityUSD).multipliedBy(100).toFixed(2).toString())
         }
         for(let i = 0; i < res.length; i++){
           //@ts-ignore
           xAxisData.push(dayjs(res[i].date * 1000).format('YYYY-MM-DD'))
           //@ts-ignore
-          seriesData.push(new BN(res[i].dailyVolumeETH).toFixed(2, 1).toString())
-          max = Math.max(max, res[i].dailyVolumeETH)
+          seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
+          max = Math.max(max, res[i].totalLiquidityUSD)
         }
+        console.log('xAxisData =', xAxisData)
         //@ts-ignore
         opts.xAxis.data = xAxisData;
         //@ts-ignore
-        opts.yAxis.max = max + 500000;
+        opts.yAxis.max = max + parseInt(max / 3);
         //@ts-ignore
         opts.series[0].data = seriesData;
         setChart1Data(opts);
@@ -121,7 +124,8 @@ const HomePage: React.FunctionComponent = (props) => {
             {
               title: slider[i].title,
               name: slider[i].name,
-              cover: slider[i].banner
+              cover: slider[i].banner,
+              logo: slider[i].logo,
             }
           )
         }
@@ -146,7 +150,7 @@ const HomePage: React.FunctionComponent = (props) => {
           { 
             rank[index] ? rank[index]
             :
-            <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'center', fontWeight: 'bold', marginRight: '5px'}}>{index + 1}th</LocalStyle.SecondText>
+            <LocalStyle.SecondText style={{fontSize: '15px', textAlign: 'left', fontWeight: 'bold', margin: '0 5px'}}>{index + 1}th</LocalStyle.SecondText>
           }
         </LocalStyle.RankImg>
         <RowBetween style={{flexWrap: 'nowrap'}}>
@@ -173,7 +177,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const InfoData = (title: string, num: number, key: number) => {
     return (
       <FadeInUp delay={key * 100}>
-        <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0'}}>
+        <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0', marginTop: isMobile ? '15px' : '0'}}>
           <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
@@ -194,7 +198,7 @@ const HomePage: React.FunctionComponent = (props) => {
     const sub = {fontSize: '14px', lineHeight: '30px', color: theme.colors.secondary, textAlign: 'center' as const}
     return (
       <FadeInUp delay={index * 100} key={index}>
-        <LocalStyle.UserCard key={index} style={isTablet ? {marginRight: 0} : {marginRight: index ? '0' : '80px'}}>
+        <LocalStyle.UserCard key={index} style={isTablet ? {marginRight: 0} : {marginRight: !index && !isMobile ? '80px' : '0', marginTop: isMobile ? '16px': '0'}}>
           <LocalStyle.UserLogo src={item?.logo}/>
           <div style={title}>{item.title}</div>
           <LocalStyle.UserLine id="discover-line"/>
@@ -209,7 +213,7 @@ const HomePage: React.FunctionComponent = (props) => {
       <FadeInUp delay={index * 100} key={index}>
         <LocalStyle.CateItem onClick={() => history.push('/project?sec=' + data.index)}>
           {Categories[data.name]}
-          <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>{data?.name}</LocalStyle.SecondText>
+          <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}} mt="12px">{data?.name}</LocalStyle.SecondText>
         </LocalStyle.CateItem>
       </FadeInUp>
     )
@@ -233,7 +237,7 @@ const HomePage: React.FunctionComponent = (props) => {
   const Slide = React.memo(
     function (props: StackedCarouselSlideProps) {
         const { data, dataIndex, swipeTo, slideIndex, isCenterSlide } = props;
-        const { cover, title, name } = data[dataIndex];
+        const { cover, title, name, logo } = data[dataIndex];
         return (
             <LocalStyle.SliderWrapper 
               onClick={() => {
@@ -246,7 +250,7 @@ const HomePage: React.FunctionComponent = (props) => {
               className="homeBanner">
               <Img 
                 decode={true}
-                style={{width: '880px !important', height: '400px', borderRadius: '8px'}}
+                style={{width: isMobile ? '343px' : '880px !important', height: isMobile ? '156px' : '400px', borderRadius: '8px'}}
                 loader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 unloader={<LocalStyle.SliderCard src={bannerDef} alt="Home banner"/>}
                 src={[cover as string]}/>
@@ -254,12 +258,18 @@ const HomePage: React.FunctionComponent = (props) => {
                 active === dataIndex ? 
                 <LocalStyle.SliderBottom>
                   <AutoRow>
-                    <LocalStyle.SliderBottomBall src={websiteWhite}/>
-                    <Text ml="10px" fontSize="18px" color={theme.colors.invertedContrast}>{title}</Text>
+                  <Img 
+                    decode={true}
+                    style={{width: isMobile ? '12.5px' : '30px', height: isMobile ? '12.5px' : '30px', borderRadius: '15px'}}
+                    loader={<LocalStyle.SliderBottomBall src={logoDef} alt="Home Logo"/>}
+                    unloader={<LocalStyle.SliderBottomBall src={logoDef} alt="Home Logo"/>}
+                    src={[logo as string]}/>
+                    {/* <LocalStyle.SliderBottomBall src={websiteWhite}/> */}
+                    <Text ml="10px" fontSize={isMobile ? "12px" : "18px"} color={theme.colors.invertedContrast}>{title}</Text>
                   </AutoRow>
-                  <AutoRow style={{width: '14%'}}>
-                    <Text mr="10px" fontSize="14px" color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
-                    <LocalStyle.SliderImg src={iconRight} style={{width: '6px', height: 'auto'}}/>
+                  <AutoRow style={{width: isMobile ? '40%' : '14%'}}>
+                    <Text mr="10px" fontSize={isMobile ? "10px" : "14px"} color={theme.colors.invertedContrast}>{t("Learn more")}</Text>
+                    <LocalStyle.SliderImg src={iconRight} style={{width: isMobile ? '4px' : '6px', height: 'auto'}}/>
                   </AutoRow>
                 </LocalStyle.SliderBottom>
                 : null
@@ -291,74 +301,76 @@ const HomePage: React.FunctionComponent = (props) => {
     {
       title: t('For Users'),
       content: t("User-explain"),
-      logo: require('../../assets/images/home/user-1.png').default,
+      logo: require('../../assets/images/home/user-1.svg').default,
+
     },
     {
       title: t('For Developers'),
       content: t('Develop-explain'),
-      logo: require('../../assets/images/home/user-2.png').default,
+      logo: require('../../assets/images/home/user-2.svg').default,
     }
   ]
   return (
       <>
-        <Container width={isTablet ? '768px' : '1200px'}>
-          <RowBetween style={{marginTop: '60px'}}>
+        <Container width={containerWidth}>
+          <RowBetween style={{marginTop: isMobile ? '20px' : '60px', justifyContent: isMobile ? 'center' : 'space-between'}}>
             <Col>
-              <LocalStyle.SecondText mb="15px" style={{fontSize: '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb="15px" style={{fontSize: isMobile ? '16px' : '24px'}}>{t("Total Value Locked in KCC")}</LocalStyle.SecondText>
               <Row align="flex-end">
-                <LocalStyle.SecondText style={{fontSize: '48px', lineHeight: '48px', fontFamily: 'kccfont Number Normal'}}>$
+                <LocalStyle.SecondText style={{fontSize: isMobile ? '36px' : '48px', lineHeight: '48px', fontFamily: 'kccfont Number Normal'}}>$
                 {
-                  chartData[0].totalLiquidityETH ?
+                  chartData.length > 1 ?
                   <CountUp 
                     start={0} 
-                    end={Number(chartData[0].totalLiquidityETH)} 
+                    end={Number(chartData[chartData.length -1].totalLiquidityUSD)} 
                     decimals={2}
                     duration={1.5} 
                     separator=","/>
                   : '--'
                 }
                 </LocalStyle.SecondText>
-                <Text fontSize="24px" color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml="27px" style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>
+                { !isMobile && <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text> }
               </Row>
+              {isMobile && <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>}
               <Chart
                 key="chart1"
                 className="chart1"
                 option={chart1Data}
                 onRender={(e): void => chart1 = e}
-                style={{width: "807px", height: "279px", minWidth: '500px', minHeight: '173'}}/>
+                style={{width: isMobile ? '351px' : "807px", height: isMobile ? '200px' : "209px", minWidth: isMobile ? '350px' : '500px', minHeight: '173px'}}/>
             </Col>
             <FadeInUp>
-              <LocalStyle.RankCard style={{marginTop: isTablet ? '20px': '0'}}>
+              <LocalStyle.RankCard style={{margin: isTablet ? '20px 0 0 0': (isMobile ? '40px auto 0 auto' : '0')}}>
                 <LocalStyle.SecondText mb="30px" style={{fontSize: '18px'}}>{t("Top 5 Ranking")}</LocalStyle.SecondText>
                 {!showTop ? <Skeleton paragraph={{ rows: 5 }} /> : null}
                 {topDapps.length ? topDapps.map((item, index) => {if(index < 5) {return DappItem(item, index)} return null }) : null}
               </LocalStyle.RankCard>
             </FadeInUp>
           </RowBetween>
-          <RowBetween style={{marginTop: '116px'}}>
+          <RowBetween style={{marginTop: isMobile ? '17px' : '116px', justifyContent: isMobile ? 'center' : 'space-between'}}>
               {InfoData('Avg Gas Fee', new BN(priceInfo.avgGasPrice).div(10 ** 18).times(priceInfo.priceUsd).toNumber(), 0)}
               {InfoData('Total Address', new BN(priceInfo.addressCount).toNumber(), 1)}
-              {InfoData('24H Txn', priceInfo.txCount as number, 2)}
+              {InfoData('24H Txn', priceInfo.txCount24H as number, 2)}
           </RowBetween>
           <>
             <FadeInUp>
-              <LocalStyle.SecondText mb="60px" mt="158px">{t("Discover")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb={isMobile ? "32px" : "60px"} mt={isMobile ? "60px" : "158px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Discover")}</LocalStyle.SecondText>
             </FadeInUp>
             <FadeInUp>
               <AutoRow justify="center" style={{position: 'relative'}}>
-                <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/>
+                {!isMobile && <SliderCoin type="left" onClick={() => {sliderRef.current.goBack()}}/>}
                 <StackedCarousel
                   ref={sliderRef}
                   data={sliderDom}
-                  carouselWidth={1200}
-                  slideWidth={880}
+                  carouselWidth={isMobile ? 343 : 1200}
+                  slideWidth={isMobile ? 343 : 880}
                   slideComponent={Slide}
                   maxVisibleSlide={sliderDom.length === 5 ? 5 : 1}
                   customTransition={'all 1000ms ease 0s'}
                   onActiveSlideChange={v => { setActive(v) }}
                   useGrabCursor={true}
                 />
-                <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>
+                {!isMobile && <SliderCoin type="right" onClick={() => {sliderRef.current.goNext()}}/>}
               </AutoRow>
               <Col>
                 <Row style={{justifyContent: 'center'}}>
@@ -376,22 +388,29 @@ const HomePage: React.FunctionComponent = (props) => {
           </>
           <LocalStyle.UserCardContainer>
             <FadeInUp>
-              <LocalStyle.SecondText mb="30px" mt="120px">{t("Why Discover KCC")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb={isMobile ? "18px" : "30px"} mt={isMobile ? "72px" : "120px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Why Discover")}</LocalStyle.SecondText>
             </FadeInUp>
-            <AutoRow justify="center">
-              {DiscoverReason.map((item, key) => userInfo(item, key))}
-            </AutoRow>
+            {
+              isMobile ? 
+              <Col style={{alignItems: 'center'}}>
+                {DiscoverReason.map((item, key) => userInfo(item, key))}
+              </Col>
+              :
+              <AutoRow justify="center">
+                {DiscoverReason.map((item, key) => userInfo(item, key))}
+              </AutoRow>
+            }
           </LocalStyle.UserCardContainer>
           <>
             <FadeInUp>
-              <LocalStyle.SecondText mb="30px" mt="120px">{t("Popular Categories")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb="30px" mt={isMobile ? "70px" : "120px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
-            <Row style={{position: 'relative'}}>
+            <Row style={{position: 'relative', justifyContent: isMobile ? 'center' : 'flex-start'}}>
               { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
                 <LocalStyle.CateItem style={{marginRight: 0}} onClick={() => history.push('/project')}>
                   {Categories['Others']}
-                  <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}}>More</LocalStyle.SecondText>
+                  <LocalStyle.SecondText style={{fontSize: '16px', fontWeight: 'normal'}} mt="12px">More</LocalStyle.SecondText>
                 </LocalStyle.CateItem>
               </FadeInUp>
             </Row>

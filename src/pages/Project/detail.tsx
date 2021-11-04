@@ -19,6 +19,7 @@ import { useResponsive } from 'utils/responsive'
 import CommentModal from '../../components/CommentModal'
 import { useComment } from '../../hooks/useDiscoverContract'
 import { Img } from 'react-image'
+import { useChainError } from 'state/wallet/hooks'
 import $ from 'jquery'
 
 const ProjectDetailPage: React.FunctionComponent = (props) => {
@@ -57,6 +58,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   })
   const [detailLoading, getInfo] = useLoading(ApiService.getDappInfo)
   const [commentLoading, getComment] = useLoading(ApiService.getDappComment)
+  const chainError = useChainError();
   const [loaded, setLoad] = useState(false)
   const [page, setPage] = useState(1)
   const [showTips, setShow] = useState(false)
@@ -114,14 +116,15 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
     })
   }, [account])
 
-  useEffect(() => {
-    if(detail.detail){
-      const height = $('#projectDetail').height() ?? 0
-      if(height > 48){
-        setShow(true)
-      }
-    }
-  }, [detail])
+  // useEffect(() => {
+  //   if(detail.detail){
+  //     const height = $('#projectDetail').height() ?? 0
+  //     console.log('height =', height)
+  //     if(height >= 48){
+  //       setShow(true)
+  //     }
+  //   }
+  // }, [detail.detail])
 
   const confirmComment = (data) => {
     let params = {
@@ -141,8 +144,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         message.success(t('Success'));
       }
     }).catch(e => {
-      let error = e?.toString().split('code":')[1]?.split(',')
-      if(error && error[0] === '-32603'){
+      if(e && e.code === -32603){
         message.error(t('You can only comment once per account'))
       } else {
         message.error(t('Contract call error'))
@@ -186,14 +188,23 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
               />
               <Col style={{width: '70%'}}>
                 <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
-                {
+                {/* {
                   showTips ?
                   <Popover overlayClassName={'projectDetailPopover'} content={<p style={{wordBreak: 'break-all'}}>{detail.detail}</p>} trigger="hover">
                     <LocalStyle.ProjectTextSubTwo style={{cursor: 'pointer'}}>{detail.detail}</LocalStyle.ProjectTextSubTwo>
                   </Popover>
                   :
                   <LocalStyle.ProjectTextSubTwo>{detail.detail}</LocalStyle.ProjectTextSubTwo>
+                } */}
+                <Row style={{position: 'relative'}}>
+                {
+                  showTips ? 
+                  <LocalStyle.ProjectDetailText>{detail.detail}</LocalStyle.ProjectDetailText>
+                  :
+                  <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 155)}{detail.detail && detail.detail.length > 155 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
                 }
+                {detail.detail && detail.detail.length > 155 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
+                </Row>
                 <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
                 <Row mt="10px">
                   <LocalStyle.ProjectTips grey={false}>{new BN(detail.margin).toFixed(2).toString()} KCS</LocalStyle.ProjectTips>
@@ -240,6 +251,10 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => {
               if(!account){
                 message.error(t('Wallet not connected'));
+                return;
+              }
+              if(chainError){
+                message.error(chainError);
                 return;
               }
               setModal(true)

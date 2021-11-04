@@ -17,6 +17,8 @@ import { useHistory } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useChainError } from '../../state/wallet/hooks'
 import { switchNetwork } from '../../utils/wallet'
+import { useResponsive } from 'utils/responsive'
+
 import useAccountInfo from '../../hooks/useAccount'
 import BN from 'bignumber.js'
 
@@ -39,8 +41,8 @@ const ConnectButton = styled.div`
   justify-content: center;
   margin: 0px;
   margin-left: 18px;
-  min-width: 120px;
-  padding: 0 24px;
+  min-width: 90px;
+  padding: 0 12px;
   outline: none;
   white-space: nowrap;
   position: relative;
@@ -48,6 +50,10 @@ const ConnectButton = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.darkGrey};
   :hover{
     border: 1px solid ${({ theme }) => theme.colors.primary};
+  }
+  ${({ theme }) => theme.mediaQueries.sm} {
+    min-width: 120px;
+    padding: 0 24px;
   }
 `
 
@@ -97,7 +103,8 @@ const RightImg = styled.img`
 `
 
 const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
-  const accountEllipsis = account ? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : null
+  const { isMobile } = useResponsive()
+  const accountEllipsis = account ? `${account.substring(0, 4)}...${!isMobile ? account.substring(account.length - 4) : ''}` : null
   const accountDropDownEllipsis = account ? `${account.substring(0, 8)}...${account.substring(account.length - 8)}` : null
   const [connectVisible, setCVisible] = useState(false)
   const [accountVisible, setAVisible] = useState(false)
@@ -162,8 +169,13 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
           > 
             <LinkImg src={require('../../assets/images/Icons/logo.png').default}/>
             <Text color={theme.colors.primary} fontSize={'14px'}>{accountEllipsis}</Text>
-            <LinkButtonLine />
-            <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0] ? new BN(balance[0]?.toSignificant(18)).toFixed(2, 1) : 0} KCS</Text>
+            { !isMobile && 
+              <>
+                <LinkButtonLine />
+                <Text color={theme.colors.invertedContrast} fontSize={'14px'}>{balance[0] ? new BN(balance[0]?.toSignificant(18)).toFixed(2, 1) : 0} KCS</Text>
+              </>
+            }
+            
           </ConnectButton>
         </Dropdown>
       ) : (

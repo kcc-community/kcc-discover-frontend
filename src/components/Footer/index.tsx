@@ -2,15 +2,23 @@ import React, { FunctionComponent, useEffect } from 'react'
 import styled from 'styled-components'
 import { Container, Text } from '../../style'
 import Row, { RowBetween } from 'components/Row'
+import Column from 'components/Column'
 import { media } from '../../constants/home'
+import { useResponsive } from 'utils/responsive'
 import $ from 'jquery'
 
 const FooterWrap = styled.div<{ transparent?: boolean }>`
   width: 100%;
-  height: 120px;
-  background: ${({ theme, transparent }) => `${transparent ? theme.colors.backgroundAlt : theme.colors.backgroundNav}`};
+  background: #262C3A;
+  height: 180px;
   display: flex;
   align-items: center;
+  margin-top: 40px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 120px;
+    margin-top: 0px;
+    background: ${({ theme, transparent }) => `${transparent ? theme.colors.backgroundAlt : theme.colors.backgroundNav}`};
+  }
 `
 
 const MediaItem = styled.a`
@@ -33,6 +41,8 @@ interface FooterProps {
 } 
 
 const Footer: React.FunctionComponent<FooterProps> = (props) => {
+  const { isMobile } = useResponsive()
+
   useEffect(() => {
     for(let index in media){
       $('.' + media[index].app).hover(function(){
@@ -54,12 +64,23 @@ const Footer: React.FunctionComponent<FooterProps> = (props) => {
   return (
     <FooterWrap transparent={props?.transparent}>
       <Container>
-        <RowBetween>
-          <Text color={'#FFFFFFCC'}>© 2021 Discover KCC All rights reserved</Text>
-          <Row style={{width: 'auto'}}>
-            {media.map((item, index) => renderMedia(item, index))}
-          </Row>
-        </RowBetween>
+        {
+          isMobile ? 
+          <Column style={{alignItems: 'center'}}>
+            <Text color={'#FFFFFFCC'}>© 2021 Discover All rights reserved</Text>
+            <Row style={{width: 'auto', marginTop: '32px', marginLeft: '-24px'}}>
+              {media.map((item, index) => renderMedia(item, index))}
+            </Row>
+          </Column>
+          :
+          <RowBetween>
+            <Text color={'#FFFFFFCC'}>© 2021 Discover All rights reserved</Text>
+            <Row style={{width: 'auto'}}>
+              {media.map((item, index) => renderMedia(item, index))}
+            </Row>
+          </RowBetween>
+        }
+        
       </Container>
     </FooterWrap>
   )

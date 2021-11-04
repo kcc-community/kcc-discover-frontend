@@ -11,7 +11,7 @@ interface Props {
 }
 
 const WalletCard: React.FC<Props> = ({ login, walletConfig, onDismiss, mb }) => {
-  const { title, } = walletConfig;
+  const { title, icon: Icon } = walletConfig;
   return (
     <Button
       width="100%"
@@ -28,6 +28,7 @@ const WalletCard: React.FC<Props> = ({ login, walletConfig, onDismiss, mb }) => 
       <Text bold color="primary" mr="16px">
         {title}
       </Text>
+      <Icon width="32px" />
     </Button>
   );
 };

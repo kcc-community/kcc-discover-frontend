@@ -50,7 +50,7 @@ export function useComment(data: any , library?: any): {
         })
     }).catch(e => {
       console.log('e =', e)
-      throw Error(e)
+      throw (e)
     })
   }
   return { commentCallback }
@@ -74,6 +74,7 @@ export function useCommentLike(data: any , library?: any): {
         })
     }).catch(e => {
       console.log(e)
+      throw e
     })
   }
   return { commentLikeCallback }
@@ -97,7 +98,7 @@ export function useCommentDelete(data: any , library?: any): {
         })
     }).catch(e => {
       console.log(e)
-      throw Error(e)
+      throw e
     })
   }
   return { commentDeleteCallback }
@@ -138,7 +139,7 @@ export function useCommit(data: any , library?: any): {
           return response.hash
         })
     }).catch(e => {
-      throw Error(e)
+      throw (e)
     })
   }
   return { commitCallback }
@@ -180,7 +181,7 @@ export function useUpdateCommit(data: any , library?: any): {
         })
     }).catch(e => {
       console.log(e)
-      throw Error(e)
+      throw (e)
     })
   }
   return { updateCallback }

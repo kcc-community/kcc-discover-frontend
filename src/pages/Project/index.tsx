@@ -161,7 +161,12 @@ const ProjectPage: React.FunctionComponent = (props) => {
               cateLoading ? 
               <LocalStyle.ProjectItem style={{height: 'auto'}}><Skeleton paragraph={{ rows: 5 }} /></LocalStyle.ProjectItem>
               :
-              subList.map(item => renderMenuItem(item)) 
+              ( 
+                <>
+                  {subList.filter(item => item.name !== 'Others').map(item => renderMenuItem(item))}
+                  {subList.filter(item => item.name === 'Others').map(item => renderMenuItem(item))}
+                </>
+              ) 
             }
           </LocalStyle.ProjectMenu>
           <Col style={{ flex: 1 }}>

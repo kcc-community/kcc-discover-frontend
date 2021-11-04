@@ -63,6 +63,15 @@ export const ProjectTextSubTwo = styled(Text)`
   -webkit-box-orient: vertical;
 `
 
+export const ProjectDetailText = styled(Text)`
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: .5px;
+  white-space: normal;
+  word-break: break-all;
+  color: ${({ theme }) => theme.colors.textSubtle};
+`
+
 export const ProjectInputWrapper = styled(Row)`
   width: 241px;
   height: 40px;
