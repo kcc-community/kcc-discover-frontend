@@ -155,7 +155,7 @@ const Menu: React.FunctionComponent = (props) => {
   
   const renderMenu = (data, index) => {
     return(
-      <a onClick={() => history.push(data?.route)} key={index} style={{marginTop: isMobile ? '36px' : '0'}}>
+      <a onClick={() => { setShow(false); history.push(data?.route)}} key={index} style={{marginTop: isMobile ? '36px' : '0'}}>
         <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml={!isMobile ? "40px" : '0'} style={{textAlign: isMobile ? 'center' : 'left'}}>{data?.title}</Text>
       </a>
     )

@@ -85,8 +85,8 @@ const HomePage: React.FunctionComponent = (props) => {
         if(!mountedRef.current) return null;
         let xAxisData = [], seriesData = [], max = 0;
         if(res.length) setChartData(res)
-        if(res[res.length - 1] && res[res.length - 2]){
-          setDailyRate(new BN(res[res.length - 1].totalLiquidityUSD).minus(res[res.length - 2].totalLiquidityUSD).div(res[res.length - 2].totalLiquidityUSD).multipliedBy(100).toFixed(2).toString())
+        if(res[res.length - 2] && res[res.length - 3]){
+          setDailyRate(new BN(res[res.length - 2].totalLiquidityUSD).minus(res[res.length - 3].totalLiquidityUSD).div(res[res.length - 3].totalLiquidityUSD).multipliedBy(100).toFixed(2).toString())
         }
         for(let i = 0; i < res.length; i++){
           //@ts-ignore
@@ -95,6 +95,7 @@ const HomePage: React.FunctionComponent = (props) => {
           seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
           max = Math.max(max, res[i].totalLiquidityUSD)
         }
+        console.log('xAxisData =', xAxisData)
         //@ts-ignore
         opts.xAxis.data = xAxisData;
         //@ts-ignore
@@ -330,7 +331,7 @@ const HomePage: React.FunctionComponent = (props) => {
                 </LocalStyle.SecondText>
                 { !isMobile && <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text> }
               </Row>
-              <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>
+              {isMobile && <Text fontSize={isMobile ? "16px" : "24px"} color={dailyVolumeRate.includes('-') ? theme.colors.failure : theme.colors.primary} fontWeight="bold" ml={isMobile ? "0px" : "27px"} style={{fontFamily: 'kccfont Number Normal'}}>{dailyVolumeRate.includes('-') ? '' : '+'}{dailyVolumeRate}%</Text>}
               <Chart
                 key="chart1"
                 className="chart1"

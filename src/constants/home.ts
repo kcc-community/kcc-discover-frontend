@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 export const ChartData = {
   xAxis: {
     axisLine: {
@@ -9,7 +8,8 @@ export const ChartData = {
       show: false,
     },
     axisLabel: {
-      color: '#B8C6D899'
+      color: '#B8C6D899',
+      showMaxLabel: true,
     }
   },
   yAxis: {
