@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import styled, { useTheme } from 'styled-components'
 import useAuth from 'hooks/useAuth'
@@ -12,6 +12,10 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { injected } from '../../connectors'
 import { updateChainError } from '../../state/wallet/actions'
+import { useResponsive } from 'utils/responsive'
+import { Drawer } from 'antd'
+import { truncateSync } from 'fs'
+import Column from 'components/Column'
 
 const Wrapper = styled.div`
   position: relative;
@@ -51,20 +55,36 @@ const Inner = styled.div`
 `
 
 const ImgLogo = styled.img`
-  height: 22px;
-  cursor: pointer
+  height: 16px;
+  cursor: pointer;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 22px;
+  }
 `
 const ImgKccLogo = styled.img`
-  height: 33px;
+  height: 26px;
   cursor: pointer;
   margin-top: 2px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 33px;
+  }
 `
 
 const ImgLines = styled.div`
   background: #596171;
-  width: 2px;
-  height: 19px;
+  width: 1.5px;
+  height: 15px;
   margin: 0 12px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 2px;
+    height: 19px;
+  }
+`
+
+const ImgMenu = styled.img`
+  height: 16px;
+  width: 16px;
+  margin: 0 15px 0 10px;
 `
 
 interface MenuList {
@@ -81,6 +101,8 @@ const Menu: React.FunctionComponent = (props) => {
   const matchAccount = useRouteMatch({ path: '/account', strict: true, sensitive: true });
   const theme = useTheme()
   const dispatch = useDispatch()
+  const { isMobile } = useResponsive()
+  const [showMenu, setShow] = useState(false)
   const href = window.location.href
   const menuList: MenuList[] = [
     {
@@ -133,8 +155,8 @@ const Menu: React.FunctionComponent = (props) => {
   
   const renderMenu = (data, index) => {
     return(
-      <a onClick={() => history.push(data?.route)} key={index}>
-        <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml="40px">{data?.title}</Text>
+      <a onClick={() => { setShow(false); history.push(data?.route)}} key={index} style={{marginTop: isMobile ? '36px' : '0'}}>
+        <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml={!isMobile ? "40px" : '0'} style={{textAlign: isMobile ? 'center' : 'left'}}>{data?.title}</Text>
       </a>
     )
   }
@@ -144,12 +166,13 @@ const Menu: React.FunctionComponent = (props) => {
       <StyledNav>
         <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
           <RowFixed>
+            { isMobile && <ImgMenu src={require('../../assets/images/Icons/h5/menu.png').default} onClick={() => setShow(!showMenu)}/>}
             <a href="https://www.kcc.io/#/" target="_blank">
               <ImgKccLogo src={require('../../assets/images/home/kcc.png').default}/>
             </a>
             <ImgLines />
             <ImgLogo src={require('../../assets/images/home/logo.png').default} onClick={() => history.push('/')}/>
-            { menuList.map((item, index) => renderMenu(item, index)) }
+            { !isMobile && menuList.map((item, index) => renderMenu(item, index)) }
           </RowFixed>
           <RowFixed>
             {!!login && !!logout && (
@@ -166,6 +189,17 @@ const Menu: React.FunctionComponent = (props) => {
           {props.children}
         </Inner>
       </BodyWrapper>
+      <Drawer
+        placement={'left'} 
+        closable={false}
+        onClose={() => {setShow(false)}}
+        visible={showMenu}
+        key={'left'}
+      >
+        <Column>
+          {menuList.map((item, index) => renderMenu(item, index))}
+        </Column>
+      </Drawer>
     </Wrapper>
   )
 }

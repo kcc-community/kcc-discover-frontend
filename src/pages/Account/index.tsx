@@ -39,7 +39,8 @@ const AccountPage: React.FunctionComponent = (props) => {
   const transactionLoading = useTransactionLoading();
   const projectInfo = useProjectInfo();
   const transactionInfo = useTransactionInfo();
-  const { isTablet } = useResponsive()
+  const { isTablet, isMobile } = useResponsive()
+  const containerWidth = isTablet ? '768px' : isMobile ? '100vw' : '1200px';
 
   const hasProject = projectInfo.state === 'None' ? false : true
   const totalValueKcs = balance[0]?.toSignificant(4) ? new BN(balance[0]?.toSignificant(4) as string).toFixed(2, 1) : '0.00'
@@ -103,7 +104,7 @@ const AccountPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{minHeight: '80vh'}} width={isTablet ? '768px' : '1200px'}>
+      <Container style={{minHeight: '80vh'}} width={containerWidth}>
         <RowBetween style={{marginTop: '40px', alignItems: 'center', marginBottom: '25px'}}>
           <Row>
             <LocalStyle.ProjectText style={{fontSize: '32px'}}>{t("My Account")}</LocalStyle.ProjectText>

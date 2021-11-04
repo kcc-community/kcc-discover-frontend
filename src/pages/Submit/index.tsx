@@ -24,6 +24,7 @@ import { updateChainError } from '../../state/wallet/actions'
 import { useDispatch } from 'react-redux'
 import { NFTStorage, File } from 'nft.storage'
 import { isAddress } from 'ethers/lib/utils'
+import { useResponsive } from 'utils/responsive'
 
 const { decryptString, } = new StringCrypto();
 const client = new NFTStorage({ token: decryptString(Ipfs, 'KCC_DISCOVER') })
@@ -96,6 +97,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   const [githubLink, setGithub] = useState('')
   const [coinmarketcapLink, setCoinMarket] = useState('')
   const [coingeckoLink, setCoinGecko] = useState('')
+  const { isMobile } = useResponsive()
 
   const checkEmail = email && !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,6})+|\.([a-zA-Z]{2,6})$/.test(email) ? false : true
   //@ts-ignore
@@ -111,7 +113,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
   }
   useEffect(() => {
     if(chainId && chainId !== Number(process.env.REACT_APP_CHAIN_ID)){
-      dispatch(updateChainError({chainError: 'Unsupported Network'}))
+      dispatch(updateChainError({chainError: isMobile ? 'Unsupported' : 'Unsupported Network'}))
       return;
       // todo: check the network type
       // switchNetwork(Number(process.env.REACT_APP_CHAIN_ID))
@@ -303,9 +305,9 @@ const SubmitPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{minHeight: '80vh', width: '536px'}}>
-        <Col style={{marginTop: '40px', marginBottom: '50px'}}>
-          <LocalStyle.ProjectText style={{fontSize: '32px', marginBottom: '30px'}}>{name ? t('Modify a project') : t('Submit a project')}</LocalStyle.ProjectText>
+      <Container style={{minHeight: '80vh', width: isMobile ? '350px' : '536px'}}>
+        <Col style={{marginTop: isMobile ? '24px' : '40px', marginBottom: '50px'}}>
+          <LocalStyle.ProjectText style={{fontSize: isMobile ? '20px' : '32px', marginBottom: isMobile ? '15px' : '30px'}}>{name ? t('Modify a project') : t('Submit a project')}</LocalStyle.ProjectText>
           <InputItem 
             title={t('Title')}
             required={true}
@@ -325,7 +327,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             showSearch
             placeholder={t("Choose")}
             optionFilterProp="children"
-            style={{marginBottom: '36px'}}
+            style={{marginBottom: isMobile ? '24px' : '36px'}}
             value={primaryCategoryIndex}
             onChange={(e) => {setPrimary(e)}}
             filterOption={(input, option) =>
@@ -349,7 +351,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             placeholder={t("Choose")}
             optionFilterProp="children"
             value={secondaryCategoryIndex}
-            style={{marginBottom: '36px'}}
+            style={{marginBottom: isMobile ? '24px' : '36px'}}
             onChange={(e) => {setSecondary(e)}}
             filterOption={(input, option) =>
               //@ts-ignore
@@ -406,7 +408,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             </Col>
           </Upload>
           <Input value={logoLink} disabled onChange={(e) => {setLogo(splitSpace(e.target.value))}} style={{marginTop: '15px'}}/>
-          <div style={{height: '36px'}}/>
+          <div style={{height: isMobile ? '24px' : '36px'}}/>
           <Row mb="8px">
             <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{t("Banner")}</Text>
             {/* <RequiredPoint>*</RequiredPoint> */}
@@ -429,7 +431,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
           </Upload>
           <Input value={banner} disabled onChange={(e) => {setBanner(e.target.value)}} style={{marginTop: '15px'}}/>
           <img src="" id="test"/>
-          <div style={{height: '36px'}}/>
+          <div style={{height: isMobile ? '24px' : '36px'}}/>
           <InputItem 
             title={t('Smart Contract Address')}
             required={checkContractAddress}
@@ -530,7 +532,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             onChange={e => {setCoinGecko(splitSpace(e.target.value))}}
           />
           <Button 
-            style={{width: '100px'}} 
+            style={{width: isMobile ? '343px' : '100px', height: isMobile ? '48px' : '32px', borderRadius: isMobile ? '24px !important' : '12px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
             || !logoLink || !websiteLink || (!marginAmount && (!name || state === 'Refused'))|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
             || !checkEmail || (!checkMargin && (!name || state === 'Refused')) || chainError || (tokenContractAddress && !isAddress(tokenContractAddress))}

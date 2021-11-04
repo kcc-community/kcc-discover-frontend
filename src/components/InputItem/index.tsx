@@ -5,6 +5,7 @@ import { Input, Popover } from 'antd'
 import { downGrey, info } from '../../constants/imgs'
 import Col from '../Column'
 import Row from '../Row'
+import { useResponsive } from 'utils/responsive'
 
 const { TextArea } = Input;
 
@@ -49,8 +50,9 @@ const ErrorText = styled.div`
 
 const InputItem: React.FunctionComponent<InputItemProps> = (props) => {
   const theme = useTheme()
+  const { isMobile } = useResponsive()
   return (
-    <Col style={{marginBottom: props.mb ?? '36px'}}>
+    <Col style={{marginBottom: props.mb ?? (isMobile ? '24px' : '36px')}}>
       {props.title && 
         <Row mb="8px">
           <Text color={theme.colors.text} fontWeight="bold" mr={'5px'}>{props.title}</Text>
