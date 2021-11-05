@@ -18,6 +18,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import Comment from '../../components/Comment'
 import Footer from '../../components/Footer'
+import MoreButton from '../../components/More'
 import { useKCSPrice } from '../../state/wallet/hooks'
 import { Img } from 'react-image'
 import { useProjectLoading, useTransactionLoading, useTransactionInfo, useProjectInfo } from '../../state/application/hooks'
@@ -62,6 +63,7 @@ const AccountPage: React.FunctionComponent = (props) => {
 
   const TopCard = (type: string) => {
     const isBalance = type === 'balance' ? true : false;
+    const infoMarginTop = isMobile ? '24px' : '35px';
     const InfoItem = (title: string, content: string | number, width?: string, mt?: string) => {
       return(
         <Col style={{width: width ?? 'auto', marginTop: mt ?? '0px'}}>
@@ -71,12 +73,20 @@ const AccountPage: React.FunctionComponent = (props) => {
       )
     }
     return(
-      <LocalStyle.AccountCard key={type} style={{width: isBalance ? '584px' : '596px', marginBottom: isTablet ? '20px': '0'}}>
+      <LocalStyle.AccountCard key={type} style={{width: isMobile ? '343px' : (isBalance ? '584px' : '596px'), marginBottom: isTablet ? '20px': (isMobile ? '16px' : '0')}}>
         {InfoItem(isBalance ? t('Total KCS Balance') : t('Total Value'), show ? (isBalance ? new BN(totalValueKcs).plus(totalLockKcs).toFixed(2, 1).toString() : `$${new BN(totalValueUsdt).plus(totalLockUsdt).toFixed(2, 1).toString() }`) : '--')}
-        <RowBetween>
-          {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', '35px')}
-          {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : `$${totalLockUsdt}`) : '--', '50%', '35px')}
-        </RowBetween>
+        {
+          isMobile ?
+          <>
+            {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', infoMarginTop)}
+            {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : `$${totalLockUsdt}`) : '--', '50%', infoMarginTop)}
+          </>
+          :
+          <RowBetween>
+            {InfoItem(isBalance ? t('Wallet KCS balance') : t('Wallet balance value'), show ? (isBalance ? totalValueKcs : `$${totalValueUsdt}`) : '--', '50%', infoMarginTop)}
+            {InfoItem(isBalance ? t('Locked KCS balance') : t('Locked balance value'), show ? (isBalance ? totalLockKcs : `$${totalLockUsdt}`) : '--', '50%', infoMarginTop)}
+          </RowBetween>
+        }
       </LocalStyle.AccountCard>
     )
   }
@@ -104,34 +114,34 @@ const AccountPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{minHeight: '80vh'}} width={containerWidth}>
-        <RowBetween style={{marginTop: '40px', alignItems: 'center', marginBottom: '25px'}}>
+      <Container style={{minHeight: '80vh', padding: isMobile ? '0 15px' : 'auto'}} width={containerWidth}>
+        <RowBetween style={{alignItems: 'center', maxWidth: isMobile ? '343px' : 'auto', margin: isMobile ? '24px auto 12px auto' : '40px 0 25px 0'}}>
           <Row>
-            <LocalStyle.ProjectText style={{fontSize: '32px'}}>{t("My Account")}</LocalStyle.ProjectText>
+            <LocalStyle.ProjectText style={{fontSize: isMobile ? '20px' : '32px'}}>{t("My Account")}</LocalStyle.ProjectText>
             <LocalStyle.AccountEye src={show ? eyeOpen : eyeClose} onClick={() => setShow(!show)}/>
           </Row>
           {
             account ? 
             <Row 
-              style={{justifyContent: 'flex-end'}}
+              style={{justifyContent: isMobile ? 'flex-start' : 'flex-end', marginTop: isMobile ? '5px' : '0'}}
               onClick={() => {
                 Copy(account ?? '');
                 message.success(t('Copied'))
               }}>
-              <LocalStyle.ProjectTextSub style={{fontSize: '14px'}}>{account}</LocalStyle.ProjectTextSub>
+              <LocalStyle.ProjectTextSub style={{fontSize: '14px', width: isMobile ? '300px' : 'auto'}}>{account}</LocalStyle.ProjectTextSub>
               <LocalStyle.AccountImgCopy src={copy}/>
             </Row>
             : null
           }
         </RowBetween>
-        <RowBetween>
+        <RowBetween style={{justifyContent: isMobile ? 'center' : 'space-between'}}>
           {TopCard('value')}
           {TopCard('balance')}
         </RowBetween>
-        <RowBetween mt="20px" mb="36px">
+        <RowBetween mt="20px" mb="36px" style={{justifyContent: isMobile ? 'center' : 'space-between'}}>
           <Col>
-            <LocalStyle.AccountCard width="387px" height="246px" style={{marginBottom: '20px'}}>
-              <RowBetween>
+            <LocalStyle.AccountCard width={isMobile ? "343px" : "387px"} height="246px" style={{marginBottom: '20px'}}>
+              <RowBetween> 
                 <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("My Project")}</LocalStyle.ProjectText>
                 {
                   hasProject && (projectInfo.state === 'Displaying' || projectInfo.state === 'Refused') &&
@@ -172,12 +182,20 @@ const AccountPage: React.FunctionComponent = (props) => {
                 )
               }
             </LocalStyle.AccountCard>  
-            <LocalStyle.AccountCard width="387px" height="332px">
+            <LocalStyle.AccountCard width={isMobile ? "343px" : "387px"} height={isMobile ? "auto" : "332px"} style={{minHeight: isMobile ? '330px' : 'auto'}}>
               {renderTitle('Transaction History')}
               <LocalStyle.AccountTransContent>
                 {
                   transactionInfo.length && !transactionLoading ?
                   transactionInfo.map((item: any, index) => {
+                    if(isMobile){
+                      if(transPage === 1 && index <= 4){
+                        return (renderTransItem({hash: item?.txid}))
+                      }
+                      if(transPage === 2){
+                        return (renderTransItem({hash: item?.txid}))
+                      }
+                    }
                     if(transPage === 1 && index <= 4 || (transPage === 2 && index > 4)){
                       return (renderTransItem({hash: item?.txid}))
                     }
@@ -193,7 +211,10 @@ const AccountPage: React.FunctionComponent = (props) => {
                 }
               </LocalStyle.AccountTransContent>
               {
-                transactionInfo.length > 0 && 
+                isMobile && (transactionInfo.length > 5 && transPage === 1) && <MoreButton onClick={() => {setTransPage(transPage + 1)}}/>
+              }
+              {
+                transactionInfo.length > 0 && !isMobile &&
                 <Pagination 
                   size="small" 
                   onChange={(page, size) => {setTransPage(page)}}
@@ -205,17 +226,20 @@ const AccountPage: React.FunctionComponent = (props) => {
               }
             </LocalStyle.AccountCard>   
           </Col>
-          <LocalStyle.AccountCard width="793px" height="597px" style={{marginTop: isTablet ? '20px': '0'}}>
+          <LocalStyle.AccountCard width={isMobile ? "343px" : "793px"} height={isMobile ? "auto" : "597px"} style={{marginTop: (isTablet || isMobile)? '20px': '0', minHeight: isMobile ? '330px' : 'auto'}}>
             {renderTitle('My Review')}
             <LocalStyle.AccountReviewContent>
               {
                 reviewList.length ? 
                 reviewList.map((item) => {return (<Comment {...item} type="mine"/>)})
                 : 
-                (reviewLoading ? <Skeleton avatar paragraph={{ rows: 4 }} /> : <Empty />)
+                (reviewLoading ? <Skeleton avatar paragraph={{ rows: 4 }} /> : <Empty margin={isMobile ? "20px auto 0 auto" : '90px auto 0 auto'}/>)
               }
             </LocalStyle.AccountReviewContent>
-            {reviewList.length > 0 && 
+            {
+              isMobile && (((reviewPage-1) * 3 + reviewList.length) > reviewTotal) && <MoreButton onClick={() => {setReviewPage(reviewPage + 1)}}/>
+            }
+            {reviewList.length > 0 && !isMobile && 
               <Pagination 
                 size="small" 
                 pageSize={3} 

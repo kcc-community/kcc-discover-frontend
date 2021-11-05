@@ -67,7 +67,7 @@ export function useInactiveListener(suppress = false) {
           .catch((e) => {
             console.error('Failed to activate after chain changed', e)
             if(e instanceof UnsupportedChainIdError){
-              dispatch(updateChainError({chainError: 'Unsupported Network'}))
+              dispatch(updateChainError({chainError: isMobile ? 'Unsupported' : 'Unsupported Network'}))
             }
           })
       }

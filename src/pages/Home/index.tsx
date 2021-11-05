@@ -95,7 +95,7 @@ const HomePage: React.FunctionComponent = (props) => {
           seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
           max = Math.max(max, res[i].totalLiquidityUSD)
         }
-        console.log('xAxisData =', xAxisData)
+        console.log('xAxisData =', xAxisData, isMobile)
         //@ts-ignore
         opts.xAxis.data = xAxisData;
         //@ts-ignore

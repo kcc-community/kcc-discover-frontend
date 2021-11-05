@@ -127,7 +127,7 @@ const Menu: React.FunctionComponent = (props) => {
       if(chainId === Number(process.env.REACT_APP_CHAIN_ID) || (Number(netID) === Number(process.env.REACT_APP_CHAIN_ID)) || (Number(netID) === 1)){
         dispatch(updateChainError({chainError: ''}))
       } else {
-        dispatch(updateChainError({chainError: 'Unsupported Network'}))
+        dispatch(updateChainError({chainError: isMobile ? 'Unsupported' : 'Unsupported Network'}))
       }
     } 
 
