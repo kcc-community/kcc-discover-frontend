@@ -46,7 +46,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
   const history = useHistory()
   const urlSec = getUrlParam('sec');
   const filterFirstUpdate = useRef(true)
-  const { isTablet } = useResponsive()
+  const { isTablet, isMobile } = useResponsive()
 
   useEffect(() => {
     if(subList.length){
@@ -148,6 +148,49 @@ const ProjectPage: React.FunctionComponent = (props) => {
       <LocalStyle.ProjectMedia href={url} target="_blank" onClick={(e) => {e.stopPropagation()}}>
         <LocalStyle.ProjectMediaImg src={logo[type]} />
       </LocalStyle.ProjectMedia>
+    )
+  }
+
+  if(isMobile){
+    return(
+      <Container style={{ minHeight: '80vh' }} width={'100vw'}>
+        { 
+          cateLoading ? 
+          <LocalStyle.ProjectItem style={{height: 'auto'}}><Skeleton paragraph={{ rows: 5 }} /></LocalStyle.ProjectItem>
+          :
+          ( 
+            <Row style={{flexWrap: 'nowrap', overflow: 'scroll', paddingLeft: '23px'}}>
+              {subList.filter(item => item.name !== 'Others').map(item => {
+                return(
+                  <LocalStyle.ProjectTab
+                    onClick={() => {
+                      setPrimary(item)
+                    }}
+                    key={item?.name}
+                    sec={item?.name === subSec?.name}
+                  >
+                    {item.name}
+                  </LocalStyle.ProjectTab>
+                )
+              })}
+              {subList.filter(item => item.name === 'Others').map(item => {
+                return(
+                  <LocalStyle.ProjectTab
+                    onClick={() => {
+                      setPrimary(item)
+                    }}
+                    key={item?.name}
+                    sec={item?.name === subSec?.name}
+                  >
+                    {item.name}
+                  </LocalStyle.ProjectTab>
+                )
+              })}
+            </Row>
+          ) 
+        }
+        <LocalStyle.ProjectLineH5 />
+      </Container>
     )
   }
 

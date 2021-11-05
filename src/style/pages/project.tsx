@@ -183,7 +183,7 @@ export const ProjectColLine = styled.div`
   width: 1px;
   background: rgba(115, 126, 141, 0.16);
 `
-
+ 
 export const ProjectButton = styled.a`
   display: flex;
   align-items: center;
@@ -244,6 +244,12 @@ export const ProjectHiddenDetail = styled.div`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   display: none;
+`
+
+export const ProjectLineH5 = styled.div`
+  background: #E0E3E5;
+  width: 100%;
+  height: 1px;
 `
 
 

@@ -86,11 +86,11 @@ const ResetCSS = createGlobalStyle`
   }
   ::-webkit-scrollbar-thumb {
     // background: ${({ theme }) => theme.colors.textSubtle}; 
-    background:#838383;
+    background: transparent;
     border-radius: 8px;
   }
   ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px ${({ theme }) => theme.colors.input}; 
+    // box-shadow: inset 0 0 5px ${({ theme }) => theme.colors.input}; 
     border-radius: 10px;
   }
 
