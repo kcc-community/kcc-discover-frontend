@@ -16,7 +16,7 @@ import { useResponsive } from 'utils/responsive'
 
 
 const CommentWrapper = styled.div`
-  width: 343px;
+  width: 100%;
   margin-bottom: 40px;
   ${({ theme }) => theme.mediaQueries.sm} {
     width: 800px;

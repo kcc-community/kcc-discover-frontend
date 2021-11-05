@@ -312,7 +312,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
         }
         {!isMobile && <LocalStyle.ProjectLine />} 
         <div style={{maxWidth: isMobile ? '100%' : '800px', margin: isMobile ? '30px auto 0 auto': '0'}}>
-          <RowBetween mb="40px">
+          <RowBetween mb={isMobile ? "16px" : "40px"}>
             <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("Comments")}</LocalStyle.ProjectText>
             <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => {
               if(!account){

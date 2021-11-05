@@ -134,9 +134,11 @@ export const ProjectDappWrapper = styled(Row)`
   margin-bottom: 22px;
   cursor: pointer;
   align-items: flex-start;
+  flex-wrap: nowrap;
   ${({ theme }) => theme.mediaQueries.sm} {
     width: 400px;
     margin-bottom: 40px;
+    flex-wrap: wrap;
   }
 `
 
