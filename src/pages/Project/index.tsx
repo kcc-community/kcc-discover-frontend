@@ -118,6 +118,25 @@ const ProjectPage: React.FunctionComponent = (props) => {
   }
 
   const renderPriTab = () => {
+    if(isMobile){
+      return(
+        <Row mb="32px">
+          {primaryList.map((item) => {
+            return (
+              <LocalStyle.ProjectTabH5
+                onClick={() => {
+                  setPrimary(item)
+                }}
+                key={item?.name}
+                sec={item?.name === primarySec?.name}
+              >
+                {item.name}
+              </LocalStyle.ProjectTabH5>
+            )
+          })}
+        </Row>
+      )
+    }
     return (
       <Row mb="32px">
         {primaryList.map((item) => {
@@ -164,7 +183,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
                 return(
                   <LocalStyle.ProjectTab
                     onClick={() => {
-                      setPrimary(item)
+                      setSub(item)
                     }}
                     key={item?.name}
                     sec={item?.name === subSec?.name}
@@ -177,7 +196,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
                 return(
                   <LocalStyle.ProjectTab
                     onClick={() => {
-                      setPrimary(item)
+                      setSub(item)
                     }}
                     key={item?.name}
                     sec={item?.name === subSec?.name}
@@ -190,7 +209,57 @@ const ProjectPage: React.FunctionComponent = (props) => {
           ) 
         }
         <LocalStyle.ProjectLineH5 />
-        {renderSearch()}
+        <div style={{margin: '0 20px'}}>
+          {renderSearch()}
+          {renderPriTab()}
+        </div>
+
+        <Col style={{ alignItems: 'center', margin: '0 20px' }}>
+          {dappLoading || cateLoading ? (
+            <Skeleton avatar paragraph={{ rows: 4 }} />
+          ) : dappList.length ? (
+            dappList.map((item: any) => {
+              return (
+                <LocalStyle.ProjectDappWrapper
+                  key={item.id}
+                  onClick={() => history.push(`/project_detail?name=${item.name}`)}
+                >
+                  <Img 
+                    style={{width: '80px', height: '80px', marginRight: '20px', borderRadius: '8px'}}
+                    loader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
+                    unloader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
+                    src={[item.logo]}
+                  />
+                  <Col>
+                    <Text fontSize="18px" fontWeight="bold" color={theme.colors.text}>
+                      {item.title}
+                    </Text>
+                    <LocalStyle.ProjectTextSub style={{width: '100%'}}>{item.intro}</LocalStyle.ProjectTextSub>
+                    <Row mt="6px">
+                      <LocalStyle.ProjectTips grey={false}>
+                        {new BN(item.margin).toFixed(2).toString()} KCS
+                      </LocalStyle.ProjectTips>
+                      {item.priCategory && (
+                        <LocalStyle.ProjectTips grey={true}>{item.priCategory.name}</LocalStyle.ProjectTips>
+                      )}
+                      {item.secCategory && (
+                        <LocalStyle.ProjectTips grey={true}>{item.secCategory.name}</LocalStyle.ProjectTips>
+                      )}
+                    </Row>
+                    <Row>
+                      {item.telegram && renderMedia('telegram', item.telegram)}
+                      {item.github && renderMedia('github', item.github)}
+                      {item.twitter && renderMedia('twitter', item.twitter)}
+                      {item.website && renderMedia('website', item.website)}
+                    </Row>
+                  </Col>
+                </LocalStyle.ProjectDappWrapper>
+              )
+            })
+          ) : (
+            <Empty />
+          )}
+        </Col>
       </Container>
     )
   }

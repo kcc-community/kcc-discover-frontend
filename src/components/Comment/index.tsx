@@ -16,8 +16,11 @@ import { useResponsive } from 'utils/responsive'
 
 
 const CommentWrapper = styled.div`
-  width: 800px;
+  width: 343px;
   margin-bottom: 40px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 800px;
+  }
 `
 
 const ImgDel = styled.img`

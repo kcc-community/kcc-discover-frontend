@@ -26,7 +26,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account, library, chainId } = useWeb3React()
-  const { isTablet } = useResponsive()
+  const { isTablet, isMobile } = useResponsive()
   const [detail, setDetail] = useState<{
     title: string
     intro: string
@@ -69,6 +69,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   const history = useHistory();
   const name = getUrlParam('name');
   const showRank = detail.rankPrimary <= 5 || detail.rankSecond <= 10
+  const containerWidth = isTablet ? '768px' : isMobile ? '100vw' : '1200px';
 
   useEffect(() => {
     Promise.all([
@@ -174,78 +175,143 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
       </AutoRow>
     )
   }
+
+  const MobileTop = () => {
+    return(
+      <>
+        <RowBetween style={{marginTop: '24px', alignItems: 'center'}}>
+          <Img 
+            style={{width: '80px', height: '80px', borderRadius: '8px'}}
+            loader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
+            unloader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
+            src={[detail.logo as string]}
+          />
+          <LocalStyle.ProjectButton href={detail.website} target="_blank" style={{height: '48px', width: '170px', borderRadius: '24px'}}>
+            {t("Visit Website")}
+            <LocalStyle.ProjectImgSend src={send}/>
+          </LocalStyle.ProjectButton>
+        </RowBetween>
+        <Text fontSize="32px" fontWeight="bold" mb="5px" mt="15px" color={theme.colors.text} style={{wordBreak: 'break-all'}}>{detail.title}</Text>
+        <Row style={{position: 'relative'}}>
+        {
+          showTips ? 
+          <LocalStyle.ProjectDetailText>{detail.detail}</LocalStyle.ProjectDetailText>
+          :
+          <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 110)}{detail.detail && detail.detail.length > 110 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
+        }
+        {detail.detail && detail.detail.length > 110 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
+        </Row>
+        <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
+        <Row mt="10px">
+          <LocalStyle.ProjectTips grey={false}>{new BN(detail.margin).toFixed(2).toString()} KCS</LocalStyle.ProjectTips>
+          {detail.priCategory ? <LocalStyle.ProjectTips grey={true}>{detail.priCategory.name}</LocalStyle.ProjectTips> : '-'}
+          {detail.secCategory ? <LocalStyle.ProjectTips grey={true}>{detail.secCategory.name}</LocalStyle.ProjectTips> : '-'}
+        </Row>
+        <Row mt="16px">
+          {detail.telegram && renderMedia('telegram', detail.telegram)}
+          {detail.github && renderMedia('github', detail.github)}
+          {detail.twitter && renderMedia('twitter', detail.twitter)}
+          {detail.website &&  renderMedia('website', detail.website)}
+        </Row>
+        <LocalStyle.ProjectRate style={{marginTop: '30px'}}>
+          <Col style={{width: '49%', alignItems: 'center'}}>
+            <LocalStyle.ProjectText style={{fontSize: '40px'}}>{Number(detail.score)}</LocalStyle.ProjectText>
+            <Rate allowHalf disabled value={Number(detail.score)} />
+            <LocalStyle.ProjectTextSub mt="5px">{detail.comments} {t("RATINGS")}</LocalStyle.ProjectTextSub>
+          </Col>
+          {
+            showRank ?
+            <>
+              <LocalStyle.ProjectColLine />
+              <Col style={{width: '49%', alignItems: 'center'}}>
+                <LocalStyle.ProjectText style={{fontSize: '40px'}}>No.{detail.rankPrimary <= 5 ? detail.rankPrimary : detail.rankSecond}</LocalStyle.ProjectText>
+                { detail.priCategory && <LocalStyle.ProjectTextSub style={{fontWeight: detail.rankPrimary <= 5 ? 'bold' : 'normal'}}>{detail.priCategory.name.toUpperCase()}</LocalStyle.ProjectTextSub> }
+                { detail.secCategory && <LocalStyle.ProjectTextSub style={{fontWeight: (detail.rankPrimary > 5 && detail.rankSecond <= 10) ? 'bold' : 'normal'}}>{detail.secCategory.name.toUpperCase()}</LocalStyle.ProjectTextSub> }
+              </Col>
+            </>
+            : null
+          }
+        </LocalStyle.ProjectRate>
+      </>
+    )
+  }
+
   return (
     <>
-      <Container style={{minHeight: '80vh'}} width={isTablet ? '768px' : '1200px'}>
-        <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
-          <Col style={{width: '800px'}}>
-            <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto', height: 'auto', marginBottom: '0'}}>
-              <Img 
-                style={{width: '140px', height: '140px', marginRight: '34px', borderRadius: '8px'}}
-                loader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
-                unloader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
-                src={[detail.logo as string]}
-              />
-              <Col style={{width: '70%'}}>
-                <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
-                {/* {
-                  showTips ?
-                  <Popover overlayClassName={'projectDetailPopover'} content={<p style={{wordBreak: 'break-all'}}>{detail.detail}</p>} trigger="hover">
-                    <LocalStyle.ProjectTextSubTwo style={{cursor: 'pointer'}}>{detail.detail}</LocalStyle.ProjectTextSubTwo>
-                  </Popover>
-                  :
-                  <LocalStyle.ProjectTextSubTwo>{detail.detail}</LocalStyle.ProjectTextSubTwo>
-                } */}
-                <Row style={{position: 'relative'}}>
-                {
-                  showTips ? 
-                  <LocalStyle.ProjectDetailText>{detail.detail}</LocalStyle.ProjectDetailText>
-                  :
-                  <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 155)}{detail.detail && detail.detail.length > 155 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
-                }
-                {detail.detail && detail.detail.length > 155 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
-                </Row>
-                <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
-                <Row mt="10px">
-                  <LocalStyle.ProjectTips grey={false}>{new BN(detail.margin).toFixed(2).toString()} KCS</LocalStyle.ProjectTips>
-                  {detail.priCategory ? <LocalStyle.ProjectTips grey={true}>{detail.priCategory.name}</LocalStyle.ProjectTips> : '-'}
-                  {detail.secCategory ? <LocalStyle.ProjectTips grey={true}>{detail.secCategory.name}</LocalStyle.ProjectTips> : '-'}
-                </Row>
-                <Row mt="24px">
-                  <LocalStyle.ProjectButton href={detail.website} target="_blank">
-                    {t("Visit Website")}
-                    <LocalStyle.ProjectImgSend src={send}/>
-                  </LocalStyle.ProjectButton>
-                  {detail.telegram && renderMedia('telegram', detail.telegram)}
-                  {detail.github && renderMedia('github', detail.github)}
-                  {detail.twitter && renderMedia('twitter', detail.twitter)}
-                  {detail.website &&  renderMedia('website', detail.website)}
-                </Row>
-              </Col>
-            </LocalStyle.ProjectDappWrapper>
-          </Col>
-          <LocalStyle.ProjectRate style={{marginTop: isTablet ? '40px': '0'}}>
-            <Col style={{width: '49%', alignItems: 'center'}}>
-              <LocalStyle.ProjectText style={{fontSize: '40px'}}>{Number(detail.score)}</LocalStyle.ProjectText>
-              <Rate allowHalf disabled value={Number(detail.score)} />
-              <LocalStyle.ProjectTextSub mt="5px">{detail.comments} {t("RATINGS")}</LocalStyle.ProjectTextSub>
-            </Col>
-            {
-              showRank ?
-              <>
-                <LocalStyle.ProjectColLine />
-                <Col style={{width: '49%', alignItems: 'center'}}>
-                  <LocalStyle.ProjectText style={{fontSize: '40px'}}>No.{detail.rankPrimary <= 5 ? detail.rankPrimary : detail.rankSecond}</LocalStyle.ProjectText>
-                  { detail.priCategory && <LocalStyle.ProjectTextSub style={{fontWeight: detail.rankPrimary <= 5 ? 'bold' : 'normal'}}>{detail.priCategory.name.toUpperCase()}</LocalStyle.ProjectTextSub> }
-                  { detail.secCategory && <LocalStyle.ProjectTextSub style={{fontWeight: (detail.rankPrimary > 5 && detail.rankSecond <= 10) ? 'bold' : 'normal'}}>{detail.secCategory.name.toUpperCase()}</LocalStyle.ProjectTextSub> }
+      <Container style={{minHeight: '80vh', padding: isMobile ? '0 15px' : '0'}} width={containerWidth}>
+        {
+          isMobile ? MobileTop()
+          :
+          <RowBetween style={{marginTop: '40px', alignItems: 'flex-start'}}>
+            <Col style={{width: '800px'}}>
+              <LocalStyle.ProjectDappWrapper style={{width: '800px', cursor: 'auto', height: 'auto', marginBottom: '0'}}>
+                <Img 
+                  style={{width: '140px', height: '140px', marginRight: '34px', borderRadius: '8px'}}
+                  loader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
+                  unloader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
+                  src={[detail.logo as string]}
+                />
+                <Col style={{width: '70%'}}>
+                  <Text fontSize="32px" fontWeight="bold" mb="5px" color={theme.colors.text}>{detail.title}</Text>
+                  {/* {
+                    showTips ?
+                    <Popover overlayClassName={'projectDetailPopover'} content={<p style={{wordBreak: 'break-all'}}>{detail.detail}</p>} trigger="hover">
+                      <LocalStyle.ProjectTextSubTwo style={{cursor: 'pointer'}}>{detail.detail}</LocalStyle.ProjectTextSubTwo>
+                    </Popover>
+                    :
+                    <LocalStyle.ProjectTextSubTwo>{detail.detail}</LocalStyle.ProjectTextSubTwo>
+                  } */}
+                  <Row style={{position: 'relative'}}>
+                  {
+                    showTips ? 
+                    <LocalStyle.ProjectDetailText>{detail.detail}</LocalStyle.ProjectDetailText>
+                    :
+                    <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 155)}{detail.detail && detail.detail.length > 155 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
+                  }
+                  {detail.detail && detail.detail.length > 155 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
+                  </Row>
+                  <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
+                  <Row mt="10px">
+                    <LocalStyle.ProjectTips grey={false}>{new BN(detail.margin).toFixed(2).toString()} KCS</LocalStyle.ProjectTips>
+                    {detail.priCategory ? <LocalStyle.ProjectTips grey={true}>{detail.priCategory.name}</LocalStyle.ProjectTips> : '-'}
+                    {detail.secCategory ? <LocalStyle.ProjectTips grey={true}>{detail.secCategory.name}</LocalStyle.ProjectTips> : '-'}
+                  </Row>
+                  <Row mt="24px">
+                    <LocalStyle.ProjectButton href={detail.website} target="_blank">
+                      {t("Visit Website")}
+                      <LocalStyle.ProjectImgSend src={send}/>
+                    </LocalStyle.ProjectButton>
+                    {detail.telegram && renderMedia('telegram', detail.telegram)}
+                    {detail.github && renderMedia('github', detail.github)}
+                    {detail.twitter && renderMedia('twitter', detail.twitter)}
+                    {detail.website &&  renderMedia('website', detail.website)}
+                  </Row>
                 </Col>
-              </>
-              : null
-            }
-          </LocalStyle.ProjectRate>
-        </RowBetween>
-        <LocalStyle.ProjectLine />
-        <div style={{maxWidth: '800px'}}>
+              </LocalStyle.ProjectDappWrapper>
+            </Col>
+            <LocalStyle.ProjectRate style={{marginTop: isTablet ? '40px': '0'}}>
+              <Col style={{width: '49%', alignItems: 'center'}}>
+                <LocalStyle.ProjectText style={{fontSize: '40px'}}>{Number(detail.score)}</LocalStyle.ProjectText>
+                <Rate allowHalf disabled value={Number(detail.score)} />
+                <LocalStyle.ProjectTextSub mt="5px">{detail.comments} {t("RATINGS")}</LocalStyle.ProjectTextSub>
+              </Col>
+              {
+                showRank ?
+                <>
+                  <LocalStyle.ProjectColLine />
+                  <Col style={{width: '49%', alignItems: 'center'}}>
+                    <LocalStyle.ProjectText style={{fontSize: '40px'}}>No.{detail.rankPrimary <= 5 ? detail.rankPrimary : detail.rankSecond}</LocalStyle.ProjectText>
+                    { detail.priCategory && <LocalStyle.ProjectTextSub style={{fontWeight: detail.rankPrimary <= 5 ? 'bold' : 'normal'}}>{detail.priCategory.name.toUpperCase()}</LocalStyle.ProjectTextSub> }
+                    { detail.secCategory && <LocalStyle.ProjectTextSub style={{fontWeight: (detail.rankPrimary > 5 && detail.rankSecond <= 10) ? 'bold' : 'normal'}}>{detail.secCategory.name.toUpperCase()}</LocalStyle.ProjectTextSub> }
+                  </Col>
+                </>
+                : null
+              }
+            </LocalStyle.ProjectRate>
+          </RowBetween>
+        }
+        {!isMobile && <LocalStyle.ProjectLine />} 
+        <div style={{maxWidth: isMobile ? '100%' : '800px', margin: isMobile ? '30px auto 0 auto': '0'}}>
           <RowBetween mb="40px">
             <LocalStyle.ProjectText style={{fontSize: '20px'}}>{t("Comments")}</LocalStyle.ProjectText>
             <Row style={{width: 'auto', cursor: 'pointer'}} onClick={() => {
