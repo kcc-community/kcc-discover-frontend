@@ -250,6 +250,7 @@ export const ProjectLineH5 = styled.div`
   background: #E0E3E5;
   width: 100%;
   height: 1px;
+  margin-bottom: 15px;
 `
 
 

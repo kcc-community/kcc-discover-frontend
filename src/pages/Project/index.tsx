@@ -190,6 +190,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
           ) 
         }
         <LocalStyle.ProjectLineH5 />
+        {renderSearch()}
       </Container>
     )
   }
