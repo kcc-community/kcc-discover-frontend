@@ -14,4 +14,5 @@ export const WalletList: any[] = [
   },
 ]
 
+// export const supportedChainIds = [Number(process.env.REACT_APP_CHAIN_ID), 4, 321, 322]
 export const supportedChainIds = [Number(process.env.REACT_APP_CHAIN_ID)]

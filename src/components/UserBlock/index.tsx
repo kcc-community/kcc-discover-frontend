@@ -41,7 +41,6 @@ const ConnectButton = styled.div`
   height: 36px;
   justify-content: center;
   margin: 0px;
-  margin-left: 18px;
   min-width: 90px;
   padding: 0 12px;
   outline: none;
@@ -55,6 +54,7 @@ const ConnectButton = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     min-width: 120px;
     padding: 0 24px;
+    margin-left: 18px;
   }
 `
 

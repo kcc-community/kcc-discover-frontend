@@ -123,7 +123,7 @@ const Menu: React.FunctionComponent = (props) => {
     const { ethereum } = window
     if(chainId || ethereum){
       let netID = ethereum?.networkVersion || ''
-      console.log('chainId =', chainId, netID )
+      console.log('chainId =', chainId, 'ethereum =',  netID )
       if(chainId === Number(process.env.REACT_APP_CHAIN_ID) || (Number(netID) === Number(process.env.REACT_APP_CHAIN_ID)) || (Number(netID) === 1)){
         dispatch(updateChainError({chainError: ''}))
       } else {

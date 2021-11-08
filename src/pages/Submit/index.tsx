@@ -58,7 +58,6 @@ const RequiredPoint = styled.div`
   font-size: 14px;
 `
 
-//todo: reset margin limit
 const SubmitPage: React.FunctionComponent = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
