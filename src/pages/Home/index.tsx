@@ -177,7 +177,7 @@ const HomePage: React.FunctionComponent = (props) => {
     return (
       <FadeInUp delay={key * 100}>
         <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0', marginTop: isMobile ? '15px' : '0'}}>
-          <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
+          <LocalStyle.SecondText style={{fontSize: isMobile ? '24px' : '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
               start={0} 
@@ -353,7 +353,7 @@ const HomePage: React.FunctionComponent = (props) => {
           </RowBetween>
           <>
             <FadeInUp>
-              <LocalStyle.SecondText mb={isMobile ? "32px" : "60px"} mt={isMobile ? "60px" : "158px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Discover")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb={isMobile ? "24px" : "60px"} mt={isMobile ? "60px" : "158px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Discover")}</LocalStyle.SecondText>
             </FadeInUp>
             <FadeInUp>
               <AutoRow justify="center" style={{position: 'relative'}}>

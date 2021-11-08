@@ -50,7 +50,10 @@ export const RankItem = styled.a`
 export const SecondText = styled(Text)`
   color: ${({ theme }) => `${theme.colors.secondary}`};
   font-weight: 700;
-  font-size: 32px;
+  font-size: 24px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 32px;
+  }
 `
 
 export const InfoCard = styled(cardTransparent)`
