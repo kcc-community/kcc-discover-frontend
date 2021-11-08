@@ -73,12 +73,18 @@ export const ProjectDetailText = styled(Text)`
 `
 
 export const ProjectInputWrapper = styled(Row)`
-  width: 241px;
   height: 40px;
+  width: 100%;
   border-radius: 8px;
   border: 1px solid #00142A1F;
   padding: 8px;
   flex-wrap: nowrap;
+  margin: 0 auto;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 241px;
+    padding: 8px;
+    margin: 0;
+  }
 `
 
 export const ProjectImgSearch = styled.img`
@@ -109,12 +115,31 @@ export const ProjectTab = styled(Text)<{ sec?: boolean }>`
   }
 `
 
+export const ProjectTabH5 = styled(Text)<{ sec?: boolean }>`
+  height: 31px;
+  background: ${({ theme, sec }) => sec ? theme.colors.primary : 'white'};
+  border: 1px solid #E0E3E5;
+  border-radius: 4px;
+  color: ${({ theme, sec }) => sec ? 'white' : theme.colors.text};
+  margin: 14px 8px 0 0;
+  padding: 0 15px;
+  line-height: 30px;
+  cursor: pointer;
+`
+
+
 export const ProjectDappWrapper = styled(Row)`
   height: 119px;
-  width: 400px;
-  margin-bottom: 40px;
+  width: 100%;
+  margin-bottom: 22px;
   cursor: pointer;
   align-items: flex-start;
+  flex-wrap: nowrap;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 400px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
 `
 
 export const ProjectDappLogo = styled.img`
@@ -251,6 +276,22 @@ export const ProjectLineH5 = styled.div`
   width: 100%;
   height: 1px;
   margin-bottom: 15px;
+  // margin-top: -15px;
+`
+
+export const RequiredPoint = styled.div`
+  color: #F5455B;
+  font-size: 14px;
+`
+
+export const CommentLine = styled.div`
+  background: #C4C4C4;
+  height: .5px;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: content-box;
+  margin-left: -15px;
+  margin-bottom: 35px;
 `
 
 

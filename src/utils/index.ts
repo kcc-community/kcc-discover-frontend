@@ -53,7 +53,11 @@ export function uriToHttp(uri: string): string[] {
 }
 
 export function getUrlParam(key) {
-  const href = window.location.href.replace(/(?=#)(.*)(?=\?)/, '');
+  let href = window.location.href.replace(/(?=#)(.*)(?=\?)/, '');
+  let copyHref = href.split('');
+  if(copyHref.filter(item => item === '?').length > 1){
+    href = href.replace('?', '');
+  }
   const url = new URL(href);
   return url.searchParams.get(key);
 }

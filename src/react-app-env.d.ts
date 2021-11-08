@@ -7,10 +7,12 @@ interface Window {
     removeListener?: (...args: any[]) => void
     autoRefreshOnNetworkChange: boolean
     request: any
+    chainId: string
     networkVersion: string | number
   }
   web3?: any
 }
+
 
 declare module 'content-hash' {
   declare function decode(x: string): string

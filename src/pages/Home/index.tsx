@@ -115,13 +115,7 @@ const HomePage: React.FunctionComponent = (props) => {
       if(!mountedRef.current) return null;
       setTopDapp(res[0].list)
       //deal slider info
-      // let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
-      let slider:any = [];
-      if(res[1].dayComments) slider.push(res[1].dayComments)
-      if(res[1].dayTxCount) slider.push(res[1].dayTxCount)
-      if(res[1].txCount) slider.push(res[1].txCount)
-      if(res[1].totalLiquidityETH) slider.push(res[1].totalLiquidityETH)
-      if(res[1].dayScore) slider.push(res[1].dayScore)
+      let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
       let dom = [] as any
       for(let i in slider){
         if(slider[i]){
@@ -183,7 +177,7 @@ const HomePage: React.FunctionComponent = (props) => {
     return (
       <FadeInUp delay={key * 100}>
         <LocalStyle.InfoCard style={{marginBottom: isTablet ? '15px' : '0', marginTop: isMobile ? '15px' : '0'}}>
-          <LocalStyle.SecondText style={{fontSize: '32px', fontFamily: 'kccfont Number Normal'}}>
+          <LocalStyle.SecondText style={{fontSize: isMobile ? '24px' : '32px', fontFamily: 'kccfont Number Normal'}}>
             {key ? '' : '$'} 
             <CountUp 
               start={0} 
@@ -359,7 +353,7 @@ const HomePage: React.FunctionComponent = (props) => {
           </RowBetween>
           <>
             <FadeInUp>
-              <LocalStyle.SecondText mb={isMobile ? "32px" : "60px"} mt={isMobile ? "60px" : "158px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Discover")}</LocalStyle.SecondText>
+              <LocalStyle.SecondText mb={isMobile ? "24px" : "60px"} mt={isMobile ? "60px" : "158px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Discover")}</LocalStyle.SecondText>
             </FadeInUp>
             <FadeInUp>
               <AutoRow justify="center" style={{position: 'relative'}}>

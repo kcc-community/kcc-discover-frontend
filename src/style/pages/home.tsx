@@ -11,8 +11,11 @@ const cardTransparent = styled.div`
 
 export const RankCard = styled(cardTransparent)`
   height: 419px;
-  width: 324px;
+  width: 334px;
   padding: 24px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 324px;
+  }
 `
 
 export const RankImg = styled.div`
@@ -47,16 +50,22 @@ export const RankItem = styled.a`
 export const SecondText = styled(Text)`
   color: ${({ theme }) => `${theme.colors.secondary}`};
   font-weight: 700;
-  font-size: 32px;
+  font-size: 24px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 32px;
+  }
 `
 
 export const InfoCard = styled(cardTransparent)`
-  width: 360px;
+  width: 343px;
   height: 114px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 360px;
+  }
 `
 
 export const UserCardContainer = styled.div`
@@ -64,7 +73,7 @@ export const UserCardContainer = styled.div`
 `
 
 export const UserCard = styled(Col)`
-  width: 360px;
+  width: 343px;
   height: 460px;
   border-radius: 8px;
   cursor: pointer;
@@ -89,6 +98,7 @@ export const UserCard = styled(Col)`
   }
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 120px;
+    width: 360px;
     background: transparent;
     color: ${({ theme }) => `${theme.colors.secondary}`};
     #discover-line {
@@ -109,7 +119,7 @@ export const UserLogo = styled.img`
 `
 
 export const CateItem = styled(cardTransparent)`
-  width: 170px;
+  width: 164px;
   height: 170px;
   display: flex;
   flex-direction: column;
@@ -124,6 +134,7 @@ export const CateItem = styled(cardTransparent)`
   //   top: -10px;
   // }
   ${({ theme }) => theme.mediaQueries.sm} {
+    width: 170px;
     margin: 0 36px 148px 0;
   }
 `

@@ -105,7 +105,7 @@ const AccountPage: React.FunctionComponent = (props) => {
   const renderTransItem = (data: any) => {
     return(
       <LocalStyle.AccountExplore key={data.txid} href={process.env.REACT_APP_EXPLORE + '/' + data.hash} target="_blank">
-        <LocalStyle.ProjectTextSub style={{fontSize: '16px', width: '70%'}}>{data?.hash ? data.hash.substr(0, 12) + '...' + data.hash.substr(-6) : '-'}</LocalStyle.ProjectTextSub>
+        <LocalStyle.ProjectTextSub style={{fontSize: '16px', width: isMobile ? '65%' : '70%'}}>{data?.hash ? data.hash.substr(0, 12) + '...' + data.hash.substr(-6) : '-'}</LocalStyle.ProjectTextSub>
         <Text color={theme.colors.primary} fontWeight={'bold'}>{t('View details')}</Text>
       </LocalStyle.AccountExplore>
     )
