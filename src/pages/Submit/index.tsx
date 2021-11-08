@@ -305,7 +305,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
 
   return (
     <>
-      <Container style={{minHeight: '80vh', width: isMobile ? '350px' : '536px'}}>
+      <Container style={{minHeight: '80vh', width: isMobile ? '100%' : '536px', padding: isMobile ? '0 15px': '0'}}>
         <Col style={{marginTop: isMobile ? '24px' : '40px', marginBottom: '50px'}}>
           <LocalStyle.ProjectText style={{fontSize: isMobile ? '20px' : '32px', marginBottom: isMobile ? '15px' : '30px'}}>{name ? t('Modify a project') : t('Submit a project')}</LocalStyle.ProjectText>
           <InputItem 
@@ -532,7 +532,7 @@ const SubmitPage: React.FunctionComponent = (props) => {
             onChange={e => {setCoinGecko(splitSpace(e.target.value))}}
           />
           <Button 
-            style={{width: isMobile ? '343px' : '100px', height: isMobile ? '48px' : '32px', borderRadius: isMobile ? '24px !important' : '12px'}} 
+            style={{width: isMobile ? '100%' : '100px', height: isMobile ? '48px' : '32px', borderRadius: isMobile ? '24px !important' : '12px'}} 
             disabled={!title || !primaryCategoryIndex || !secondaryCategoryIndex || !shortIntroduction
             || !logoLink || !websiteLink || (!marginAmount && (!name || state === 'Refused'))|| !email || ((!contractAddresses || !isAddress(contractAddresses)) && checkContractAddress) 
             || !checkEmail || (!checkMargin && (!name || state === 'Refused')) || chainError || (tokenContractAddress && !isAddress(tokenContractAddress))}

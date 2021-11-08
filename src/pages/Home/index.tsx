@@ -95,6 +95,7 @@ const HomePage: React.FunctionComponent = (props) => {
           seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
           max = Math.max(max, res[i].totalLiquidityUSD)
         }
+        console.log('xAxisData =', xAxisData, isMobile)
         //@ts-ignore
         opts.xAxis.data = xAxisData;
         //@ts-ignore
@@ -115,13 +116,7 @@ const HomePage: React.FunctionComponent = (props) => {
       if(!mountedRef.current) return null;
       setTopDapp(res[0].list)
       //deal slider info
-      // let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
-      let slider:any = [];
-      if(res[1].dayComments) slider.push(res[1].dayComments)
-      if(res[1].dayTxCount) slider.push(res[1].dayTxCount)
-      if(res[1].txCount) slider.push(res[1].txCount)
-      if(res[1].totalLiquidityETH) slider.push(res[1].totalLiquidityETH)
-      if(res[1].dayScore) slider.push(res[1].dayScore)
+      let slider = [res[1].dayComments, res[1].dayTxCount, res[1].txCount ,res[1].totalLiquidityETH, res[1].dayScore];
       let dom = [] as any
       for(let i in slider){
         if(slider[i]){

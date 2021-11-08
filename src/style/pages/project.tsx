@@ -276,7 +276,22 @@ export const ProjectLineH5 = styled.div`
   width: 100%;
   height: 1px;
   margin-bottom: 15px;
-  margin-top: -15px;
+  // margin-top: -15px;
+`
+
+export const RequiredPoint = styled.div`
+  color: #F5455B;
+  font-size: 14px;
+`
+
+export const CommentLine = styled.div`
+  background: #C4C4C4;
+  height: .5px;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: content-box;
+  margin-left: -15px;
+  margin-bottom: 35px;
 `
 
 
