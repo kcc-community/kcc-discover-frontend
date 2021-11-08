@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
+import { useActiveWeb3React } from 'hooks'
 import styled, { useTheme } from 'styled-components'
 import useAuth from 'hooks/useAuth'
 import { RowFixed, RowBetween } from '../Row'
@@ -94,7 +95,7 @@ interface MenuList {
 
 const Menu: React.FunctionComponent = (props) => {
   const { t } = useTranslation();
-  const { account, chainId } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { login, logout } = useAuth()
   const history = useHistory();
   const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true });
@@ -166,7 +167,7 @@ const Menu: React.FunctionComponent = (props) => {
       <StyledNav>
         <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
           <RowFixed>
-            { isMobile && <ImgMenu src={require('../../assets/images/Icons/h5/menu.png').default} onClick={() => setShow(!showMenu)}/>}
+            {isMobile && <ImgMenu src={require('../../assets/images/Icons/h5/menu.png').default} onClick={() => setShow(!showMenu)}/>}
             <a href="https://www.kcc.io/#/" target="_blank">
               <ImgKccLogo src={require('../../assets/images/home/kcc.png').default}/>
             </a>

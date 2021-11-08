@@ -382,9 +382,10 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
                   return;
                 }
                 if(isMobile){
-                  setComment(true)
+                  window.scrollTo(0, 0);
+                  setComment(true);
                 } else {
-                  setModal(true)
+                  setModal(true);
                 }
               }}>
                 <LocalStyle.ProjectImgEdit src={edit}/>
