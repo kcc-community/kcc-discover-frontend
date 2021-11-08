@@ -184,8 +184,20 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
   }
 
   const MobileTop = () => {
+    if(!loaded){
+      return(
+        <Col style={{margin: '30px 0'}}>
+          <Skeleton avatar paragraph={{ rows: 4 }}/>
+        </Col>
+      )
+    }
     return(
       <>
+        <Row style={{height: '53px'}}>
+          <LocalStyle.ProjectImgSearch src={require('../../assets/images/Icons/h5/left.png').default} onClick={() => {history.goBack()}}/>
+          <Text color={theme.colors.text} fontWeight="bold" mr="20px" style={{flex: '1', textAlign: 'center'}}>{detail.title ?? '-'}</Text>
+        </Row>
+        <LocalStyle.CommentLine />
         <RowBetween style={{marginTop: '24px', alignItems: 'center'}}>
           <Img 
             style={{width: '80px', height: '80px', borderRadius: '8px'}}
@@ -193,7 +205,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
             unloader={<LocalStyle.ProjectDetailLogo src={logoDef} alt="DApp logo"/>}
             src={[detail.logo as string]}
           />
-          <LocalStyle.ProjectButton href={detail.website} target="_blank" style={{height: '48px', width: '170px', borderRadius: '24px'}}>
+          <LocalStyle.ProjectButton href={detail.website} target="_blank" style={{height: '48px', width: '170px', borderRadius: '24px',marginRight: '0'}}>
             {t("Visit Website")}
             <LocalStyle.ProjectImgSend src={send}/>
           </LocalStyle.ProjectButton>
@@ -204,9 +216,9 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
           showTips ? 
           <LocalStyle.ProjectDetailText>{detail.detail}</LocalStyle.ProjectDetailText>
           :
-          <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 100)}{detail.detail && detail.detail.length > 100 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
+          <LocalStyle.ProjectTextSubTwo>{detail.detail?.substring(0, 96)}{detail.detail && detail.detail.length > 96 ? '...' : ''}</LocalStyle.ProjectTextSubTwo>
         }
-        {detail.detail && detail.detail.length > 100 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
+        {detail.detail && detail.detail.length > 96 && <Text onClick={() => setShow(!showTips)} color={theme.colors.primary} fontWeight="bold" style={{cursor: 'pointer', lineHeight: '20px', textAlign: 'right', position: 'absolute', bottom: 0, right: 0}}>{showTips ? 'Fold' : 'Unfold'}</Text>}
         </Row>
         <LocalStyle.ProjectHiddenDetail id="projectDetail">{detail.detail}</LocalStyle.ProjectHiddenDetail>
         <Row mt="10px">
@@ -220,7 +232,7 @@ const ProjectDetailPage: React.FunctionComponent = (props) => {
           {detail.twitter && renderMedia('twitter', detail.twitter)}
           {detail.website &&  renderMedia('website', detail.website)}
         </Row>
-        <LocalStyle.ProjectRate style={{marginTop: '30px'}}>
+        <LocalStyle.ProjectRate style={{marginTop: '30px', width: '100%'}}>
           <Col style={{width: '49%', alignItems: 'center'}}>
             <LocalStyle.ProjectText style={{fontSize: '40px'}}>{Number(detail.score)}</LocalStyle.ProjectText>
             <Rate allowHalf disabled value={Number(detail.score)} />

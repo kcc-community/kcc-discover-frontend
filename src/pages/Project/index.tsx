@@ -74,10 +74,10 @@ const ProjectPage: React.FunctionComponent = (props) => {
     if (content) params.title = content
     if (filterFirstUpdate.current) { filterFirstUpdate.current = false; return; }
     getDappList(params).then((res: any) => {
-      if (content) {
-        setPrimary(primaryList[0])
-        setSub(subList[0])
-      }
+      // if (content) {
+      //   setPrimary(primaryList[0])
+      //   setSub(subList[0])
+      // }
       setDapp(res.list)
     })
   }, [primarySec, subSec, content])
