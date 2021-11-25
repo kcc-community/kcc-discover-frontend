@@ -95,6 +95,7 @@ const HomePage: React.FunctionComponent = (props) => {
           seriesData.push(new BN(res[i].totalLiquidityUSD).toFixed(2, 1).toString())
           max = Math.max(max, res[i].totalLiquidityUSD)
         }
+        console.log('xAxisData =', xAxisData)
         //@ts-ignore
         opts.xAxis.data = xAxisData;
         //@ts-ignore
@@ -404,7 +405,7 @@ const HomePage: React.FunctionComponent = (props) => {
             <FadeInUp>
               <LocalStyle.SecondText mb="30px" mt={isMobile ? "70px" : "120px"} style={{textAlign: isMobile ? 'center' : 'left'}}>{t("Popular Categories")}</LocalStyle.SecondText>
             </FadeInUp>
-            <Row style={{position: 'relative', justifyContent: isMobile ? 'center' : 'flex-start'}}>
+            <Row style={{position: 'relative', justifyContent: isMobile ? 'center' : 'flex-start', marginBottom: isMobile ? '0' : '100px'}}>
               { categorySubtle.filter(item => item.name !== 'Others').map((item: any, index) => { if(index > 0 && index < 6){ return cateItem(item, index) } return null}) }
               <FadeInUp delay={700} >
                 <LocalStyle.CateItem style={{marginRight: 0}} onClick={() => history.push('/project')}>

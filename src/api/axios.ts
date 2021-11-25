@@ -131,7 +131,7 @@ const handleResposne = (res, resolve, reject, params) => {
       resolve(res.content || res.data)
   } else {
       if (res.responseCode === '401') {
-          window.location.href = '#/login'
+          window.location.href = '/'
       }
       if (res.responseCode) {
           reject({code: res.responseCode, message: res.responseMsg})

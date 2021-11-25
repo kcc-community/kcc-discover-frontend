@@ -168,7 +168,7 @@ const Menu: React.FunctionComponent = (props) => {
         <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
           <RowFixed>
             {isMobile && <ImgMenu src={require('../../assets/images/Icons/h5/menu.png').default} onClick={() => setShow(!showMenu)}/>}
-            <a href="https://www.kcc.io/#/" target="_blank">
+            <a href="https://www.kcc.io" target="_blank">
               <ImgKccLogo src={require('../../assets/images/home/kcc.png').default}/>
             </a>
             <ImgLines />
