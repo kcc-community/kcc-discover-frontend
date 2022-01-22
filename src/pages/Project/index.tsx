@@ -61,7 +61,7 @@ const ProjectPage: React.FunctionComponent = (props) => {
     if (subSec.name === 'All') {
       setSeoMeta(() => {
         return {
-          content: 'All Projects by KCC',
+          content: 'All Projects on KCC',
           description: 'Here you can find all rojects building on KCC.',
         }
       })
