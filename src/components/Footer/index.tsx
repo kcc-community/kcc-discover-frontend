@@ -67,14 +67,14 @@ const Footer: React.FunctionComponent<FooterProps> = (props) => {
         {
           isMobile ? 
           <Column style={{alignItems: 'center'}}>
-            <Text color={'#FFFFFFCC'}>© 2021 Discover All rights reserved</Text>
+            <Text color={'#FFFFFFCC'}>© 2022 Discover All rights reserved</Text>
             <Row style={{width: 'auto', marginTop: '32px', marginLeft: '-24px'}}>
               {media.map((item, index) => renderMedia(item, index))}
             </Row>
           </Column>
           :
           <RowBetween>
-            <Text color={'#FFFFFFCC'}>© 2021 Discover All rights reserved</Text>
+            <Text color={'#FFFFFFCC'}>© 2022 Discover All rights reserved</Text>
             <Row style={{width: 'auto'}}>
               {media.map((item, index) => renderMedia(item, index))}
             </Row>
