@@ -199,7 +199,7 @@ const Menu: React.FunctionComponent = (props) => {
             <ImgLines />
             <ImgLogo src={require('../../assets/images/home/logo.png').default} onClick={() => history.push('/')} />
             {!isMobile && menuList.map((item, index) => renderMenu(item, index))}
-            <UnicornLink />
+            {!isMobile && <UnicornLink />}
           </RowFixed>
           <RowFixed>
             {!!login && !!logout && (

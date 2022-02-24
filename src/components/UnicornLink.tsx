@@ -11,6 +11,10 @@ const UnicornWrap = styled.div`
   cursor: pointer;
   margin-top: 1px;
   margin-left: 30px;
+  @media (max-width: 768px) {
+    align-items: center;
+    margin-top: 30px;
+  }
 `
 
 const Link = styled.div`
