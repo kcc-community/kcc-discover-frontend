@@ -17,6 +17,7 @@ import { useResponsive } from 'utils/responsive'
 import { Drawer } from 'antd'
 import { truncateSync } from 'fs'
 import Column from 'components/Column'
+import UnicornLink from '../UnicornLink'
 
 const Wrapper = styled.div`
   position: relative;
@@ -45,7 +46,6 @@ const BodyWrapper = styled.div`
   position: relative;
   display: flex;
 `
-
 
 const Inner = styled.div`
   flex-grow: 1;
@@ -94,12 +94,12 @@ interface MenuList {
 }
 
 const Menu: React.FunctionComponent = (props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { account, chainId } = useActiveWeb3React()
   const { login, logout } = useAuth()
-  const history = useHistory();
-  const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true });
-  const matchAccount = useRouteMatch({ path: '/account', strict: true, sensitive: true });
+  const history = useHistory()
+  const matchHome = useRouteMatch({ path: '/', strict: true, sensitive: true })
+  const matchAccount = useRouteMatch({ path: '/account', strict: true, sensitive: true })
   const theme = useTheme()
   const dispatch = useDispatch()
   const { isMobile } = useResponsive()
@@ -122,58 +122,84 @@ const Menu: React.FunctionComponent = (props) => {
 
   useEffect(() => {
     const { ethereum } = window
-    if(chainId || ethereum){
+    if (chainId || ethereum) {
       let netID = ethereum?.networkVersion || ''
-      console.log('chainId =', chainId, 'ethereum =',  netID )
-      if(chainId === Number(process.env.REACT_APP_CHAIN_ID) || (Number(netID) === Number(process.env.REACT_APP_CHAIN_ID)) || (Number(netID) === 1)){
-        dispatch(updateChainError({chainError: ''}))
+      console.log('chainId =', chainId, 'ethereum =', netID)
+      if (
+        chainId === Number(process.env.REACT_APP_CHAIN_ID) ||
+        Number(netID) === Number(process.env.REACT_APP_CHAIN_ID) ||
+        Number(netID) === 1
+      ) {
+        dispatch(updateChainError({ chainError: '' }))
       } else {
-        dispatch(updateChainError({chainError: isMobile || window.innerWidth < 768 ? 'Unsupported' : 'Unsupported Network'}))
+        dispatch(
+          updateChainError({ chainError: isMobile || window.innerWidth < 768 ? 'Unsupported' : 'Unsupported Network' })
+        )
       }
-    } 
-
+    }
   }, [chainId])
 
   useEffect(() => {
-    const isHome = matchHome && matchHome.isExact;
-    const isAccount = matchAccount && matchAccount.isExact;
-    let body = document.getElementsByTagName('body')[0];
-    let lastLocation: any;
+    const isHome = matchHome && matchHome.isExact
+    const isAccount = matchAccount && matchAccount.isExact
+    let body = document.getElementsByTagName('body')[0]
+    let lastLocation: any
     history.listen((location) => {
       if (lastLocation !== location) {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0)
       }
-      lastLocation = location;
-    });
-    if(isHome){
-      body.setAttribute('style',`background: ${theme.colors.background}`)
-    } else if(isAccount){
-      body.setAttribute('style',`background: ${theme.colors.backgroundLight}`)
+      lastLocation = location
+    })
+    if (isHome) {
+      body.setAttribute('style', `background: ${theme.colors.background}`)
+    } else if (isAccount) {
+      body.setAttribute('style', `background: ${theme.colors.backgroundLight}`)
     } else {
-      body.setAttribute('style',`background: ${theme.colors.invertedContrast}`)
+      body.setAttribute('style', `background: ${theme.colors.invertedContrast}`)
     }
   }, [history, href])
-  
+
   const renderMenu = (data, index) => {
-    return(
-      <a onClick={() => { setShow(false); history.push(data?.route)}} key={index} style={{marginTop: isMobile ? '36px' : '0'}}>
-        <Text color={theme.colors.invertedContrast} fontSize="18px" fontWeight="500" ml={!isMobile ? "40px" : '0'} style={{textAlign: isMobile ? 'center' : 'left'}}>{data?.title}</Text>
+    return (
+      <a
+        onClick={() => {
+          setShow(false)
+          history.push(data?.route)
+        }}
+        key={index}
+        style={{ marginTop: isMobile ? '36px' : '0' }}
+      >
+        <Text
+          color={theme.colors.invertedContrast}
+          fontSize="18px"
+          fontWeight="500"
+          ml={!isMobile ? '40px' : '0'}
+          style={{ textAlign: isMobile ? 'center' : 'left' }}
+        >
+          {data?.title}
+        </Text>
       </a>
     )
   }
 
-  return ( 
+  return (
     <Wrapper>
       <StyledNav>
-        <RowBetween style={{maxWidth: '1200px', margin: '0 auto'}}>
+        <RowBetween style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <RowFixed>
-            {isMobile && <ImgMenu src={require('../../assets/images/Icons/h5/menu.png').default} onClick={() => setShow(!showMenu)}/>}
+            {isMobile && (
+              <ImgMenu
+                src={require('../../assets/images/Icons/h5/menu.png').default}
+                onClick={() => setShow(!showMenu)}
+              />
+            )}
             <a href="https://www.kcc.io" target="_blank">
-              <ImgKccLogo src={require('../../assets/images/home/kcc.png').default}/>
+              <ImgKccLogo src={require('../../assets/images/home/kcc.png').default} />
             </a>
             <ImgLines />
-            <ImgLogo src={require('../../assets/images/home/logo.png').default} onClick={() => history.push('/')}/>
-            { !isMobile && menuList.map((item, index) => renderMenu(item, index)) }
+            <ImgLogo src={require('../../assets/images/home/logo.png').default} onClick={() => history.push('/')} />
+            {!isMobile && menuList.map((item, index) => renderMenu(item, index))}
+            <UnicornLink />
           </RowFixed>
           <RowFixed>
             {!!login && !!logout && (
@@ -186,19 +212,20 @@ const Menu: React.FunctionComponent = (props) => {
         </RowBetween>
       </StyledNav>
       <BodyWrapper>
-        <Inner>
-          {props.children}
-        </Inner>
+        <Inner>{props.children}</Inner>
       </BodyWrapper>
       <Drawer
-        placement={'left'} 
+        placement={'left'}
         closable={false}
-        onClose={() => {setShow(false)}}
+        onClose={() => {
+          setShow(false)
+        }}
         visible={showMenu}
         key={'left'}
       >
         <Column>
           {menuList.map((item, index) => renderMenu(item, index))}
+          <UnicornLink />
         </Column>
       </Drawer>
     </Wrapper>
