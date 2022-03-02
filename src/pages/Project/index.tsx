@@ -16,6 +16,8 @@ import { useResponsive } from 'utils/responsive'
 import { useCategorySubtle, useCategoryPrimary, useCategoryLoading } from '../../state/application/hooks'
 import Footer from '../../components/Footer'
 import { Img } from 'react-image'
+import Helmet from 'react-helmet'
+import { find } from 'lodash'
 
 interface DappFilterParams {
   limit?: number
@@ -38,29 +40,61 @@ const ProjectPage: React.FunctionComponent = (props) => {
     index?: number
   }>({ name: 'All', nums: 0 })
   const [content, setInput] = useState('')
-  const subList = useCategorySubtle();
-  const primaryList = useCategoryPrimary();
-  const cateLoading = useCategoryLoading();
+  const subList = useCategorySubtle()
+  const primaryList = useCategoryPrimary()
+  const cateLoading = useCategoryLoading()
   const [dappList, setDapp] = useState([])
   const [dappLoading, getDappList] = useLoading(ApiService.getDappList)
   const history = useHistory()
-  const urlSec = getUrlParam('sec');
+  const urlSec = getUrlParam('sec')
+  const selectedId = getUrlParam('id')
   const filterFirstUpdate = useRef(true)
   const { isTablet, isMobile } = useResponsive()
 
+  const [seoMeta, setSeoMeta] = useState<{ content: string; description: string }>({
+    content: '',
+    description: '',
+  })
+
   useEffect(() => {
-    if(subList.length){
-      for(let i = 0; i < subList.length; i++){
-        if(urlSec && subList[i].index === Number(urlSec)){
-          setSub(subList[i])
+    console.log('subSec', subSec)
+    if (subSec.name === 'All') {
+      setSeoMeta(() => {
+        return {
+          content: 'All Projects on KCC',
+          description: 'Here you can find all rojects building on KCC.',
+        }
+      })
+    } else {
+      setSeoMeta(() => {
+        return {
+          content: `${subSec.name} Project List - KCC`,
+          description: `Find all ${subSec.name} projects on KCC.`,
+        }
+      })
+    }
+  }, [subSec])
+
+  useEffect(() => {
+    if (subList.length) {
+      if (selectedId) {
+        const target = find(subList, { id: Number(selectedId) })
+        if (target) {
+          setSub(() => target)
+        }
+      }
+
+      for (let i = 0; i < subList.length; i++) {
+        if (urlSec && subList[i].index === Number(urlSec)) {
+          setSub(() => subList[i])
         }
       }
     }
-  }, [subList])
+  }, [subList, selectedId])
 
   useEffect(() => {
-    if(!urlSec){
-      getDappList({limit: 100}).then((res: any) => {
+    if (!urlSec) {
+      getDappList({ limit: 100 }).then((res: any) => {
         setDapp(res.list)
       })
     }
@@ -72,7 +106,11 @@ const ProjectPage: React.FunctionComponent = (props) => {
     if (primarySec.name !== 'All') params.pri = primarySec?.index
     if (subSec.name !== 'All') params.sec = subSec?.index
     if (content) params.title = content
-    if (filterFirstUpdate.current) { filterFirstUpdate.current = false; return; }
+    if (filterFirstUpdate.current) {
+      filterFirstUpdate.current = false
+      return
+    }
+
     getDappList(params).then((res: any) => {
       // if (content) {
       //   setPrimary(primaryList[0])
@@ -87,7 +125,8 @@ const ProjectPage: React.FunctionComponent = (props) => {
     return (
       <LocalStyle.ProjectItem
         onClick={() => {
-          setSub(data)
+          setSub(() => data)
+          window.history.pushState(0, '', `${window.location.href.split('?')[0]}?id=${data?.id ?? 0}`)
         }}
         key={data.name}
         style={{ background: subSec.name === data?.name ? theme.colors.invertedContrast : 'transparent' }}
@@ -108,18 +147,22 @@ const ProjectPage: React.FunctionComponent = (props) => {
   const renderSearch = () => {
     return (
       <LocalStyle.ProjectInputWrapper>
-        <LocalStyle.ProjectImgSearch src={search}/>
-        <LocalStyle.ProjectInput placeholder={t('Search')} value={content} onChange={(e) => {
-          let value = e.target.value.replace(/[\W]/g,'')
-          setInput(value as any)
-        }}/>
+        <LocalStyle.ProjectImgSearch src={search} />
+        <LocalStyle.ProjectInput
+          placeholder={t('Search')}
+          value={content}
+          onChange={(e) => {
+            let value = e.target.value.replace(/[\W]/g, '')
+            setInput(value as any)
+          }}
+        />
       </LocalStyle.ProjectInputWrapper>
     )
   }
 
   const renderPriTab = () => {
-    if(isMobile){
-      return(
+    if (isMobile) {
+      return (
         <Row mb="32px">
           {primaryList.map((item) => {
             return (
@@ -164,25 +207,34 @@ const ProjectPage: React.FunctionComponent = (props) => {
       website: website,
     }
     return (
-      <LocalStyle.ProjectMedia href={url} target="_blank" onClick={(e) => {e.stopPropagation()}}>
+      <LocalStyle.ProjectMedia
+        href={url}
+        target="_blank"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+      >
         <LocalStyle.ProjectMediaImg src={logo[type]} />
       </LocalStyle.ProjectMedia>
     )
   }
 
-  if(isMobile){
-    return(
+  if (isMobile) {
+    return (
       <Container style={{ minHeight: '80vh' }} width={'100vw'}>
-        { 
-          cateLoading ? 
-          <LocalStyle.ProjectItem style={{height: 'auto'}}><Skeleton paragraph={{ rows: 5 }} /></LocalStyle.ProjectItem>
-          :
-          ( 
-            <Row style={{flexWrap: 'nowrap', overflow: 'scroll', paddingLeft: '23px'}}>
-              {subList.filter(item => item.name !== 'Others').map(item => {
-                return(
+        {cateLoading ? (
+          <LocalStyle.ProjectItem style={{ height: 'auto' }}>
+            <Skeleton paragraph={{ rows: 5 }} />
+          </LocalStyle.ProjectItem>
+        ) : (
+          <Row style={{ flexWrap: 'nowrap', overflow: 'scroll', paddingLeft: '23px' }}>
+            {subList
+              .filter((item) => item.name !== 'Others')
+              .map((item) => {
+                return (
                   <LocalStyle.ProjectTab
                     onClick={() => {
+                      // window.history.replaceState(0, `${window.location.href}?id=${item?.name}`)
                       setSub(item)
                     }}
                     key={item?.name}
@@ -192,11 +244,14 @@ const ProjectPage: React.FunctionComponent = (props) => {
                   </LocalStyle.ProjectTab>
                 )
               })}
-              {subList.filter(item => item.name === 'Others').map(item => {
-                return(
+            {subList
+              .filter((item) => item.name === 'Others')
+              .map((item) => {
+                return (
                   <LocalStyle.ProjectTab
                     onClick={() => {
                       setSub(item)
+                      // window.history.replaceState(0, `${window.location.href}?id=-1`)
                     }}
                     key={item?.name}
                     sec={item?.name === subSec?.name}
@@ -205,11 +260,10 @@ const ProjectPage: React.FunctionComponent = (props) => {
                   </LocalStyle.ProjectTab>
                 )
               })}
-            </Row>
-          ) 
-        }
+          </Row>
+        )}
         <LocalStyle.ProjectLineH5 />
-        <div style={{margin: '0 20px'}}>
+        <div style={{ margin: '0 20px' }}>
           {renderSearch()}
           {renderPriTab()}
         </div>
@@ -224,17 +278,17 @@ const ProjectPage: React.FunctionComponent = (props) => {
                   key={item.id}
                   onClick={() => history.push(`/project_detail?name=${item.name}`)}
                 >
-                  <Img 
-                    style={{width: '80px', height: '80px', marginRight: '20px', borderRadius: '8px'}}
-                    loader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
-                    unloader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
+                  <Img
+                    style={{ width: '80px', height: '80px', marginRight: '20px', borderRadius: '8px' }}
+                    loader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo" />}
+                    unloader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo" />}
                     src={[item.logo]}
                   />
                   <Col>
                     <Text fontSize="18px" fontWeight="bold" color={theme.colors.text}>
                       {item.title}
                     </Text>
-                    <LocalStyle.ProjectTextSub style={{width: '100%'}}>{item.intro}</LocalStyle.ProjectTextSub>
+                    <LocalStyle.ProjectTextSub style={{ width: '100%' }}>{item.intro}</LocalStyle.ProjectTextSub>
                     <Row mt="6px">
                       <LocalStyle.ProjectTips grey={false}>
                         {new BN(item.margin).toFixed(2).toString()} KCS
@@ -266,21 +320,26 @@ const ProjectPage: React.FunctionComponent = (props) => {
 
   return (
     <>
+      <Helmet>
+        <title>{seoMeta.content}</title>
+        <meta name="description" content={seoMeta.description} />
+      </Helmet>
       <Container style={{ minHeight: '80vh' }} width={isTablet ? '768px' : '1200px'}>
         <RowBetween style={{ marginTop: '40px', alignItems: 'flex-start' }}>
           <LocalStyle.ProjectMenu>
-            <LocalStyle.ProjectText ml="21px" mb="17px">{t("Categories")}</LocalStyle.ProjectText>
-            { 
-              cateLoading ? 
-              <LocalStyle.ProjectItem style={{height: 'auto'}}><Skeleton paragraph={{ rows: 5 }} /></LocalStyle.ProjectItem>
-              :
-              ( 
-                <>
-                  {subList.filter(item => item.name !== 'Others').map(item => renderMenuItem(item))}
-                  {subList.filter(item => item.name === 'Others').map(item => renderMenuItem(item))}
-                </>
-              ) 
-            }
+            <LocalStyle.ProjectText ml="21px" mb="17px">
+              {t('Categories')}
+            </LocalStyle.ProjectText>
+            {cateLoading ? (
+              <LocalStyle.ProjectItem style={{ height: 'auto' }}>
+                <Skeleton paragraph={{ rows: 5 }} />
+              </LocalStyle.ProjectItem>
+            ) : (
+              <>
+                {subList.filter((item) => item.name !== 'Others').map((item) => renderMenuItem(item))}
+                {subList.filter((item) => item.name === 'Others').map((item) => renderMenuItem(item))}
+              </>
+            )}
           </LocalStyle.ProjectMenu>
           <Col style={{ flex: 1 }}>
             {renderSearch()}
@@ -295,17 +354,17 @@ const ProjectPage: React.FunctionComponent = (props) => {
                       key={item.id}
                       onClick={() => history.push(`/project_detail?name=${item.name}`)}
                     >
-                      <Img 
-                        style={{width: '80px', height: '80px', marginRight: '20px', borderRadius: '8px'}}
-                        loader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
-                        unloader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo"/>}
+                      <Img
+                        style={{ width: '80px', height: '80px', marginRight: '20px', borderRadius: '8px' }}
+                        loader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo" />}
+                        unloader={<LocalStyle.ProjectDappLogo src={logoDef} alt="DApp logo" />}
                         src={[item.logo]}
                       />
                       <Col>
                         <Text fontSize="18px" fontWeight="bold" color={theme.colors.text}>
                           {item.title}
                         </Text>
-                        <LocalStyle.ProjectTextSub style={{width: '300px'}}>{item.intro}</LocalStyle.ProjectTextSub>
+                        <LocalStyle.ProjectTextSub style={{ width: '300px' }}>{item.intro}</LocalStyle.ProjectTextSub>
                         <Row mt="6px">
                           <LocalStyle.ProjectTips grey={false}>
                             {new BN(item.margin).toFixed(2).toString()} KCS
