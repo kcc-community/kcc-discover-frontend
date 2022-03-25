@@ -11,11 +11,16 @@ import dayjs from 'dayjs'
 import { useWeb3React } from '@web3-react/core'
 import { useCommentLike, useCommentDelete } from '../../hooks/useDiscoverContract'
 import { Img } from 'react-image'
+import { useResponsive } from 'utils/responsive'
+
 
 
 const CommentWrapper = styled.div`
-  width: 800px;
+  width: 100%;
   margin-bottom: 40px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 800px;
+  }
 `
 
 const ImgDel = styled.img`
@@ -44,6 +49,7 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
   const theme = useTheme()
   const { account, library, chainId } = useWeb3React()
   const [show, setShow] = useState(false)
+  const { isMobile } = useResponsive()
   const splitComment = (content) => {
     if(content.length > 160 && !show){
       return content.substr(0, 160) + '...'
@@ -100,6 +106,43 @@ const Comment: React.FunctionComponent<CommentProps> = (props) => {
   }
 
   if(props.type === 'mine'){
+    if(isMobile){
+      return(
+        <CommentWrapper key={props.id} style={{width: '295px'}}>
+          <RowBetween align="flex-start" style={{flexWrap: 'nowrap'}}>
+            <Img 
+              style={{width: '40px', height: '40px', marginRight: '18px', borderRadius: '8px', marginTop: '5px'}}
+              loader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
+              unloader={<LocalStyle.AccountImgDApp src={logoDef} alt="DApp logo"/>}
+              src={[props.application.logo as string]}/>
+            <Col style={{flexWrap: 'nowrap'}}>
+              <RowBetween>
+                <Text fontWeight="bold" color={theme.colors.text} mr="20px" ellipsis width="200px">{props.title}</Text>
+                <ImgDel src={del} onClick={() => deleteComment()}/>
+              </RowBetween>
+              <Col>
+                <RowBetween>
+                  <Row mb="5px">
+                    <Rate allowHalf disabled value={props.score / 10}/>
+                    <LocalStyle.ProjectTextSub ml="20px">{dayjs(props.createTime).format('YYYY-MM-DD') }</LocalStyle.ProjectTextSub>
+                  </Row>
+                </RowBetween>
+                <Row style={{position: 'relative'}}>
+                  <Text fontSize={'14px'} color={theme.colors.textSubtle} style={{letterSpacing: '.2px', wordBreak: 'break-all'}}>
+                    {splitComment(props.content)}
+                  </Text>
+                  {props.content.length > 160 && <Text onClick={() => setShow(!show)} color={theme.colors.primary} fontWeight="bold" style={{position: 'absolute', bottom: 0, right: 0, cursor: 'pointer', lineHeight: '16px'}}>{show ? 'Fold' : 'Unfold'}</Text>}
+                </Row>
+                <Row mt="15px">
+                  {renderHand('good')}
+                  {renderHand('bad')}
+                </Row>
+              </Col>
+            </Col>
+          </RowBetween>
+        </CommentWrapper>
+      )
+    }
     return(
       <CommentWrapper key={props.id} style={{width: '720px'}}>
         <RowBetween align="flex-start" style={{flexWrap: 'nowrap'}}>

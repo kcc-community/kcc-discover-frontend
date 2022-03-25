@@ -29,8 +29,8 @@ export const ChartData = {
     }
   },
   grid: {
-    left: '5%',
-    right: '5%',
+    left: window.innerWidth < 768 ? '10%' : '5%',
+    right: window.innerWidth < 768 ? '10%' : '5%',
     bottom: '0%',
     top: '0%',
     containLabel: true

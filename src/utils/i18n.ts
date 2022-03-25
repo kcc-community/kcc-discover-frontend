@@ -26,7 +26,7 @@ export default i18n
     resources: {
       ...lngTemplates,
     } as any,
-    lng: localStorage.getItem('KCC_DISCOVER_LANG') || 'en',
+    lng:'en',
     fallbackLng: 'en',
     preload: ['en', 'zh-CN'],
     interpolation: {

@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useChainError } from '../../state/wallet/hooks'
 import { switchNetwork } from '../../utils/wallet'
 import { useResponsive } from 'utils/responsive'
+import LinkExternal from '../../style/components/Link/LinkExternal'
 
 import useAccountInfo from '../../hooks/useAccount'
 import BN from 'bignumber.js'
@@ -40,7 +41,6 @@ const ConnectButton = styled.div`
   height: 36px;
   justify-content: center;
   margin: 0px;
-  margin-left: 18px;
   min-width: 90px;
   padding: 0 12px;
   outline: none;
@@ -54,6 +54,7 @@ const ConnectButton = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     min-width: 120px;
     padding: 0 24px;
+    margin-left: 18px;
   }
 `
 
@@ -83,10 +84,9 @@ const LinkImg = styled.img`
 
 const AccountWrapper = styled(RowBetween)`
   background: ${({ theme }) => theme.colors.gradients.hovercard};
-  height: 64px;
   width: 232px;
   border-radius: 4px;
-  padding: 0 10px;
+  padding: 10px;
   cursor: pointer;
 `
 
@@ -100,6 +100,17 @@ const RightImg = styled.img`
   height: 20px;
   margin-left: 3px;
   cursor: pointer;
+`
+
+const VisitExplorer = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const VisitImg = styled.img`
+  width: 16px;
+  height: 16px;
 `
 
 const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
@@ -135,6 +146,16 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
             <Text fontSize={'12px'} color={theme.colors.textSubtle}>{accountDropDownEllipsis}</Text>
           </Col>
           <CopyImg src={copy}/>
+          {
+            isMobile ? 
+            <VisitExplorer target="_blank" href={`https://explorer.kcc.io/address/${account}`}>
+              <LinkExternal style={{ fontSize: '12px' }} small href={`https://explorer.kcc.io/address/${account}`} mt="2px" mr="8px">
+                View on KCC Explorer
+              </LinkExternal>
+              <VisitImg src={require('../../assets/images/Icons/h5/send.png').default}/>
+            </VisitExplorer>
+            : null
+          }
         </AccountWrapper>
       </Row>
       <Menu.Item key="account">
@@ -155,6 +176,15 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
           </Row>
         </RowBetween>
       </Menu.Item>
+      {
+        isMobile &&
+        <Menu.Item style={{width: '100%'}} key="out">
+          <RowBetween onClick={logout}>
+            <Text fontSize={'14px'} fontWeight={'500'} color={'#EB6666'}>{t("Login Out")}</Text>
+            <VisitImg src={require('../../assets/images/Icons/h5/out.png').default}/>
+          </RowBetween>
+        </Menu.Item>
+      }
     </Menu>
   )
   return (
@@ -164,7 +194,9 @@ const UserBlock: React.FC<Props> = ({ account, chainId, login, logout }) => {
           <ConnectButton
             style={{width: 'auto', padding: '0 12px'}}
             onClick={() => {
-              setAVisible(!accountVisible)
+              if(!isMobile){
+                setAVisible(!accountVisible)
+              }
             }}
           > 
             <LinkImg src={require('../../assets/images/Icons/logo.png').default}/>

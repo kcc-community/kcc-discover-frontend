@@ -4,7 +4,7 @@ import { connectorLocalStorageKey } from '../style'
 import { useWeb3React as useWeb3ReactCore, UnsupportedChainIdError } from '@web3-react/core'
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { useEffect, useState } from 'react'
-import { isMobile } from 'react-device-detect'
+import { useResponsive }  from 'utils/responsive'
 import { injected } from '../connectors'
 import { NetworkContextName } from '../constants/wallet'
 import { useDispatch } from 'react-redux'
@@ -14,12 +14,12 @@ export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & 
   const context = useWeb3ReactCore<Web3Provider>()
   const contextNetwork = useWeb3ReactCore<Web3Provider>(NetworkContextName)
   return context.active ? context : contextNetwork
-}
+} 
 
 export function useEagerConnect() {
   const { activate, active } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
   const [tried, setTried] = useState(false)
-
+  const { isMobile } = useResponsive()
   useEffect(() => {
     const hasSignedIn = window.localStorage.getItem(connectorLocalStorageKey)
     if (hasSignedIn) {
@@ -54,6 +54,7 @@ export function useEagerConnect() {
 export function useInactiveListener(suppress = false) {
   const { active, error, activate } = useWeb3ReactCore() // specifically using useWeb3React because of what this hook does
   const dispatch = useDispatch()
+  const { isMobile } = useResponsive()
 
   useEffect(() => {
     const { ethereum } = window
@@ -67,7 +68,7 @@ export function useInactiveListener(suppress = false) {
           .catch((e) => {
             console.error('Failed to activate after chain changed', e)
             if(e instanceof UnsupportedChainIdError){
-              dispatch(updateChainError({chainError: 'Unsupported Network'}))
+              dispatch(updateChainError({chainError: isMobile ? 'Unsupported' : 'Unsupported Network'}))
             }
           })
       }

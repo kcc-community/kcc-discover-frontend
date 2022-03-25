@@ -18,13 +18,18 @@ export const AccountImgCopy = styled.img`
 `
 
 export const AccountCard = styled.div<{ width?: string, height?: string }>`
-  width: ${({ width }) => width ?? '596px'};
-  height: ${({ height }) => height ?? '224px'};
+  width: ${({ width }) => width ?? '343px'};;
+  height: ${({ height }) => height ?? '297px'};
   background: ${({ theme }) => theme.colors.invertedContrast};;
   border: 1px solid rgba(115, 126, 141, 0.16);
   border-radius: 8px;
   padding: 20px 24px;
   position: relative;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: ${({ width }) => width ?? '596px'};
+    height: ${({ height }) => height ?? '224px'};
+  }
+
 `
 
 export const AccountLine = styled.div`
@@ -60,11 +65,17 @@ export const AccountStatusShow = styled.div<{ status?: string, color?: string }>
 `
 
 export const AccountTransContent = styled.div`
-  height: 200px;
+  height: auto;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 200px;
+  }
 `
 
 export const AccountReviewContent = styled.div`
-  height: 465px;
+  height: auto;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    height: 465px;
+  }
 `
 
 export const AccountExplore = styled.a`
