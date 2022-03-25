@@ -89,7 +89,7 @@
   "Unsupported Chain Id Unsupported Chain Id Error. Check your chain Id.": "Unsupported Chain ID or Chain ID Error. Please check your chain ID.",
   "Provider Error No provider was found": "Wallet is incorrect. Please switch to MetaMask or WalletConnect.",
   "Authorization Error Please authorize to access your account": "Authorization Error Please authorize to access your account",
-  "Can't find connector The connector config is wrong": "KCC network not added. Please add the newwork first and try again.",
+  "Can't find connector The connector config is wrong": "KCC network not added. Please add the network first and try again.",
   "You can only comment once per account": "For each project, you can only comment once.",
   "Contract call error": "Contract call error",
   "Insufficient balance": "Insufficient balance",
