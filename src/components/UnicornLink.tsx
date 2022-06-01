@@ -45,7 +45,6 @@ const UnicornLink = () => {
       >
         {t('Unicorn Contest')}
       </Link>
-      <Image src={require('../assets/images/home/hot.png').default} />
     </UnicornWrap>
   )
 }
