@@ -99,9 +99,12 @@ export const UserCard = styled(Col)`
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-top: 120px;
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
     width: 360px;
 =======
 >>>>>>> develop
+>>>>>>> master
     background: transparent;
     color: ${({ theme }) => `${theme.colors.secondary}`};
     #discover-line {
@@ -138,9 +141,12 @@ export const CateItem = styled(cardTransparent)`
   // }
   ${({ theme }) => theme.mediaQueries.sm} {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
     width: 170px;
 =======
 >>>>>>> develop
+>>>>>>> master
     margin: 0 36px 148px 0;
   }
 `

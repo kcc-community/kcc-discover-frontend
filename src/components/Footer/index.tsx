@@ -10,7 +10,7 @@ import $ from 'jquery'
 const FooterWrap = styled.div<{ transparent?: boolean }>`
   width: 100%;
   background: #262C3A;
-  height: 180px;
+  height: 220px;
   display: flex;
   align-items: center;
   margin-top: 40px;
@@ -68,13 +68,17 @@ const Footer: React.FunctionComponent<FooterProps> = (props) => {
           isMobile ? 
           <Column style={{alignItems: 'center'}}>
             <Text color={'#FFFFFFCC'}>© 2022 Discover All rights reserved</Text>
+            <Text color={'#B8C6D899'} fontSize="12px" maxWidth="330px" mt="5px" textAlign="center">{`<Risk Statement>`} All info in this site is purely educational and should only be used to inform your own research. We're not offering investment advice, endorsement of any project or approach, or promise of any outcome.</Text>
             <Row style={{width: 'auto', marginTop: '32px', marginLeft: '-24px'}}>
               {media.map((item, index) => renderMedia(item, index))}
             </Row>
           </Column>
           :
           <RowBetween>
-            <Text color={'#FFFFFFCC'}>© 2022 Discover All rights reserved</Text>
+            <Column>
+              <Text color={'#FFFFFFCC'}>© 2022 Discover All rights reserved</Text>
+              <Text color={'#B8C6D899'} fontSize="12px" maxWidth="800px" mt="5px">{`<Risk Statement>`} All info in this site is purely educational and should only be used to inform your own research. We're not offering investment advice, endorsement of any project or approach, or promise of any outcome.</Text>
+            </Column>
             <Row style={{width: 'auto'}}>
               {media.map((item, index) => renderMedia(item, index))}
             </Row>
