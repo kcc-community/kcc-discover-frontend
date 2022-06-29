@@ -31,6 +31,8 @@ const { decryptString } = new StringCrypto()
 const client = new NFTStorage({ token: decryptString(Ipfs, 'KCC_DISCOVER') })
 const { Option } = Select
 
+const { create } = require('ipfs-http-client')
+
 interface SubmitProps {
   title: string
   shortIntroduction: string
@@ -309,18 +311,38 @@ const SubmitPage: React.FunctionComponent = (props) => {
       return
     }
     message.info(t('Uploading'), 0)
-    const metadata = await client.storeBlob(new Blob([file] as any))
-    console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
-    message.destroy()
-    message.success(t('Upload success'))
-    switch (type) {
-      case 'logo':
-        setLogo(metadata)
-        break
-      case 'banner':
-        setBanner(metadata)
-        break
-    }
+    // const metadata = await client.storeBlob(new Blob([file] as any))
+    // console.log('metadata.json contents with IPFS gateway URLs:\n', metadata)
+    // message.destroy()
+    // message.success(t('Upload success'))
+    // switch (type) {
+    //   case 'logo':
+    //     setLogo(metadata)
+    //     break
+    //   case 'banner':
+    //     setBanner(metadata)
+    //     break
+    // }
+    const client = create(process.env.REACT_APP_IPFS_URL)
+    client
+      .add(file)
+      .then((res: any) => {
+        message.destroy()
+        message.success(t('Upload success'))
+        switch (type) {
+          case 'logo':
+            setLogo(res.path)
+            break
+          case 'banner':
+            setBanner(res.path)
+            break
+        }
+      })
+      .catch((e) => {
+        message.destroy()
+        message.error(t('Upload fail, please try again.'))
+        console.log('upload e = ', e)
+      })
   }
 
   const limitUploadVolume = (type: string, size: number) => {
@@ -471,11 +493,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
             {...upLoadProps}
             onChange={async (e) => {
               uploadImg('logo', e.file, { width: 288, height: 288 })
-              // const client = create(process.env.REACT_APP_IPFS_URL);
-              // client.add(e.file).then((res: any) => {
-              //   console.log('upload success =', res)
-              //   setLogo(res.path)
-              // }).catch(e => {console.log('upload e = ', e)})
             }}
           >
             <Col>
@@ -541,7 +558,6 @@ const SubmitPage: React.FunctionComponent = (props) => {
             }}
             error={contractAddresses && !isAddress(contractAddresses) ? 'Error contract address' : ''}
           />
-          {console.log('stat =', state)}
           <InputItem
             title={name && state !== 'Refused' ? t('The amount of KCS margin call') : t('Amount of KCS margin')}
             required={name && state !== 'Refused' ? false : true}
